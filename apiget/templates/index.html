@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://www.w3school.com.cn/jquery/jquery-1.11.1.min.js">
+</script>
+<script>
+$(document).ready(function(){
+  $("#btn1").click(function(){
+    $(".mytr").remove();
+    $.getJSON("/api/get/",function(ret){
+      $.each(ret,function(idx,item){
+        $("table").append('<tr class="mytr"><td>'+item.id+"</td><td>"+item.productName+"</td><td>"+item.status+
+        "</td><td>"+item.targetType+"</td><td>"+item.scanType+"</td><td>"+item.level+"</td><td>"+item.checkResult+
+        "</td><td>"+item.updateStatus+"</td><td>"+item.targets+"</td><td>"+item.createTime+"</td></tr>");
+    })
+ })
+  })
+})
+</script>
+</head>
+
+<body>
+
+<h3 id="test">请点击下面的按钮，通过 jQuery AJAX 改变这段文本。</h3>
+<button id="btn1" type="button">获得外部的内容</button>
+<table><th>id</th><th>productName</th><th>status</th><th>targetType</th>
+<th>scanType</th><th>level</th><th>checkResult</th><th>updateStatus</th><th>targets</th><th>createTime</th>
+</table>
+</body>
+</html>
