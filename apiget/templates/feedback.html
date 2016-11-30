@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <!-- start: PAGE HEADER -->
+    <div class="row" id="page-header">
+        <div class="col-sm-12">
+            <!-- start: PAGE TITLE & BREADCRUMB -->
+            <ol class="breadcrumb">
+                <li>
+                    <i class="clip-home-3"></i>
+                    <a href="#">
+                        测试组季度数据
+                    </a>
+                </li>
+            </ol>
+            <br/>
+            <!-- end: PAGE TITLE & BREADCRUMB -->
+        </div>
+    </div>
+    <!-- end: PAGE HEADER -->
+    <!-- start: PAGE CONTENT -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- start: FORM VALIDATION 1 PANEL -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-users teal"></i>第三方对测试组反馈
+                    <div class="panel-tools">
+                        <a class="btn btn-xs btn-link panel-close" href="#">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                    <form action="" role="form" id="form">
+                        <div class="row">
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+
+                                <button class="btn btn-info btn-block" id="grade" type="button">
+                                    测试质量与效率 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-info btn-block" id="fbqcount" type="button">
+                                    第三方反馈问题分类 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-info btn-block" id="undolist" type="button">
+                                    未解决问题列表 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-info btn-block" id="fbulist" type="button">
+                                    反馈问题用户列表 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <button class="btn btn-info btn-block" id="fbupload" type="button">
+                                    数据上传 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-info btn-block" id="filedown" type="button">
+                                    原始数据文件下载 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="summary"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-hover" id="data-table">
+                                <thead>
+                                </thead>
+                                <tbody id="tb">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="namelist">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="main" style="width: 1000px;height:400px;"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- end: FORM VALIDATION 1 PANEL -->
+        </div>
+    </div>
+
+
+    <!-- end: PAGE CONTENT-->
+</div>
+</div>
+<!-- end: PAGE -->
+</div>
+<!-- end: MAIN CONTAINER -->
+<!-- start: FOOTER -->
+<div class="footer clearfix">
+    <div class="footer-inner">
+        <script>
+            document.write(new Date().getFullYear())
+        </script>
+    </div>
+    <div class="footer-items">
+        <span class="go-top"><i class="clip-chevron-up"></i></span>
+    </div>
+</div>
+<!-- end: FOOTER -->
+
+<!-- start: MAIN JAVASCRIPTS -->
+    <!--[if lt IE 9]>
+        <script src="/static/bower_components/respond/dest/respond.min.js"></script>
+        <script src="/static/bower_components/Flot/excanvas.min.js"></script>
+        <script src="/static/bower_components/jquery-1.x/dist/jquery.min.js"></script>
+        <![endif]-->
+<!--[if gte IE 9]><!-->
+<script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!--<![endif]-->
+
+<script type="text/javascript" src="/static/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/blockUI/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/static/bower_components/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/jquery.cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="/static/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="/static/assets/js/min/main.min.js"></script>
+<!-- end: MAIN JAVASCRIPTS -->
+<script type="text/javascript" src="/static/echarts/js/echarts.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/assets/js/min/form-elements.min.js"></script>
+<script type="text/javascript" src="/static/testinfo/testinfo.js"></script>
+<script>
+    $(document).ready(function() {
+        feedbackinit();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie8 no-js" lang="en"><![endif]-->
+<!--[if IE 9]><html class="ie9 no-js" lang="en"><![endif]-->
+<!--[if !IE]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <title>漏洞信息查询系统</title>
+    <link rel="shortcut icon" href="http://shared.ydstatic.com/images/favicon.ico" />
+    <!-- start: META -->
+    <meta charset="UTF-8" />
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="Responsive Admin Template build with Twitter Bootstrap and jQuery" name="description" />
+    <meta content="ClipTheme" name="author" />
+    <!-- end: META -->
+    <!-- start: MAIN CSS -->
+    <link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700|Raleway:400,100,200,300,500,600,700,800,900/" />
+    <link type="text/css" rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="/static/bower_components/font-awesome/css/font-awesome.min.css" />
+    <link type="text/css" rel="stylesheet" href="/static/assets/fonts/clip-font.min.css" />
+    <link type="text/css" rel="stylesheet" href="/static/assets/css/main.min.css" />
+    <link type="text/css" rel="stylesheet" href="/static/assets/css/main-responsive.min.css" />
+    <link type="text/css" rel="stylesheet" media="print" href="/static/assets/css/print.min.css" />
+    <link type="text/css" rel="stylesheet" id="skin_color" href="/static/assets/css/theme/light.min.css" />
+    <link type="text/css" rel="stylesheet" href="/static/bower_components/datatables/media/css/dataTables.bootstrap.min.css" />
+
+    <!-- end: MAIN CSS -->
+
+
+    <link href="/static/testinfo/testinfo.css" rel="stylesheet"/>
+
+</head>
+
+<body>
+
+<!-- start: HEADER -->
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <!-- start: TOP NAVIGATION CONTAINER -->
+    <div class="container">
+        <div class="navbar-header">
+            <!-- start: RESPONSIVE MENU TOGGLER -->
+            <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                <span class="clip-list-2"></span>
+            </button>
+            <!-- end: RESPONSIVE MENU TOGGLER -->
+            <!-- start: LOGO -->
+            <a class="navbar-brand" href="/">
+                <i class="clip-home"></i>漏洞信息查询系统
+            </a>
+            <!-- end: LOGO -->
+        </div>
+    </div>
+    <!-- end: TOP NAVIGATION CONTAINER -->
+</div>
+<!-- end: HEADER -->
+<!-- start: MAIN CONTAINER -->
+<div class="main-container">
+<div class="navbar-content">
+
+        <!-- start: SIDEBAR -->
+        <div class="main-navigation navbar-collapse collapse">
+            <!-- start: MAIN MENU TOGGLER BUTTON -->
+            <div class="navigation-toggler">
+                <i class="clip-chevron-left"></i>
+                <i class="clip-chevron-right"></i>
+            </div>
+            <!-- end: MAIN MENU TOGGLER BUTTON -->
+            <!-- start: MAIN NAVIGATION MENU -->
+            <ul class="main-navigation-menu">
+                <li class="" id="holeinfo">
+                    <a href="javascript:void(0);" class="active">
+                        <i class="clip-warning"></i>
+                        <span class="title"> 安全部漏洞信息 </span><i class="icon-arrow"></i>
+
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a href="/table/">
+                                <i class="clip-grid-6"></i>
+                                <span class="title"> 安全部漏洞查询 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/charts/">
+                                <i class="clip-bars"></i>
+                                <span class="title"> 安全部漏洞统计 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="load">
+                                <i class="clip-refresh"></i>
+                                <span class="title"> 安全部漏洞数据更新 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="clip-tag"></i>
+                                <span class="title">{{ uptime }}</span>
+                            </a>
+
+                        </li>
+                    </ul>
+                </li>
+                <li class="" id="testinfo">
+                    <a href="javascript:;" class="active" id="quarterreview">
+                        <i class="clip-folder"></i>
+                        <span class="title"> 测试组季度数据 </span>
+                        <i class="icon-arrow"></i>
+                    </a>
+                    <ul class="sub-menu" style="">
+                        <li class="" id="quarterbugs">
+
+                            <a href="javascript:;"><i class="fa fa-line-chart"></i>
+                                本季度业务成果 <i class="icon-arrow"></i>
+                            </a>
+                            <ul class="sub-menu" style="">
+                                <li>
+                                    <a href="/quarterreview?mode=1&amp;case=1" id="m1c1" class="chart2">
+                                        发现BUG数
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/quarterreview?mode=1&amp;case=2" id="m1c2" class="chart2">
+                                        发现P1BUG数
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/quarterreview?mode=2&amp;case=1" id="m2c1" class="chart2">
+                                        逃逸BUG总数
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/quarterreview?mode=2&amp;case=2" id="m2c2" class="chart2">
+                                        逃逸P1BUG总数
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/quarterreview?mode=3&amp;case=1" id="m3c1" class="chart2">
+                                        BUG逃逸率
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/quarterreview?mode=4&amp;case=1" id="m4c1" class="chart2">
+                                        各产品发现BUG数
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/quarterreview?mode=4&amp;case=2" id="m4c2" class="chart2">
+                                        各产品发现P1BUG数
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/quarterreview?mode=4&amp;case=3" id="m4c3" class="chart2">
+                                        各产品逃逸问题分布
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="" id="productbugs">
+                            <a href="javascript:;"><i class="fa fa-product-hunt"></i>
+                                分产品数据 <i class="icon-arrow"></i>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="/productreview?mode=1">
+                                        分产品分时段数据一览
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/productreview?mode=2">
+                                        分产品分类别数据一览
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="" id="moretool">
+                            <a href="javascript:;"><i class="fa clip-stack-empty "></i>
+                                更多 <i class="icon-arrow"></i>
+                            </a>
+                            <ul class="sub-menu">
+
+                                <li>
+                                    <a href="/feedback">
+                                        第三方对测试组反馈
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="/update">
+                                        最新季度数据录入
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- end: MAIN NAVIGATION MENU -->
+        </div>
+        <!-- end: SIDEBAR -->
+    </div>
+    <!-- start: PAGE -->
+    <div class="main-content">
+        <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-hidden="true">
+            <img src="http://news.21cn.com/zhuanti/21cnAPP/lbs/loading.gif" width="508px" height="381px"/>
+        </div>
+
+        <!-- /.modal -->
+        <!-- start: PANEL CONFIGURATION MODAL FORM -->
+
+        <!-- end: SPANEL CONFIGURATION MODAL FORM -->
+
+
+
+
+{% block content %}
+{% endblock %}
+
+<script>
+    $(document).ready(function() {
+        baseinit();
+    });
+</script>
+</body>
+
+</html>

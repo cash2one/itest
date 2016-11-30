@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <!-- start: PAGE HEADER -->
+    <div class="row" id="page-header">
+        <div class="col-sm-12">
+            <!-- start: PAGE TITLE & BREADCRUMB -->
+            <ol class="breadcrumb">
+                <li>
+                    <i class="clip-home-3"></i>
+                    <a href="#">
+                        测试组季度数据
+                    </a>
+                </li>
+
+            </ol>
+            <br/>
+            <!-- end: PAGE TITLE & BREADCRUMB -->
+        </div>
+    </div>
+    <!-- end: PAGE HEADER -->
+    <!-- start: PAGE CONTENT -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- start: FORM VALIDATION 1 PANEL -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-product-hunt teal"></i>分产品数据
+                    <div class="panel-tools">
+                        <a class="btn btn-xs btn-link panel-close" href="#">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                    <form action="" role="form" id="form">
+                        <div class="row">
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        产品名 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <select id="name" class="form-control" name="name">
+                                        <option value="LUNA">LUNA</option>
+                                        <option value="YNOTE">YNOTE</option>
+                                        <option value="ARMANI">ARMANI</option>
+                                        <option value="EAD">EAD</option>
+                                    </select>
+                                </div>
+                            </div>
+                            {% if mode == '1' %}
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        时间段 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <select id="quarter" class="form-control" name="quarter">
+
+                                    </select>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        类别 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select id="case" class="form-control" name="case">
+                                        <option value="1">发现BUG数</option>
+                                        <option value="2">发现P1BUG数</option>
+                                        <option value="3">逃逸BUG数</option>
+                                        <option value="4">逃逸P1BUG数</option>
+                                        <option value="5">准入测试次数</option>
+                                        <option value="6">通过准入测试次数</option>
+                                        <option value="7">功能发现BUG数</option>
+                                        <option value="8">功能发现P1BUG数</option>
+                                        <option value="9">性能发现BUG数</option>
+                                        <option value="10">性能发现P1BUG数</option>
+                                    </select>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="go" type="button">
+                                    Go! <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="main" style="width: 1000px;height:400px;"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- end: FORM VALIDATION 1 PANEL -->
+        </div>
+    </div>
+
+
+    <!-- end: PAGE CONTENT-->
+</div>
+</div>
+<!-- end: PAGE -->
+</div>
+<!-- end: MAIN CONTAINER -->
+<!-- start: FOOTER -->
+<div class="footer clearfix">
+    <div class="footer-inner">
+        <script>
+            document.write(new Date().getFullYear())
+        </script>
+    </div>
+    <div class="footer-items">
+        <span class="go-top"><i class="clip-chevron-up"></i></span>
+    </div>
+</div>
+<!-- end: FOOTER -->
+
+<!-- start: MAIN JAVASCRIPTS -->
+    <!--[if lt IE 9]>
+        <script src="/static/bower_components/respond/dest/respond.min.js"></script>
+        <script src="/static/bower_components/Flot/excanvas.min.js"></script>
+        <script src="/static/bower_components/jquery-1.x/dist/jquery.min.js"></script>
+        <![endif]-->
+<!--[if gte IE 9]><!-->
+<script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!--<![endif]-->
+
+<script type="text/javascript" src="/static/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/blockUI/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/static/bower_components/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/jquery.cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="/static/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="/static/assets/js/min/main.min.js"></script>
+<!-- end: MAIN JAVASCRIPTS -->
+<script type="text/javascript" src="/static/echarts/js/echarts.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/assets/js/min/form-elements.min.js"></script>
+<script type="text/javascript" src="/static/testinfo/testinfo.js"></script>
+<script>
+    var getpbugs =  function(){
+
+        var Name = $('#name').val();
+        {% if mode == '1' %}
+        var Quarters = $('#quarter').val();
+        {% else %}
+        var Case = $('#case').val();
+        {% endif %}
+
+
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+            title: {
+                text: "BUG总数",
+                x: 'center',
+                align: 'right',
+
+            },
+            color: [
+                "#4cb0f9",
+                "#003472",
+                "#9ed048",
+                "#ffa631"
+            ],
+            tooltip : {
+                    trigger: 'axis',
+                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    },
+                },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                },
+                top: '10%',
+                right: '5%'
+            },
+            legend: {
+                data:[],
+                x: 'left',
+                left:20,
+                top:'10%',
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '20%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : []
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [],
+        };
+        var ldlist = [];
+        var series = [];
+
+        $.getJSON("/api/productbugs",
+                {
+                    "name": Name,
+                    "mode": {{ mode }},
+                    {% if mode == '1' %}
+                    "quarter": Quarters
+                    {% else %}
+                    "case": Case
+                    {% endif %}
+
+
+                }
+                , function (ret) {
+
+                    option.xAxis[0].data = ret.xAxis;
+                    option.title.text = ret.title;
+
+                    for (var i = 0; i < ret.xAxis.length; i ++){
+                        $('#trrr').append('<th>'+ret.xAxis[i]+'</th>');
+                    }
+
+                    sortk = [];
+                    for (var k in ret.data){
+                        sortk.push(k);
+                    }
+                    sortk.sort();
+
+                    for (var i = 0;i<sortk.length; i++){
+                        ldlist.push(sortk[i]);
+                        series.push({name: sortk[i], type: ret.type, data: ret.data[sortk[i]], label: { normal: {show: true, textStyle: {fontSize: 16}, position: 'top'}}});
+                    }
+                    option.legend.data = ldlist;
+                    option.series = series;
+                    myChart.setOption(option);
+                });
+    };
+
+    $("#go").click(function () {
+        getpbugs();
+
+    });
+    $(document).ready(function() {
+        Main.init();
+        $.getJSON('/api/getquarters',
+        {
+            need: 'last'
+        },
+        function (ret) {
+           for (var ind in ret.quarters){
+               $("#quarter").append('<option value="'+ret.quarters[ind]+'">'+ret.quarters[ind]+'</option>');
+           }
+            getpbugs();
+        });
+
+        openmenu($('#testinfo'));
+        openmenu($('#productbugs'));
+
+    });
+</script>
+{% endblock %}

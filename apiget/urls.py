@@ -3,9 +3,18 @@ import apiget.views
 
 urlpatterns = [
     url(r'^reset/', apiget.views.HolesResetAPI),
-    url(r'^get/', apiget.views.HoleGetAPI),
-    url(r'^search', apiget.views.HoleSelectAPI),
+    url(r'^search', apiget.views.HoleTableAPI),
     url(r'^detailbyid', apiget.views.HoleDetailAPI),
-    url(r'^productnamelist', apiget.views.ProducnNameAPI),
-    url(r'.?',apiget.views.home),
+    url(r'^productnamelist', apiget.views.ProductNameAPI),
+    url(r'^statistics', apiget.views.StatisticsAPI),
+    url(r'^update/', apiget.views.HolesUpdateAPI),
+    url(r'^quarterbugs', apiget.views.QuartersBugsAPI),
+    url(r'^productbugs', apiget.views.ProductBugsAPI),
+    url(r'^feedback', apiget.views.FeedBackAPI),
+    url(r'^getquarters', apiget.views.GetQuartersAPI),
+    url(r'^getlastentry', apiget.views.GetLastEntryAPI),
+    url(r'^update', apiget.views.TIUpdate),
+    url(r'^download', apiget.views.FileDownloadAPI),
+    url(r'^filename', apiget.views.GetFileNameAPI),
+    url(r'^fbupload', apiget.views.FBUploadAPI),
 ]

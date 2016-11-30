@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <!-- start: PAGE HEADER -->
+    <div class="row" id="page-header">
+        <div class="col-sm-12">
+            <!-- start: PAGE TITLE & BREADCRUMB -->
+            <ol class="breadcrumb">
+                <li>
+                    <i class="clip-home-3"></i>
+                    <a href="#">
+                        测试组季度数据
+                    </a>
+                </li>
+            </ol>
+            <br/>
+            <!-- end: PAGE TITLE & BREADCRUMB -->
+        </div>
+    </div>
+    <!-- end: PAGE HEADER -->
+    <!-- start: PAGE CONTENT -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- start: FORM VALIDATION 1 PANEL -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-database teal"></i> 最新季度数据录入
+                    <div class="panel-tools">
+                        <a class="btn btn-xs btn-link panel-close" href="#">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form action="/api/update" role="form" id="form" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-4">
+                        1.选择需要更新的产品与季度 点击go
+                                </div>
+                    </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        产品名 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <select type="text" id="group" class="form-control redtext" name="group">
+                                        <option value="LUNA">LUNA</option>
+                                        <option value="YNOTE">YNOTE</option>
+                                        <option value="EAD">EAD</option>
+                                        <option value="ARMANI">ARMANI</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        季度 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <select type="text" id="quarter" class="form-control redtext" name="quarter">
+
+                                    </select>
+                                </div>
+                            </div>
+                        <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="go" type="button">
+                                    Go! <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    <br>
+                    <div class="row">
+                         <div class="col-md-4">
+                        2.更新完数据后点击“更新”
+                             </div>
+
+                    </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        发现bug数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="found" class="form-control" name="found" />
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        发现P1bug数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="found_p1" class="form-control" name="found_p1" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        逃逸bug数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="escape" class="form-control" name="escape" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        其中线上事故、机器等（测试无责任）数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="escape_noduty" class="form-control" name="escape_noduty" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        逃逸P1bug数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="escape_p1" class="form-control" name="escape_p1" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        其中线上事故、机器等（测试无责任）数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="escape_p1_noduty" class="form-control" name="escape_p1_noduty" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        准入测试次数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="allow_tests" class="form-control" name="allow_tests" />
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        通过准入测试次数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="allow_tests_pass" class="form-control" name="allow_tests_pass" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        功能测试发现bug数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="found_function" class="form-control" name="found_function" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        功能测试发现P1bug数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="found_function_p1" class="form-control" name="found_function_p1" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        其他测试（性能、自动化等）发现Bug数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="other" class="form-control" name="other" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        其他测试（性能、自动化等）发现P1Bug数 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0" step="1" id="other_p1" class="form-control" name="other_p1" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        逃逸bug记录地址(wiki、link等) <span class="symbol"></span>
+                                    </label>
+                                    <input type="url" id="escape_info" class="form-control" name="escape_info" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-info btn-block" id="select" type="submit">
+                                    更新 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- end: FORM VALIDATION 1 PANEL -->
+        </div>
+    </div>
+
+    <!-- end: PAGE CONTENT-->
+</div>
+</div>
+<!-- end: PAGE -->
+</div>
+<!-- end: MAIN CONTAINER -->
+<!-- start: FOOTER -->
+<div class="footer clearfix">
+    <div class="footer-inner">
+        <script>
+            document.write(new Date().getFullYear())
+        </script>
+    </div>
+    <div class="footer-items">
+        <span class="go-top"><i class="clip-chevron-up"></i></span>
+    </div>
+</div>
+<!-- end: FOOTER -->
+<!-- start: RIGHT SIDEBAR -->
+
+<!-- end: RIGHT SIDEBAR -->
+<div id="event-management" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Event Management</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-light-grey">
+                    Close
+                </button>
+                <button type="button" class="btn btn-danger remove-event no-display">
+                    <i class='fa fa-trash-o'></i> Delete Event
+                </button>
+                <button type='submit' class='btn btn-success save-event'>
+                    <i class='fa fa-check'></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- start: MAIN JAVASCRIPTS -->
+<!--[if lt IE 9]>
+<script src="/static/bower_components/respond/dest/respond.min.js"></script>
+<script src="/static/bower_components/Flot/excanvas.min.js"></script>
+<script src="/static/bower_components/jquery-1.x/dist/jquery.min.js"></script>
+<![endif]-->
+    <!--[if lt IE 9]>
+        <script src="/static/bower_components/respond/dest/respond.min.js"></script>
+        <script src="/static/bower_components/Flot/excanvas.min.js"></script>
+        <script src="/static/bower_components/jquery-1.x/dist/jquery.min.js"></script>
+        <![endif]-->
+<!--[if gte IE 9]><!-->
+<script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!--<![endif]-->
+
+<script type="text/javascript" src="/static/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/blockUI/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/static/bower_components/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/jquery.cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="/static/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="/static/assets/js/min/main.min.js"></script>
+<!-- end: MAIN JAVASCRIPTS -->
+
+<!-- start: JAVASCRIPTS REQUIRED FOR TABLE PAGE ONLY -->
+<script src="/static/bower_components/bootbox.js/bootbox.js"></script>
+<script src="/static/bower_components/jquery-mockjax/dist/jquery.mockjax.min.js"></script>
+<script src="/static/bower_components/select2/dist/js/select2.min.js"></script>
+<script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="/static/bower_components/datatables/media/js/dataTables.bootstrap.js"></script>
+<script src="/static/assets/js/min/table-data.min.js"></script>
+<!-- end: JAVASCRIPTS REQUIRED FOR TABLE PAGE ONLY -->
+
+
+<script src="/static/assets/js/min/form-elements.min.js"></script>
+<script type="text/javascript" src="/static/testinfo/testinfo.js"></script>
+<script>
+    $(document).ready(function() {
+        updateinit();
+    });
+
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+.navbar-content{
+    position: fixed;
+}
+.clear{
+    clear: both;
+}
+#loading{
+    background-color: white;
+    opacity:0.4;
+}
+#detail{
+    margin: 60px 100px;
+    position: fixed;
+    width: auto;
+    height: 500px;
+    overflow: auto;
+    z-index: 1000;
+}
+#detail .modal-dialog{
+    width: auto;
+    height: auto;
+}
+div{
+    word-wrap: break-word;
+    word-break:break-all;
+}
+#loading img{
+    display:block;
+    position:relative;
+    margin:auto;
+}
+.detail img{
+    height: auto;
+    width: auto\9;
+    width:100%;
+}
+img {
+    max-width: 100%;
+}
+.unfinished{
+    text-decoration: line-through;
+}

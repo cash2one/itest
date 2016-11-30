@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <!-- start: PAGE HEADER -->
+    <div class="row" id="page-header">
+        <div class="col-sm-12">
+            <!-- start: PAGE TITLE & BREADCRUMB -->
+            <ol class="breadcrumb">
+                <li>
+                    <i class="clip-home-3"></i>
+                    <a href="#">
+                        第三方对测试组反馈数据录入
+                    </a>
+                </li>
+            </ol>
+            <br/>
+            <!-- end: PAGE TITLE & BREADCRUMB -->
+        </div>
+    </div>
+    <!-- end: PAGE HEADER -->
+    <!-- start: PAGE CONTENT -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- start: FORM VALIDATION 1 PANEL -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-database teal"></i> 第三方对测试组反馈数据录入
+                    <div class="panel-tools">
+                        <a class="btn btn-xs btn-link panel-close" href="#">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <br>
+                    <form action="/api/fbupload" role="form" id="form" method="post">
+                        {% csrf_token %}
+                        <br>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        日期(年月日) <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="text" id="date" class="form-control redtext" name="date" />
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        姓名 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="text" id="name" class="form-control redtext" name="name" />
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        属于的产品组 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="text" id="group" class="form-control" name="group" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        测试质量打分 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0.0" max="10.0" step="0.1" id="grade1" class="form-control" name="grade1" />
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        测试效率打分 <span class="symbol"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="number" min="0.0" max="10.0" step="0.1" id="grade2" class="form-control" name="grade2" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                意见与建议
+                                </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="teal" value="Y" name="need_machine"  style="position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                    缺少机器
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="teal" value="Y" name="need_person"  style="position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                    缺少人力
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="teal" value="Y" name="bug_qua"  style="position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                    BUG质量相关
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="teal" value="Y" name="suggest"  style="position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                    建议其他
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="teal" value="Y" name="good"  style="position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                    单纯夸赞
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="teal" value="Y" name="process"  style="position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                    测试流程相关
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="teal" value="Y" name="chat"  style="position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                    沟通相关
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="teal" value="Y" name="escape1"  style="position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                    逃逸相关
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        反馈内容 <span class="symbol"></span>
+                                    </label>
+                                    <textarea class="form-control" name="feedback"></textarea>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-info btn-block" id="select" type="submit">
+                                    更新 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- end: FORM VALIDATION 1 PANEL -->
+        </div>
+    </div>
+
+    <!-- end: PAGE CONTENT-->
+</div>
+</div>
+<!-- end: PAGE -->
+</div>
+<!-- end: MAIN CONTAINER -->
+<!-- start: FOOTER -->
+<div class="footer clearfix">
+    <div class="footer-inner">
+        <script>
+            document.write(new Date().getFullYear())
+        </script>
+    </div>
+    <div class="footer-items">
+        <span class="go-top"><i class="clip-chevron-up"></i></span>
+    </div>
+</div>
+<!-- end: FOOTER -->
+<!-- start: RIGHT SIDEBAR -->
+
+<!-- end: RIGHT SIDEBAR -->
+<div id="event-management" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Event Management</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-light-grey">
+                    Close
+                </button>
+                <button type="button" class="btn btn-danger remove-event no-display">
+                    <i class='fa fa-trash-o'></i> Delete Event
+                </button>
+                <button type='submit' class='btn btn-success save-event'>
+                    <i class='fa fa-check'></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- start: MAIN JAVASCRIPTS -->
+    <!--[if lt IE 9]>
+        <script src="/static/bower_components/respond/dest/respond.min.js"></script>
+        <script src="/static/bower_components/Flot/excanvas.min.js"></script>
+        <script src="/static/bower_components/jquery-1.x/dist/jquery.min.js"></script>
+        <![endif]-->
+<!--[if lt IE 9]>
+<script src="/static/bower_components/respond/dest/respond.min.js"></script>
+<script src="/static/bower_components/Flot/excanvas.min.js"></script>
+<script src="/static/bower_components/jquery-1.x/dist/jquery.min.js"></script>
+<![endif]-->
+<!--[if gte IE 9]><!-->
+<script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!--<![endif]-->
+
+<script type="text/javascript" src="/static/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/blockUI/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/static/bower_components/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/jquery.cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="/static/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="/static/assets/js/min/main.min.js"></script>
+<!-- end: MAIN JAVASCRIPTS -->
+
+<!-- start: JAVASCRIPTS REQUIRED FOR TABLE PAGE ONLY -->
+<script src="/static/bower_components/bootbox.js/bootbox.js"></script>
+<script src="/static/bower_components/jquery-mockjax/dist/jquery.mockjax.min.js"></script>
+<script src="/static/bower_components/select2/dist/js/select2.min.js"></script>
+<script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="/static/bower_components/datatables/media/js/dataTables.bootstrap.js"></script>
+<script src="/static/assets/js/min/table-data.min.js"></script>
+<!-- end: JAVASCRIPTS REQUIRED FOR TABLE PAGE ONLY -->
+
+
+<script src="/static/assets/js/min/form-elements.min.js"></script>
+<script type="text/javascript" src="/static/testinfo/testinfo.js"></script>
+<script>
+    $(document).ready(function() {
+        fbuploadinit();
+    });
+</script>
+{% endblock %}

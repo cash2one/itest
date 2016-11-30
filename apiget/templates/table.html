@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+{% block content %}
+
+            <div class="container">
+                <!-- start: PAGE HEADER -->
+                <div class="row" id="page-header">
+                    <div class="col-sm-12">
+                        <!-- start: PAGE TITLE & BREADCRUMB -->
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="clip-home-3"></i>
+                                <a href="#">
+                                    安全部漏洞信息
+                                </a>
+                            </li>
+                        </ol>
+                        <br/>
+                        <!-- end: PAGE TITLE & BREADCRUMB -->
+                    </div>
+                </div>
+                <!-- end: PAGE HEADER -->
+                <!-- start: PAGE CONTENT -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- start: FORM VALIDATION 1 PANEL -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa clip-search-3 teal"></i> 安全部漏洞查询
+                                <div class="panel-tools">
+                                    <a class="btn btn-xs btn-link panel-close" href="#">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="detailclose close" data-dismiss="modal" aria-hidden="true">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title">漏洞详情</h4>
+                                            </div>
+                                            <div class="modal-body">
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default detailclose" data-dismiss="modal">
+                                                    关闭
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <form action="" role="form" id="form">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    产品组 <span class="symbol"></span>
+                                                </label>
+                                                <select id="group" class="form-control" name="group">
+                                                    <option value="">全部</option>
+                                                    <option value="LUNA">LUNA</option>
+                                                    <option value="笔记">笔记</option>
+                                                    <option value="广告">广告</option>
+                                                    <option value="惠惠">惠惠</option>
+                                                    <option value="其他">其他</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    产品名 <span class="symbol"></span>
+                                                </label>
+                                                <select id="productName" class="form-control" name="productName">
+                                                    <option value="">全部</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    目标类型 <span class="symbol"></span>
+                                                </label>
+                                                <select id="targetType" class="form-control" name="targetType">
+                                                    <option value="">全部</option>
+                                                    <option value="ip">ip</option>
+                                                    <option value="domain">domain</option>
+                                                    <option value="app">app</option>
+                                                    <option value="other">other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    漏洞等级 <span class="symbol"></span>
+                                                </label>
+                                                <select id="level" class="form-control" name="level">
+                                                    <option value="">全部</option>
+                                                    <option value="1">低</option>
+                                                    <option value="2">中</option>
+                                                    <option value="3">高</option>
+                                                    <option value="4">严重</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    漏洞状态 <span class="symbol"></span>
+                                                </label>
+                                                <select id="status" class="form-control" name="status">
+                                                    <option value="">全部</option>
+                                                    <option value="1">处理中</option>
+                                                    <option value="3">已修复</option>
+                                                    <option value="4">可接受风险</option>
+                                                    <option value="5">误报</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <br>
+                                    </div>
+                                    <div class="row">
+                                        <div class="tabbable col-md-12">
+                                            <ul  class="nav nav-tabs tab-green">
+                                                <li class="active">
+                                                    <a href="#panel_tab4_1" data-toggle="tab" aria-expanded="true" id="time_quarter">
+                                                        <i class="blue fa clip-airplane"></i> 季度查询
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#panel_tab4_2" data-toggle="tab" aria-expanded="false" id="time_date">
+                                                        <i class="pink fa clip-calendar"></i> 日期查询
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="panel_tab4_1">
+                                                    <div class="col-md-2">
+                                                        <div class="form-group connected-group">
+                                                            <label  class="control-label">
+                                                                选择年份<span class="symbol"></span>
+                                                            </label>
+                                                            <div class="input-group">
+                                                                <select id="year" class="form-control" name="year">
+                                                                    <option value="">全部</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div class="form-group connected-group">
+                                                            <label  class="control-label">
+                                                                选择季度<span class="symbol"></span>
+                                                            </label>
+                                                            <div class="input-group">
+                                                                <select id="quarter" class="form-control" name="quarter">
+                                                                    <option value="">全部</option>
+                                                                    <option value="1">Q1</option>
+                                                                    <option value="2">Q2</option>
+                                                                    <option value="3">Q3</option>
+                                                                    <option value="4">Q4</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane" id="panel_tab4_2">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group connected-group">
+                                                            <label  class="control-label">
+                                                                开始日期<span class="symbol"></span>
+                                                            </label>
+                                                            <div class="input-group">
+                                                                <input type="date" name="bgdate" id="bgdate"  class="form-control date-picker">
+
+                                                                <span class="input-group-addon"> <i class="fa fa-calendar"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group connected-group">
+                                                            <label  class="control-label">
+                                                                结束日期<span class="symbol"></span>
+                                                            </label>
+                                                            <div class="input-group">
+                                                                <input type="date" name="eddate" id="eddate" value=""  class="form-control date-picker">
+                                                                <span class="input-group-addon"> <i class="fa fa-calendar"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="clear"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn btn-info btn-block" id="select" type="button">
+                                                查询 <i class="fa fa-arrow-circle-right"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn btn-info btn-block" id="reset" type="reset">
+                                                重置 <i class="fa clip-rotate-2"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- end: FORM VALIDATION 1 PANEL -->
+                    </div>
+                </div>
+
+                <!-- end: PAGE CONTENT-->
+            </div>
+        </div>
+        <!-- end: PAGE -->
+    </div>
+    <!-- end: MAIN CONTAINER -->
+    <!-- start: FOOTER -->
+
+    <!-- end: FOOTER -->
+    <!-- start: RIGHT SIDEBAR -->
+
+    <!-- end: RIGHT SIDEBAR -->
+    <div id="event-management" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                    <h4 class="modal-title">Event Management</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-light-grey">
+                    Close
+                </button>
+                    <button type="button" class="btn btn-danger remove-event no-display">
+                    <i class='fa fa-trash-o'></i> Delete Event
+                </button>
+                    <button type='submit' class='btn btn-success save-event'>
+                    <i class='fa fa-check'></i> Save
+                </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- start: MAIN JAVASCRIPTS -->
+    <!--[if lt IE 9]>
+        <script src="/static/bower_components/respond/dest/respond.min.js"></script>
+        <script src="/static/bower_components/Flot/excanvas.min.js"></script>
+        <script src="/static/bower_components/jquery-1.x/dist/jquery.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+    <!--<![endif]-->
+
+    <script type="text/javascript" src="/static/bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+    <script type="text/javascript" src="/static/bower_components/blockUI/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="/static/bower_components/iCheck/icheck.min.js"></script>
+    <script type="text/javascript" src="/static/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <script type="text/javascript" src="/static/bower_components/jquery.cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/static/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="/static/assets/js/min/main.min.js"></script>
+    <!-- end: MAIN JAVASCRIPTS -->
+
+    <!-- start: JAVASCRIPTS REQUIRED FOR TABLE PAGE ONLY -->
+    <script src="/static/bower_components/bootbox.js/bootbox.js"></script>
+    <script src="/static/bower_components/jquery-mockjax/dist/jquery.mockjax.min.js"></script>
+    <script src="/static/bower_components/select2/dist/js/select2.min.js"></script>
+    <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="/static/bower_components/datatables/media/js/dataTables.bootstrap.js"></script>
+    <script src="/static/assets/js/min/table-data.min.js"></script>
+    <!-- end: JAVASCRIPTS REQUIRED FOR TABLE PAGE ONLY -->
+
+
+    <script src="/static/assets/js/min/form-elements.min.js"></script>
+    <script type="text/javascript" src="/static/testinfo/testinfo.js"></script>
+    <script>
+        $(document).ready(function() {
+            tableinit();
+        });
+    </script>
+{% endblock %}

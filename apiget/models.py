@@ -20,5 +20,47 @@ class HoleInfo(models.Model):
     checkResult = models.BooleanField()
     updateStatus = models.CharField(max_length=2)
     productName = models.CharField(max_length=50)
+    groupName = models.CharField(max_length=10)
     h_id = models.CharField(max_length=20)
     targets = models.TextField()
+    quarter = models.CharField(max_length=10)
+
+class TestInfos(models.Model):
+    quarter = models.CharField(max_length=8)
+    group = models.CharField(max_length=20)
+    bugs_found = models.CharField(max_length=8)
+    bugs_found_p1 = models.CharField(max_length=8)
+    bugs_escape = models.CharField(max_length=8)
+    bugs_escape_noduty = models.CharField(max_length=8)
+    bugs_escape_p1 = models.CharField(max_length=8)
+    bugs_escape_p1_noduty = models.CharField(max_length=8)
+    bugs_escape_info = models.TextField()
+    bugs_found_function = models.CharField(max_length=8)
+    bugs_found_function_p1 = models.CharField(max_length=8)
+    bugs_other = models.CharField(max_length=8)
+    bugs_other_p1 = models.CharField(max_length=8)
+
+    allow_tests = models.CharField(max_length=8)
+    allow_tests_pass = models.CharField(max_length=8)
+
+    t_id = models.CharField(max_length=8)
+
+
+class FeedBack(models.Model):
+    date = models.CharField(max_length=16)
+    name = models.CharField(max_length=10)
+    group = models.CharField(max_length=10)
+    grade1 = models.FloatField()
+    grade2 = models.FloatField()
+
+    feedback = models.TextField()
+    feedback_done = models.CharField(max_length=2)
+
+    need_machine = models.CharField(max_length=2)
+    need_person = models.CharField(max_length=2)
+    bug_qua = models.CharField(max_length=2)
+    suggest = models.CharField(max_length=2)
+    good = models.CharField(max_length=2)
+    process = models.CharField(max_length=2)
+    chat = models.CharField(max_length=2)
+    escape1 = models.CharField(max_length=2)

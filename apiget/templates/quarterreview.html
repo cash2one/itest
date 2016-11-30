@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <!-- start: PAGE HEADER -->
+    <div class="row" id="page-header">
+        <div class="col-sm-12">
+            <!-- start: PAGE TITLE & BREADCRUMB -->
+            <ol class="breadcrumb">
+                <li>
+                    <i class="clip-home-3"></i>
+                    <a href="#">
+                        测试组季度数据
+                    </a>
+                </li>
+            </ol>
+            <br/>
+            <!-- end: PAGE TITLE & BREADCRUMB -->
+        </div>
+    </div>
+    <!-- end: PAGE HEADER -->
+    <!-- start: PAGE CONTENT -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- start: FORM VALIDATION 1 PANEL -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-line-chart teal"></i>本季度业务成果
+                    <div class="panel-tools">
+                        <a class="btn btn-xs btn-link panel-close" href="#">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    {% if mode != '4' %}
+                    <form action="" role="form" id="form">
+                        <div class="row">
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+
+                                <button class="btn btn-info btn-block" id="last-2-year" type="button">
+                                    最近两年数据 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="last-3-year" type="button">
+                                    最近三年数据 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="all-year" type="button">
+                                    全部 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-striped table-bordered table-hover table-full-width dataTable no-footer" id="sample_1" role="grid" aria-describedby="sample_1_info">
+                                <thead>
+                                <tr role="row">
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr role="row" class="odd">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                   <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="main" style="width: 1000px;height:400px;"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- end: FORM VALIDATION 1 PANEL -->
+        </div>
+    </div>
+
+
+    <!-- end: PAGE CONTENT-->
+</div>
+</div>
+<!-- end: PAGE -->
+</div>
+<!-- end: MAIN CONTAINER -->
+<!-- start: FOOTER -->
+<div class="footer clearfix">
+    <div class="footer-inner">
+        <script>
+            document.write(new Date().getFullYear())
+        </script>
+    </div>
+    <div class="footer-items">
+        <span class="go-top"><i class="clip-chevron-up"></i></span>
+    </div>
+</div>
+<!-- end: FOOTER -->
+
+<!-- start: MAIN JAVASCRIPTS -->
+    <!--[if lt IE 9]>
+        <script src="/static/bower_components/respond/dest/respond.min.js"></script>
+        <script src="/static/bower_components/Flot/excanvas.min.js"></script>
+        <script src="/static/bower_components/jquery-1.x/dist/jquery.min.js"></script>
+        <![endif]-->
+<!--[if gte IE 9]><!-->
+<script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!--<![endif]-->
+
+<script type="text/javascript" src="/static/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/blockUI/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/static/bower_components/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/jquery.cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="/static/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="/static/assets/js/min/main.min.js"></script>
+<!-- end: MAIN JAVASCRIPTS -->
+<script type="text/javascript" src="/static/echarts/js/echarts.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/assets/js/min/form-elements.min.js"></script>
+<script type="text/javascript" src="/static/testinfo/testinfo.js"></script>
+<script>
+    var getyear =  function(Quarters){
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+            title: {
+                text: "BUG总数",
+                x: 'center',
+                align: 'right',
+
+            },
+            color: [
+                "#4cb0f9",
+                "#003472",
+                "#9ed048",
+                "#ffa631"
+            ],
+            tooltip : {
+                    trigger: 'axis',
+                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    },
+                },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                },
+                top: '10%',
+                right: '5%'
+            },
+            legend: {
+                data:[],
+                x: 'left',
+                left:20,
+                top:'10%',
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '20%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : []
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [],
+        };
+        var ldlist = [];
+        var series = [];
+        $.getJSON("/api/quarterbugs",
+                {
+                    "mode": {{ mode }},
+                    "case": {{ case }},
+                    "quarters": Quarters
+                }
+                , function (ret) {
+                    $('tbody').children().remove();
+                    $('thead').children().remove();
+                    option.xAxis[0].data = ret.xAxis;
+                    option.title.text = ret.title;
+                    $('thead').append('<tr id="trrr"><th></th></tr>');
+
+                    for (var i = 0; i < ret.xAxis.length; i ++){
+                        $('#trrr').append('<th>'+ret.xAxis[i]+'</th>');
+                    }
+                    sortk = [];
+                    for (var k in ret.data){
+                        sortk.push(k);
+                    }
+                    sortk.sort();
+                    for (var i = 0;i<sortk.length; i++){
+                        ldlist.push(sortk[i]);
+                        {% if mode == '3' %}
+                        series.push({name: sortk[i], type: ret.type, data: ret.data[sortk[i]], label: { normal: {show: true, textStyle: {fontSize: 16}, position: 'top', formatter: '{c}%'}}});
+                        {% else %}
+                        series.push({name: sortk[i], type: ret.type, data: ret.data[sortk[i]], label: { normal: {show: true, textStyle: {fontSize: 16}, position: 'top'}}});
+                        {% endif %}
+                        $('tbody').append('<tr  id="'+sortk[i]+'"><th>'+sortk[i]+'</th></tr>');
+                        for (var j = 0; j < ret.data[sortk[i]].length; j ++){
+                        {% if mode == '3' %}
+                            $('#'+sortk[i]).append('<td>'+ret.data[sortk[i]][j]+'%</td>');
+                        {% else %}
+                            $('#'+sortk[i]).append('<td>'+ret.data[sortk[i]][j]+'</td>');
+                        {% endif %}
+                        }
+                    };
+                    option.legend.data = ldlist;
+                    option.series = series;
+                    myChart.setOption(option);
+                });
+    };
+    {% if mode != '4' %}
+
+    $("#last-2-year").click(function () {
+        getyear(8);
+    });
+    $("#last-3-year").click(function () {
+        getyear(12);
+    });
+    $("#all-year").click(function () {
+        getyear(24);
+    });
+    {% endif %}
+    var openmenu = function(menunow){
+        menunow.attr("class", "open");
+        menunow.children("ul").attr("style", "display: block;");
+        menunow.siblings().attr("class", "");
+        menunow.siblings().children("ul").attr("style", "display: none;");
+    };
+    $(document).ready(function() {
+        Main.init();
+        var date = new Date();
+        var thisyear = date.getFullYear();
+        while(thisyear>=2013){
+            $("#charts-year").append('<option value="'+thisyear+'">'+thisyear+'</option>');
+            thisyear--;
+        }
+        {% if mode != '4' %}
+        getyear(8);
+        {% else %}
+        getyear(4);
+        {% endif %}
+        openmenu($('#testinfo'));
+        openmenu($('#quarterbugs'));
+    });
+</script>
+{% endblock %}

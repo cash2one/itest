@@ -20,5 +20,12 @@ import itest.views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('apiget.urls')),
+    url(r'^charts/', itest.views.charts),
+    url(r'^quarterreview', itest.views.quarterreview),
+    url(r'^productreview', itest.views.productreview),
+    url(r'^feedback', itest.views.feedback),
+    url(r'^update', itest.views.update),
+    url(r'^download', itest.views.downloadpage),
+    url(r'^fbupload', itest.views.uploadpage),
     url(r'.?',itest.views.home),
 ]
