@@ -216,10 +216,11 @@ var table_select = function () {
 
 var table_time_quarter = function () {
     $("#bgdate").val("");
-    $("#eddate").val("");
+    $("#eddate").val(date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()));
 };
 
 var table_time_date = function () {
+    var date = new Date();
     $("#year").val("");
     $("#quarter").val("");
     $("#eddate").val(date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()));
@@ -265,7 +266,7 @@ var getgitem = function () {
     $("#productName").children().next().remove();
     $.getJSON("/api/productnamelist",
         {
-            'group':gn,
+            'group':gn
         }
         , function (ret) {
             $.each(ret.name, function (idx, item) {

@@ -214,15 +214,20 @@ var table_select = function () {
         });
 };
 
-var table_time_quarter = function () {
+var table_time_quarter = function (date) {
     $("#bgdate").val("");
     $("#eddate").val("");
 };
 
-var table_time_date = function () {
+var table_time_date = function (date) {
     $("#year").val("");
     $("#quarter").val("");
-    $("#eddate").val(date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()));
+    if (date.getDate() < 10){
+        $("#eddate").val(date.getFullYear()+"-"+(date.getMonth()+1)+"-0"+(date.getDate()));
+    }
+    else {
+        $("#eddate").val(date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()));
+    }
 };
 
 var tableinit = function () {
@@ -230,25 +235,17 @@ var tableinit = function () {
 
     openmenu($('#holeinfo'));
     var date = new Date();
-    $("#eddate").val(date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()));
-
-
-//            $.getJSON("/api/productnamelist", function (ret) {
-//                        $.each(ret, function (idx, item) {
-//                            $("#productName").append('<option value="'+item.name+'">'+item.name+'</option>');
-//                        });
-//                    });
     var thisyear = date.getFullYear();
     while(thisyear>=2013){
         $("#year").append('<option value="'+thisyear+'">'+thisyear+'</option>');
         thisyear--;
     }
     $("#time_quarter").click(function (){
-        table_time_quarter();
+        table_time_quarter(date);
     });
 
     $("#time_date").click(function (){
-        table_time_date();
+        table_time_date(date);
     });
     getgitem();
     $("#group").change(function(){
@@ -265,7 +262,7 @@ var getgitem = function () {
     $("#productName").children().next().remove();
     $.getJSON("/api/productnamelist",
         {
-            'group':gn,
+            'group':gn
         }
         , function (ret) {
             $.each(ret.name, function (idx, item) {

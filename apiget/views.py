@@ -75,13 +75,13 @@ def ProductNameAPI(request):
 #获取表格数据
 def HoleTableAPI(request):
     dbo = HoleInfo.objects
-    dbo = _Selecter(request, dbo)
+    dbo = _Selector(request, dbo)
     return JsonResponse(_TableJsonRp(dbo))
 
 #获取统计数据
 def StatisticsAPI(request):
     dbo = HoleInfo.objects
-    dbo = _Selecter(request, dbo)
+    dbo = _Selector(request, dbo)
     #统计模式
     if 'smode' in request.GET:
         smode = str(request.GET['smode'])
@@ -176,7 +176,9 @@ def HolesResetAPI(request):
 
     for hi in jtest['holeInfos']:
         _HoleSave(hi)
-
+    logfile = open(BASE_DIR + '/log', 'a')
+    logfile.write('Reset holeinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
+    logfile.close()
     return HttpResponse('ok')
 
 #更新数据库 时间短
@@ -195,6 +197,9 @@ def HolesUpdateAPI(request):
             continue
         _HoleSave(hi)
         count += 1
+    logfile = open(BASE_DIR + '/log', 'a')
+    logfile.write('Update holeinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
+    logfile.close()
 
     return HttpResponse(count)
 
@@ -281,7 +286,7 @@ def HoleDetailAPI(request):
     else:
         return HttpResponse('no id')
 #链式选择器
-def _Selecter(request, dbos):
+def _Selector(request, dbos):
     if 'targetType' in request.GET:
         targetType = request.GET['targetType']
         if targetType:
@@ -315,13 +320,14 @@ def _Selecter(request, dbos):
     #东八区的时间组出的时间戳实际多了八个小时 需要补正
     if 'bgdate' in request.GET:
         bgdate = request.GET['bgdate']
-        if bgdate and bgdate!=' ':
+        if bgdate and bgdate != '':
             bgdate_date = datetime.datetime.strptime(bgdate,"%Y-%m-%d")
             timestamp = (time.mktime(bgdate_date.timetuple()))*1000 - 8*3600
             dbos = dbos.filter(createTime__gte = timestamp)
     if 'eddate' in request.GET:
-        eddate = request.GET['eddate'] + " 23:59:59"
-        if eddate and eddate!=' ':
+        eddate = request.GET['eddate']
+        if eddate and eddate != '':
+            eddate += " 23:59:59"
             eddate_date = datetime.datetime.strptime(eddate,"%Y-%m-%d  %H:%M:%S")
             timestamp = (time.mktime(eddate_date.timetuple()))*1000 - 8*3600
             dbos = dbos.filter(createTime__lte = timestamp)
@@ -793,6 +799,9 @@ def FBUploadAPI(request):
                  suggest = suggest, good = good, process = process, chat = chat, escape1 = escape1,
                  feedback = feedback, feedback_done = 'Y').save()
 
+        logfile = open(BASE_DIR + '/log', 'a')
+        logfile.write('Edit feedback at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
+        logfile.close()
     return HttpResponseRedirect('/fbupload')
             
 #上传季度数据
@@ -815,6 +824,9 @@ def TIUpdate(request):
                                 bugs_other=request.POST.get('other'), bugs_other_p1=request.POST.get('other_p1'),
                                 allow_tests=request.POST.get('allow_tests'),
                                 allow_tests_pass=request.POST.get('allow_tests_pass'))
+            logfile = open(BASE_DIR + '/log', 'a')
+            logfile.write('Update testinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
+            logfile.close()
         #不存在，创建
         elif len(matchcase) == 0:
             t_id = quarter[:4] + quarter[-1]
@@ -839,6 +851,9 @@ def TIUpdate(request):
                                 bugs_other=request.POST.get('other'), bugs_other_p1=request.POST.get('other_p1'),
                                 allow_tests=request.POST.get('allow_tests'),
                                 allow_tests_pass=request.POST.get('allow_tests_pass'),t_id = t_id).save()
+            logfile = open(BASE_DIR + '/log', 'a')
+            logfile.write('New testinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
+            logfile.close()
     return HttpResponseRedirect('/update')
 
 #获取季度信息
