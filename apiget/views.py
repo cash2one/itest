@@ -108,17 +108,12 @@ def _HoleGet():
     except ConnectionError as e:
         return HttpResponse(e)
 
-    #存储历史数据
-    infocontent = reqinfo.content
-    holeinfofile = open('%s/dbbackup/backup%s.json' % (BASE_DIR,timezone.now().strftime("%Y-%m-%d")),'wb')
-    holeinfofile.write(infocontent)
-    holeinfofile.close()
-
     timecontent = reqtime.content
     timefile = open('%s/time.txt' % BASE_DIR, 'wb')
     timefile.write(timecontent)
     timefile.close()
 
+    infocontent = reqinfo.content
     drsp = json.loads(infocontent.decode('utf-8'))
 
     return drsp
