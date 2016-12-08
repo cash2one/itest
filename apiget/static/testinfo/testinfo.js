@@ -8,7 +8,10 @@ function openmenu(menunow){
 function unfinish(unfinished) {
     alert('功能尚未完成');
 }
-
+function displayblock(display){
+    display.attr('class', 'modal fade in');
+    display.attr('style', 'display: block');
+}
 function base_getupdate(){
     $("#loading").fadeIn();
     $.get("/api/update/",function (ret) {
@@ -156,7 +159,7 @@ function table_opendetail(thisone) {
         },
         function (ret) {
             $("#detail .modal-dialog .modal-content .modal-body").html(ret);
-            $("#detail").fadeIn();
+            displayblock($("#detail"));
         }
     )
 }

@@ -975,7 +975,6 @@ def GetMarketShareAPI(request):
 
     for o in dbo:
         if ret.has_key(o.sourcename):
-
             if ret[o.sourcename]['data'].has_key(o.productname):
                 ret[o.sourcename]['data'][o.productname]['value'].append(o.value)
             else:
