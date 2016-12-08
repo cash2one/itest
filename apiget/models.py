@@ -64,3 +64,13 @@ class FeedBack(models.Model):
     process = models.CharField(max_length=2)
     chat = models.CharField(max_length=2)
     escape1 = models.CharField(max_length=2)
+
+class MarketShare(models.Model):
+    productname = models.CharField(max_length=30)
+    value = models.FloatField()
+    date = models.CharField(max_length=10)
+    source = models.TextField()
+    sourcename = models.CharField(max_length=30)
+    platform = models.CharField(max_length=10)# desktop / mobile
+    type = models.CharField(max_length=10)# browser / os
+    market = models.CharField(max_length=10)# ww / CN

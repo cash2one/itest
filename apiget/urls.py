@@ -17,4 +17,7 @@ urlpatterns = [
     url(r'^download', apiget.views.FileDownloadAPI),
     url(r'^filename', apiget.views.GetFileNameAPI),
     url(r'^fbupload', apiget.views.FBUploadAPI),
+    url(r'^getsc',apiget.views.getStatCounter),
+    url(r'^getnms',apiget.views.initNetMarketShare),
+    url(r'^getms',apiget.views.GetMarketShareAPI),
 ]

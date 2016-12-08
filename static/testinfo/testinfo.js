@@ -1,25 +1,25 @@
-var openmenu = function(menunow){
+function openmenu(menunow){
     menunow.attr("class", "open");
     menunow.children("ul").attr("style", "display: block;");
     menunow.siblings().attr("class", "");
     menunow.siblings().children("ul").attr("style", "display: none;");
 };
 
-var unfinish = function (unfinished) {
+function unfinish(unfinished) {
     alert('功能尚未完成');
 };
 
-var displaynone = function (display) {
+function displaynone(display) {
     display.attr("class", "modal fade");
     display.attr("style","");
 };
 
-var displayblock = function (display) {
+function displayblock(display) {
     display.attr("class","modal fade in");
     display.attr("style","display: block");
 };
 
-var base_getupdate = function(){
+function base_getupdate(){
     displayblock($("#loading"));
     $.get("/api/update/",function (ret) {
         alert("更新"+ret+"条数据");
@@ -28,7 +28,7 @@ var base_getupdate = function(){
         location.reload();
     });
 };
-var baseinit = function () {
+function baseinit() {
 
     $("#load").click(function () {
         base_getupdate();
@@ -39,11 +39,11 @@ var baseinit = function () {
     });
 
     $('.detailclose').click(function () {
-        displaynone($("#detail"));
+        $("#detail").fadeOut();
     });
 };
 
-var chartsinit = function () {
+function chartsinit() {
     Main.init();
     openmenu($('#holeinfo'));
     var date = new Date();
@@ -74,7 +74,7 @@ var chartsinit = function () {
     });
 };
 
-var feedbackinit = function () {
+function feedbackinit() {
     Main.init();
     getfb(1);
     openmenu($('#testinfo'));
@@ -107,7 +107,7 @@ var feedbackinit = function () {
         window.open('/fbupload')
     });
 };
-var filedowninit = function () {
+function filedowninit() {
     Main.init();
     openmenu($('#testinfo'));
     openmenu($('#moretool'));
@@ -118,14 +118,14 @@ var filedowninit = function () {
             }
         })
 };
-var fbuploadinit = function () {
+function fbuploadinit() {
     Main.init();
     openmenu($('#testinfo'));
     openmenu($('#moretool'));
 };
 
 
-var update_getentry = function () {
+function update_getentry() {
     var group = $('#group').val();
     var quarter = $('#quarter').val();
     $.getJSON('/api/getlastentry',
@@ -140,7 +140,7 @@ var update_getentry = function () {
     );
 };
 
-var updateinit = function () {
+function updateinit() {
     Main.init();
     openmenu($('#testinfo'));
     openmenu($('#moretool'));
@@ -158,7 +158,7 @@ var updateinit = function () {
         update_getentry();
     });
 };
-var table_opendetail = function (thisone) {
+function table_opendetail(thisone) {
     var id = thisone.attr('id');
     $.get('/api/detailbyid',
         {
@@ -171,7 +171,7 @@ var table_opendetail = function (thisone) {
     )
 };
 
-var table_select = function () {
+function table_select() {
     var group = $("#group").val();
     var productName = $("#productName").val();
     var targetType = $("#targetType").val();
@@ -214,12 +214,12 @@ var table_select = function () {
         });
 };
 
-var table_time_quarter = function (date) {
+function table_time_quarter(date) {
     $("#bgdate").val("");
     $("#eddate").val("");
 };
 
-var table_time_date = function (date) {
+function table_time_date(date) {
     $("#year").val("");
     $("#quarter").val("");
     if (date.getDate() < 10){
@@ -230,7 +230,7 @@ var table_time_date = function (date) {
     }
 };
 
-var tableinit = function () {
+function tableinit() {
     Main.init();
 
     openmenu($('#holeinfo'));
@@ -257,7 +257,7 @@ var tableinit = function () {
 };
 
 
-var getgitem = function () {
+function getgitem() {
     var gn = $('#group').val();
     $("#productName").children().next().remove();
     $.getJSON("/api/productnamelist",
@@ -271,7 +271,7 @@ var getgitem = function () {
         });
 };
 
-var getfb =  function(Mode){
+function getfb(Mode){
     $('#tb').children().remove();
     $('#namelist').children().remove();
     var myChart = echarts.init(document.getElementById('main'));
@@ -399,19 +399,8 @@ var getfb =  function(Mode){
         });
 };
 
-var getcharts = function(years, smode, title){
+function getcharts(years, smode, title){
     var myChart = echarts.init(document.getElementById('main'));
-//        var formatter_tt = function(params) {
-//            var rtsting = '';
-//            for(var i = 0; i <params.length; i++)
-//            {
-//                if(params[i].value!='0'){
-//                    rtsting += ('<i  style="color: '+params[i].color+'">◆</i>'+params[i].seriesName+' : '+params[i].value+'<br/>');
-//                }
-//            }
-//            return rtsting;
-//
-//        };
     var option = {
         title : {
             text : '',

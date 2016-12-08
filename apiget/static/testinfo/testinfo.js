@@ -1,34 +1,24 @@
-var openmenu = function(menunow){
+function openmenu(menunow){
     menunow.attr("class", "open");
-    menunow.children("ul").attr("style", "display: block;");
+    menunow.children("ul").show();
     menunow.siblings().attr("class", "");
-    menunow.siblings().children("ul").attr("style", "display: none;");
-};
+    menunow.siblings().children("ul").hide();
+}
 
-var unfinish = function (unfinished) {
+function unfinish(unfinished) {
     alert('功能尚未完成');
-};
+}
 
-var displaynone = function (display) {
-    display.attr("class", "modal fade");
-    display.attr("style","");
-};
-
-var displayblock = function (display) {
-    display.attr("class","modal fade in");
-    display.attr("style","display: block");
-};
-
-var base_getupdate = function(){
-    displayblock($("#loading"));
+function base_getupdate(){
+    $("#loading").fadeIn();
     $.get("/api/update/",function (ret) {
         alert("更新"+ret+"条数据");
     }).done(function() {
-        displaynone($("#loading"));
+        $("#loading").fadeOut();
         location.reload();
     });
-};
-var baseinit = function () {
+}
+function baseinit() {
 
     $("#load").click(function () {
         base_getupdate();
@@ -39,11 +29,11 @@ var baseinit = function () {
     });
 
     $('.detailclose').click(function () {
-        displaynone($("#detail"));
+        $("#detail").fadeOut();
     });
-};
+}
 
-var chartsinit = function () {
+function chartsinit() {
     Main.init();
     openmenu($('#holeinfo'));
     var date = new Date();
@@ -72,9 +62,9 @@ var chartsinit = function () {
     $("#chart2-all-year").click(function () {
         getcharts('all', 2, '2013年至今安全部漏洞统计');
     });
-};
+}
 
-var feedbackinit = function () {
+function feedbackinit() {
     Main.init();
     getfb(1);
     openmenu($('#testinfo'));
@@ -106,8 +96,8 @@ var feedbackinit = function () {
     $("#fbupload").click(function () {
         window.open('/fbupload')
     });
-};
-var filedowninit = function () {
+}
+function filedowninit() {
     Main.init();
     openmenu($('#testinfo'));
     openmenu($('#moretool'));
@@ -117,15 +107,15 @@ var filedowninit = function () {
                 $('#filename').append('<option value="'+ret.filelist[k]+'">'+ret.filelist[k]+'</option>');
             }
         })
-};
-var fbuploadinit = function () {
+}
+function fbuploadinit() {
     Main.init();
     openmenu($('#testinfo'));
     openmenu($('#moretool'));
-};
+}
 
 
-var update_getentry = function () {
+function update_getentry() {
     var group = $('#group').val();
     var quarter = $('#quarter').val();
     $.getJSON('/api/getlastentry',
@@ -138,9 +128,9 @@ var update_getentry = function () {
             }
         }
     );
-};
+}
 
-var updateinit = function () {
+function updateinit() {
     Main.init();
     openmenu($('#testinfo'));
     openmenu($('#moretool'));
@@ -157,8 +147,8 @@ var updateinit = function () {
     $('#go').click(function(){
         update_getentry();
     });
-};
-var table_opendetail = function (thisone) {
+}
+function table_opendetail(thisone) {
     var id = thisone.attr('id');
     $.get('/api/detailbyid',
         {
@@ -166,12 +156,12 @@ var table_opendetail = function (thisone) {
         },
         function (ret) {
             $("#detail .modal-dialog .modal-content .modal-body").html(ret);
-            displayblock($("#detail"));
+            $("#detail").fadeIn();
         }
     )
-};
+}
 
-var table_select = function () {
+function table_select() {
     var group = $("#group").val();
     var productName = $("#productName").val();
     var targetType = $("#targetType").val();
@@ -199,7 +189,7 @@ var table_select = function () {
             "level":level,
             "status":status,
             "quarter":quarter,
-            "year":year,
+            "year":year
         }
         , function (ret) {
             $.each(ret, function (idx, item) {
@@ -212,14 +202,14 @@ var table_select = function () {
             });
             TableData.init();
         });
-};
+}
 
-var table_time_quarter = function (date) {
+function table_time_quarter(date) {
     $("#bgdate").val("");
     $("#eddate").val("");
-};
+}
 
-var table_time_date = function (date) {
+function table_time_date(date) {
     $("#year").val("");
     $("#quarter").val("");
     if (date.getDate() < 10){
@@ -228,9 +218,9 @@ var table_time_date = function (date) {
     else {
         $("#eddate").val(date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()));
     }
-};
+}
 
-var tableinit = function () {
+function tableinit() {
     Main.init();
 
     openmenu($('#holeinfo'));
@@ -254,10 +244,10 @@ var tableinit = function () {
     $("#select").click(function () {
         table_select();
     });
-};
+}
 
 
-var getgitem = function () {
+function getgitem() {
     var gn = $('#group').val();
     $("#productName").children().next().remove();
     $.getJSON("/api/productnamelist",
@@ -269,9 +259,9 @@ var getgitem = function () {
                 $("#productName").append('<option value="'+item+'">'+item+'</option>');
             });
         });
-};
+}
 
-var getfb =  function(Mode){
+function getfb(Mode){
     $('#tb').children().remove();
     $('#namelist').children().remove();
     var myChart = echarts.init(document.getElementById('main'));
@@ -295,7 +285,7 @@ var getfb =  function(Mode){
         },
         toolbox: {
             feature: {
-                saveAsImage: {},
+                saveAsImage: {}
             },
             top: '10%',
             right: '5%'
@@ -397,33 +387,22 @@ var getfb =  function(Mode){
                 }
             }
         });
-};
+}
 
-var getcharts = function(years, smode, title){
+function getcharts(years, smode, title){
     var myChart = echarts.init(document.getElementById('main'));
-//        var formatter_tt = function(params) {
-//            var rtsting = '';
-//            for(var i = 0; i <params.length; i++)
-//            {
-//                if(params[i].value!='0'){
-//                    rtsting += ('<i  style="color: '+params[i].color+'">◆</i>'+params[i].seriesName+' : '+params[i].value+'<br/>');
-//                }
-//            }
-//            return rtsting;
-//
-//        };
     var option = {
         title : {
             text : '',
             x: 'center',
-            align: 'right',
+            align: 'right'
         },
         tooltip : {
             trigger: 'axis',
             axisPointer : {            // 坐标轴指示器，坐标轴触发有效
                 type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
             },
-            enterable: true,
+            enterable: true
         },
         toolbox: {
             feature: {
@@ -437,7 +416,7 @@ var getcharts = function(years, smode, title){
             data:[],
             x: 'left',
             left:20,
-            top:'10%',
+            top:'10%'
         },
         grid: {
             left: '3%',
@@ -457,7 +436,7 @@ var getcharts = function(years, smode, title){
                 type : 'value'
             }
         ],
-        series : [],
+        series : []
     };
     var formelement = {
         "years": years,
@@ -496,4 +475,4 @@ var getcharts = function(years, smode, title){
             }
             myChart.setOption(option);
         });
-};
+}

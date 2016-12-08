@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^update', itest.views.update),
     url(r'^download', itest.views.downloadpage),
     url(r'^fbupload', itest.views.uploadpage),
+    url(r'^marketshare', itest.views.marketshare),
     url(r'.?',itest.views.home),
 ]

@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <!-- start: PAGE HEADER -->
+    <div class="row" id="page-header">
+        <div class="col-sm-12">
+            <!-- start: PAGE TITLE & BREADCRUMB -->
+            <ol class="breadcrumb">
+                <li>
+                    <i class="clip-home-3"></i>
+                    <a href="#">
+                        市场份额查询
+                    </a>
+                </li>
+            </ol>
+            <br/>
+            <!-- end: PAGE TITLE & BREADCRUMB -->
+        </div>
+    </div>
+    <!-- end: PAGE HEADER -->
+    <!-- start: PAGE CONTENT -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- start: FORM VALIDATION 1 PANEL -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-line-chart teal"></i>市场份额数据
+                    <div class="panel-tools">
+                        <a class="btn btn-xs btn-link panel-close" href="#">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form action="" role="form" id="form">
+                        <div class="row">
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="last-1-month" type="button">
+                                    最近一个月 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="last-3-month" type="button">
+                                    最近三个月 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="last-1-year" type="button">
+                                    最近一年 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                             <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        平台 <span class="symbol"></span>
+                                    </label>
+                                    <select id="platform" class="form-control" name="platform">
+                                        <option value="desktop">桌面</option>
+                                        <option value="mobile">移动端</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        类型 <span class="symbol"></span>
+                                    </label>
+                                    <select id="type" class="form-control" name="type">
+                                        <option value="browser">浏览器</option>
+                                        <option value="os">操作系统</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        市场 <span class="symbol"></span>
+                                    </label>
+                                    <select id="market" class="form-control" name="market">
+                                        <option value="CN">中国</option>
+                                        <option value="ww">全球</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                   <br>
+                    <div class="row" id="canvasrow">
+
+                    </div>
+                </div>
+            </div>
+            <!-- end: FORM VALIDATION 1 PANEL -->
+        </div>
+    </div>
+
+
+    <!-- end: PAGE CONTENT-->
+</div>
+</div>
+<!-- end: PAGE -->
+</div>
+<!-- end: MAIN CONTAINER -->
+<!-- start: FOOTER -->
+<div class="footer clearfix">
+    <div class="footer-inner">
+        <script>
+            document.write(new Date().getFullYear())
+        </script>
+    </div>
+    <div class="footer-items">
+        <span class="go-top"><i class="clip-chevron-up"></i></span>
+    </div>
+</div>
+<!-- end: FOOTER -->
+
+<!-- start: MAIN JAVASCRIPTS -->
+    <!--[if lt IE 9]>
+        <script src="/static/bower_components/respond/dest/respond.min.js"></script>
+        <script src="/static/bower_components/Flot/excanvas.min.js"></script>
+        <script src="/static/bower_components/jquery-1.x/dist/jquery.min.js"></script>
+        <![endif]-->
+<!--[if gte IE 9]><!-->
+<script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!--<![endif]-->
+
+<script type="text/javascript" src="/static/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/blockUI/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/static/bower_components/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<script type="text/javascript" src="/static/bower_components/jquery.cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="/static/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="/static/assets/js/min/main.min.js"></script>
+<!-- end: MAIN JAVASCRIPTS -->
+<script type="text/javascript" src="/static/echarts/js/echarts.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/assets/js/min/form-elements.min.js"></script>
+<script type="text/javascript" src="/static/testinfo/testinfo.js"></script>
+<script>
+    function getmarketshare(Months, title){
+        var market = $("#market").val(),
+            type = $("#type").val(),
+            platform = $("#platform").val();
+        $.getJSON("/api/getms",
+            {
+                "market": market,
+                "type": type,
+                "platform": platform ,
+                "months": Months
+            }
+            , function (ret) {
+                    $("#canvasrow").children().remove();
+
+                    if (Months > 1) {
+                        for (var site in ret) {
+
+                            $("#canvasrow").append('<div class="col-md-12"><div id="' + site + '" style="width: 1000px;height:400px;"></div></div>');
+                            var series = [],namelist = [], myChart = echarts.init(document.getElementById(site));
+
+                            for (var name in ret[site]['data']) {
+                                namelist.push(name);
+                                series.push({name: name, type: 'line', data: ret[site]['data'][name]['value'],
+                                    smooth:true});
+                            }
+                            var option = {
+                                title: {
+                                    text: site.toUpperCase() +' '+ title + ' 数据',
+                                    link: ret[site].src,
+                                    x: 'center',
+                                    align: 'right'
+                                },
+                                color: [
+                                    "#81C2D6",
+                                    "#8192D6",
+                                    "#D9B3E6",
+                                    "#DCF7A1",
+                                    "#83FCD8",
+                                    "#61FF69",
+                                    "#B8F788",
+                                    "#58D2E8",
+                                    "#F2B6B6",
+                                    "#E8ED51"
+                                ],
+                                tooltip : {
+                                    trigger: 'axis',
+                                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                                        type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                    }
+                                },
+                                toolbox: {
+                                    feature: {
+                                        saveAsImage: {},
+                                        dataView: {}
+                                    },
+                                    optionToContent: function(opt) {
+                                        var axisData = opt.xAxis[0].data;
+                                        var series = opt.series;
+
+                                        var table = '<table style="width:auto;text-align:center" border=2><tbody><tr>'
+                                                     + '<td>时间</td>';
+                                        for (var i = 0, ls = series.length; i<ls;i++){
+                                            table += ('<td>' + series[i].name + '</td>');
+                                        }
+                                        table += '</tr>';
+                                        for (var i = 0, l = axisData.length; i < l; i++) {
+                                            table += ('<tr>'+ '<td>' + axisData[i] + '</td>');
+                                            for (var j = 0, ls = series.length; j < ls; j++){
+                                                table += ('<td>' + series[j].data[i] + '</td>');
+                                            }
+                                            table += '</tr>';
+                                        }
+                                        table += '</tbody></table>';
+                                        return table;
+                                    },
+                                    top: '10%',
+                                    right: '5%'
+                                },
+                                legend: {
+                                    data:[],
+                                    x: 'left',
+                                    left:'5%',
+                                    top:'10%',
+                                    right: '10%',
+                                },
+                                grid: {
+                                    left: '3%',
+                                    right: '4%',
+                                    bottom: '3%',
+                                    top: '20%',
+                                    containLabel: true
+                                },
+                                xAxis : [
+                                    {
+                                        type : 'category',
+                                        data : []
+                                    }
+                                ],
+                                yAxis : [{type : 'value'}],
+                                series : []
+                            };
+                            option.legend.data = namelist;
+                            option.xAxis[0].data = ret[site].date;
+                            option.series = series;
+                            myChart.setOption(option);
+                        }
+                    }
+                    else {
+                        for (var site in ret) {
+                        $("#canvasrow").append('<div class="col-md-6"><div id="' + site + '" style="width: 500px;height:400px;"></div></div>');
+                        var dlist = [],
+                                myChart = echarts.init(document.getElementById(site));
+                        for (var name in ret[site]['data']) {
+                            dlist.push({'name': name, 'value': ret[site]['data'][name]['value'][0]})
+                        }
+                        var option = {
+                            title: {
+                                text: ret[site].date + ' ' + site.toUpperCase() + ' 数据',
+                                link: ret[site].src,
+                                left: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {d}%"
+                            },
+                            visualMap: {
+                                show: false,
+                                min: 80,
+                                max: 600,
+                                inRange: {
+                                    colorLightness: [0, 1]
+                                }
+                            },
+                            color: [
+                                "#81C2D6",
+                                "#8192D6",
+                                "#D9B3E6",
+                                "#DCF7A1",
+                                "#83FCD8",
+                                "#61FF69",
+                                "#B8F788",
+                                "#58D2E8",
+                                "#F2B6B6",
+                                "#E8ED51"
+                            ],
+                            series: [
+                                {
+                                    name: '最近一个月市场份额',
+                                    type: 'pie',
+                                    radius: '55%',
+                                    center: ['50%', '50%'],
+                                    avoidLabelOverlap: true,
+                                    label: {
+                                        normal: {
+                                            show: true
+                                        },
+                                        emphasis: {
+                                            show: true,
+                                            textStyle: {
+                                                fontSize: '10',
+                                                fontWeight: 'bold'
+                                            }
+                                        }
+                                    },
+                                    labelLine: {
+                                        normal: {
+                                            show: true
+                                        }
+                                    },
+                                    data: dlist.sort(function (a, b) {
+                                        return a.value - b.value
+                                    }),
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                    }
+                    }
+            });
+        }
+
+    $("#last-1-month").click(function () {
+        getmarketshare(1);
+    });
+    $("#last-3-month").click(function () {
+        getmarketshare(3,'最近三个月');
+    });
+    $("#last-1-year").click(function () {
+        getmarketshare(12, '最近一年');
+    });
+
+    var openmenu = function(menunow){
+        menunow.attr("class", "open");
+        menunow.children("ul").attr("style", "display: block;");
+        menunow.siblings().attr("class", "");
+        menunow.siblings().children("ul").attr("style", "display: none;");
+    };
+    $(document).ready(function() {
+        Main.init();
+        openmenu($('#toolbox'));
+    });
+</script>
+{% endblock %}

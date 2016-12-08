@@ -68,3 +68,8 @@ def downloadpage(request):
     content = _mcget(request, content)
 
     return render(request, 'filedown.html', content)
+
+def marketshare(request):
+    content = _cinit()
+
+    return render(request, 'marketshare.html', content)

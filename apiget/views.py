@@ -1,6 +1,10 @@
 # -*- coding:utf-8 -*-
 import json
 import os, tempfile, zipfile
+
+import re
+from bs4 import BeautifulSoup
+
 from django.http import StreamingHttpResponse
 
 from itest.settings import MEDIA_URL
@@ -16,7 +20,7 @@ import datetime
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from requests import ConnectionError
 
-from apiget.models import HoleInfo,TestInfos,FeedBack
+from apiget.models import HoleInfo,TestInfos,FeedBack,MarketShare
 from itest.settings import BASE_DIR
 LevelList = ["空","低","中","高","严重"]
 StatusList = ["空","处理中","状态2","已修复","可接受风险","误报"]
@@ -916,3 +920,219 @@ def FileDownloadAPI(request):
         response['Content-Disposition'] = 'attachment;filename="{0}"'.format(filename)
         return response
 
+# ------------------------------------------------------markshare-------------------------------------------------------
+#                                              来自各大统计网站的市场份额信息
+#
+#
+#                                        #    #    ##    #####   #    #  ######   #####
+#                                        ##  ##   #  #   #    #  #   #   #          #
+#                                        # ## #  #    #  #    #  ####    #####      #
+#                                        #    #  ######  #####   #  #    #          #
+#                                        #    #  #    #  #   #   #   #   #          #
+#                                        #    #  #    #  #    #  #    #  ######     #
+#
+#                                             ####   #    #    ##    #####   ######
+#                                            #       #    #   #  #   #    #  #
+#                                             ####   ######  #    #  #    #  #####
+#                                                 #  #    #  ######  #####   #
+#                                            #    #  #    #  #    #  #  #    #
+#                                             ####   #    #  #    #  #    #  ######
+
+
+def GetMarketShareAPI(request):
+    dbo = MarketShare.objects
+    if 'platform' in request.GET:
+        platform = request.GET['platform']
+        if platform:
+            dbo = dbo.filter(platform = platform)
+    if 'type' in request.GET:
+        type = request.GET['type']
+        if type:
+            dbo = dbo.filter(type = type)
+    if 'market' in request.GET:
+        market = request.GET['market']
+        if market:
+            dbo = dbo.filter(market = market)
+    if 'months' in request.GET:
+        months = int(request.GET['months'])
+        if months:
+            nowtime = datetime.datetime.now()
+            nowyear = int(nowtime.year)
+            nowmonth = int(nowtime.month)
+            if(nowmonth<=months):
+                needdate = str(nowyear-1)+'-'+str(nowmonth+12-months)
+            else:
+                needdate = str(nowyear)+'-'+str(nowmonth-months)
+            if needdate[-3]!='-':
+                needdate = '-0'.join(needdate.split('-'))
+            dbo = dbo.filter(date__gte = needdate).order_by('date')
+
+    ret = {}
+    d = []
+
+    for date in dbo.values_list('date').distinct():
+        d.append(date[0])
+
+    for o in dbo:
+        if ret.has_key(o.sourcename):
+
+            if ret[o.sourcename]['data'].has_key(o.productname):
+                ret[o.sourcename]['data'][o.productname]['value'].append(o.value)
+            else:
+                ret[o.sourcename]['data'][o.productname] = {'value':[o.value,]}
+        else:
+            ret[o.sourcename] = {'date':d,'data':{o.productname:{'value':[o.value,]}},'src':o.source}
+
+    return JsonResponse(ret)
+
+def initNetMarketShare(request):
+
+    monthmode = re.compile(r'^(\d{4})-(\d{2})')
+    qpicdmode = re.compile(r'qpcid=(\w{8})&')
+
+    bg = "2015-11"
+    ed = "2016-12"
+    def dateform(str):
+        d = {'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06', 'July': '07',
+             'August': '08', 'September': '09', 'October': '10', 'November': '11', 'December': '12',}
+        year = str[-4:]
+        month = d[str[:-6]]
+        return year+'-'+month
+
+    def monthcount(str):
+        year, month = monthmode.match(str).groups()
+        return (int(year) - 1999) * 12 + int(month) - 1
+
+    bgmc = monthcount(bg)
+    edmc = monthcount(ed)
+    qpsp = bgmc
+    qpnp = edmc - bgmc
+
+    init = requests.get('http://netmarketshare.com/')
+    #qpcid = qpicdmode.findall(init.text)
+    qpcid = ''
+    qpgroup = ((3, 0), (1, 1), (11, 0), (11, 1))#浏览器桌面 浏览器手机 操作系统按版本桌面 操作系统手机
+    cookies = {"ASP.NET_SessionId": "kx0f1rjn4a1h4askp4qogr0r",
+               "ppu_main_124111d1af66eb0c050ddea0602fe67f": "1",
+               "ppu_sub_124111d1af66eb0c050ddea0602fe67f": "2", "__support_check": "1",
+               "__na_u_63653888": "27021642135076",
+               "__na_c": "1", "__na_u_102463488": "60884244633757", "__na_u_94599168": "7047127001031"}
+
+    header = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36"}
+
+    cookies['ASP.NET_SessionId'] = init.cookies['ASP.NET_SessionId']
+    MarketShare.objects.filter(sourcename='netmarketshare').all().delete()
+    for (qprid, qpcustomd) in qpgroup:
+
+        url = "http://netmarketshare.com/common/pages/reportexport?uitype=dialog&" \
+              "url=%%2freport.aspx%%3fqprid%%3d%s%%26qptimeframe%%3dM%%26qpsp%%3d%s%%26qpnp%%3d%s%%26qpch%%3d350%%26" \
+              "qpdisplay%%3d111111111111110%%26qpdt%%3d1%%26qpct%%3d4%%26qpcustomb%%3d%s%%26qpcid%%3d%s%%26qpf%%3d13&exportpageloaded=1" \
+              % (qprid, qpsp, qpnp, qpcustomd, qpcid)
+
+        infomation = requests.get(url, headers=header, cookies=cookies).text
+        soup = BeautifulSoup(infomation, "xml")
+        if soup.select('dataset') :
+            if qprid == 3:
+                platform, type = 'desktop', 'browser'
+            elif qprid == 1:
+                platform, type = 'mobile', 'browser'
+            elif qprid == 11:
+                if qpcustomd == 0:
+                    platform, type = 'desktop', 'os'
+                else:
+                    platform, type = 'mobile', 'os'
+            else:
+                platform, type = 'desktop', 'browser'
+            MarketShare.objects.filter(sourcename='netmarketshare', platform=platform,
+                                       type=type, market='ww').all().delete()
+            d = soup.select('dataset')[0].children
+            rd = {'data':{},'month' : [] }
+            for item in d:
+                if(item.name):
+                    if(item.name!='row'):
+                        if item.name[-1] != '1':
+                            rd['data'][item.name[-1]] = {'name':item.get_text(),'value':[]}
+                    else:
+                        for v in item:
+                            if (v.name):
+                                if v.name[-1] == '1':
+                                    rd['month'].append(dateform(v.get_text()))
+                                else:
+                                    rd['data'][v.name[-1]]['value'].append(float(v.get_text()[:-1]))
+
+            for k in rd['data'].keys():
+                i = 0
+                while i < len(rd['data'][k]['value']):
+
+                    MarketShare(date=rd['month'][i],
+                                source='http://netmarketshare.com/', sourcename='netmarketshare',
+                                platform=platform, type=type,
+                                market='ww', value=float(rd['data'][k]['value'][i]),
+                                productname=rd['data'][k]['name']).save()
+                    i += 1
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('get '+url+'failed')
+
+def getStatCounter(request):
+    timeframemode = re.compile(r'from (.*?)$')
+    datemode = re.compile(r'% - (.+?)$')
+
+    fromMonthYear = "2015-11"
+    toMonthYear = "2016-11"
+
+    def cut(str):
+        return ''.join(str.split('-'))
+
+    def dateform(strdate):
+        d = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'June': '06', 'July': '07', 'Aug': '08',
+             'Sept': '09',
+             'Oct': '10', 'Nov': '11', 'Dec': '12',}
+        year = strdate[-4:]
+        month = d[strdate[:-5]]
+        return year + '-' + month
+
+    fromInt = cut(fromMonthYear)
+    toInt = cut(toMonthYear)
+    regions = ['Worldwide', 'China']
+    region_hiddens = ['ww', 'CN']
+
+    devices = ['Desktop', 'Mobile']
+    statTypes = ['Browser', 'Operating%20System']
+    statType_hiddens = ['browser', 'os']
+
+    for device in devices:
+        device_hidden = device.lower()
+        for (statType, statType_hidden) in zip(statTypes, statType_hiddens):
+            if device == 'Desktop' and statType == 'Browser':
+                nstatType, nstatType_hidden = 'Combine%%20Chrome%%20(all%%20versions)%%20%%26%%20Firefox%%20(5%%2B)', \
+                                              'browser_version_partially_combined'
+            else:
+                nstatType, nstatType_hidden = statType, statType_hidden
+
+            for (region, region_hidden) in zip(regions, region_hiddens):
+                url = "http://gs.statcounter.com/chart.php?device=%s&" \
+                      "device_hidden=%s&multi-device=true&statType_hidden=%s&" \
+                      "region_hidden=%s&granularity=monthly&statType=%s&" \
+                      "region=%s&fromInt=%s&toInt=%s&fromMonthYear=%s&toMonthYear=%s" \
+                      % (device, device_hidden, nstatType_hidden, region_hidden, nstatType, region, fromInt, toInt,
+                         fromMonthYear, toMonthYear)
+                header = {
+                    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36"}
+
+                infomation = requests.get(url, headers=header).text
+                soup = BeautifulSoup(infomation, "xml")
+                datasets = soup.select('dataset')
+                if datasets:
+                    MarketShare.objects.filter(platform=device_hidden, type=statType_hidden, market=region_hidden).all().delete()
+                    for dataset in datasets:
+                        for set in dataset.select('set'):
+                            MarketShare(date=dateform(datemode.findall(set.get('toolText'))[0]),
+                                        source='http://gs.statcounter.com/',sourcename='statcounter',
+                                        platform=device_hidden,type=statType_hidden,
+                                        market=region_hidden,value=float(set.get('value')),
+                                        productname=dataset.get('seriesName')).save()
+                    return HttpResponse('ok')
+                else:
+                    return HttpResponse('get ' + url + 'failed')
