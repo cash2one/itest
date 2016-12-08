@@ -1,33 +1,26 @@
 function openmenu(menunow){
     menunow.attr("class", "open");
-    menunow.children("ul").attr("style", "display: block;");
+    menunow.children("ul").show();
     menunow.siblings().attr("class", "");
-    menunow.siblings().children("ul").attr("style", "display: none;");
-};
+    menunow.siblings().children("ul").hide();
+}
 
 function unfinish(unfinished) {
     alert('功能尚未完成');
-};
-
-function displaynone(display) {
-    display.attr("class", "modal fade");
-    display.attr("style","");
-};
-
-function displayblock(display) {
-    display.attr("class","modal fade in");
-    display.attr("style","display: block");
-};
-
+}
+function displayblock(display){
+    display.attr('class', 'modal fade in');
+    display.attr('style', 'display: block');
+}
 function base_getupdate(){
-    displayblock($("#loading"));
+    $("#loading").fadeIn();
     $.get("/api/update/",function (ret) {
         alert("更新"+ret+"条数据");
     }).done(function() {
-        displaynone($("#loading"));
+        $("#loading").fadeOut();
         location.reload();
     });
-};
+}
 function baseinit() {
 
     $("#load").click(function () {
@@ -41,7 +34,7 @@ function baseinit() {
     $('.detailclose').click(function () {
         $("#detail").fadeOut();
     });
-};
+}
 
 function chartsinit() {
     Main.init();
@@ -72,7 +65,7 @@ function chartsinit() {
     $("#chart2-all-year").click(function () {
         getcharts('all', 2, '2013年至今安全部漏洞统计');
     });
-};
+}
 
 function feedbackinit() {
     Main.init();
@@ -106,7 +99,7 @@ function feedbackinit() {
     $("#fbupload").click(function () {
         window.open('/fbupload')
     });
-};
+}
 function filedowninit() {
     Main.init();
     openmenu($('#testinfo'));
@@ -117,12 +110,12 @@ function filedowninit() {
                 $('#filename').append('<option value="'+ret.filelist[k]+'">'+ret.filelist[k]+'</option>');
             }
         })
-};
+}
 function fbuploadinit() {
     Main.init();
     openmenu($('#testinfo'));
     openmenu($('#moretool'));
-};
+}
 
 
 function update_getentry() {
@@ -138,7 +131,7 @@ function update_getentry() {
             }
         }
     );
-};
+}
 
 function updateinit() {
     Main.init();
@@ -157,7 +150,7 @@ function updateinit() {
     $('#go').click(function(){
         update_getentry();
     });
-};
+}
 function table_opendetail(thisone) {
     var id = thisone.attr('id');
     $.get('/api/detailbyid',
@@ -169,7 +162,7 @@ function table_opendetail(thisone) {
             displayblock($("#detail"));
         }
     )
-};
+}
 
 function table_select() {
     var group = $("#group").val();
@@ -199,7 +192,7 @@ function table_select() {
             "level":level,
             "status":status,
             "quarter":quarter,
-            "year":year,
+            "year":year
         }
         , function (ret) {
             $.each(ret, function (idx, item) {
@@ -212,12 +205,12 @@ function table_select() {
             });
             TableData.init();
         });
-};
+}
 
 function table_time_quarter(date) {
     $("#bgdate").val("");
     $("#eddate").val("");
-};
+}
 
 function table_time_date(date) {
     $("#year").val("");
@@ -228,7 +221,7 @@ function table_time_date(date) {
     else {
         $("#eddate").val(date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()));
     }
-};
+}
 
 function tableinit() {
     Main.init();
@@ -254,7 +247,7 @@ function tableinit() {
     $("#select").click(function () {
         table_select();
     });
-};
+}
 
 
 function getgitem() {
@@ -269,7 +262,7 @@ function getgitem() {
                 $("#productName").append('<option value="'+item+'">'+item+'</option>');
             });
         });
-};
+}
 
 function getfb(Mode){
     $('#tb').children().remove();
@@ -295,7 +288,7 @@ function getfb(Mode){
         },
         toolbox: {
             feature: {
-                saveAsImage: {},
+                saveAsImage: {}
             },
             top: '10%',
             right: '5%'
@@ -397,7 +390,7 @@ function getfb(Mode){
                 }
             }
         });
-};
+}
 
 function getcharts(years, smode, title){
     var myChart = echarts.init(document.getElementById('main'));
@@ -405,14 +398,14 @@ function getcharts(years, smode, title){
         title : {
             text : '',
             x: 'center',
-            align: 'right',
+            align: 'right'
         },
         tooltip : {
             trigger: 'axis',
             axisPointer : {            // 坐标轴指示器，坐标轴触发有效
                 type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
             },
-            enterable: true,
+            enterable: true
         },
         toolbox: {
             feature: {
@@ -426,7 +419,7 @@ function getcharts(years, smode, title){
             data:[],
             x: 'left',
             left:20,
-            top:'10%',
+            top:'10%'
         },
         grid: {
             left: '3%',
@@ -446,7 +439,7 @@ function getcharts(years, smode, title){
                 type : 'value'
             }
         ],
-        series : [],
+        series : []
     };
     var formelement = {
         "years": years,
@@ -485,4 +478,4 @@ function getcharts(years, smode, title){
             }
             myChart.setOption(option);
         });
-};
+}
