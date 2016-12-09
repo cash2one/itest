@@ -1253,3 +1253,49 @@ def getBaidu(request):
             return HttpResponse('Get ' + url + ' error try later,code:' + response.status_code)
     return HttpResponse('ok')
 
+def getIos(request):
+    datamode = re.compile(r'\{name:"(.+?)", value:(\d{1,2}),')
+
+    datemode = re.compile(r'^(\w+?) \d{1,2}, (\d{4})\.$')
+
+    url1 = "https://developer.apple.com/support/app-store/"
+    url2 = "https://developer.apple.com/support/includes/ios-chart/scripts/chart.js"
+
+    header = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36"}
+
+    def dateform(dategroup):
+        d = {'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06', 'July': '07',
+             'August': '08', 'September': '09', 'October': '10', 'November': '11', 'December': '12',}
+        year = dategroup[1]
+        month = d[dategroup[0]]
+        return year + '-' + month
+
+    try:
+        geturl = requests.get(url1, headers=header)
+    except ConnectionError as e:
+        return HttpResponse(e)
+
+    if geturl.status_code == 200:
+        infomation = geturl.text
+        soup = BeautifulSoup(infomation, "lxml")
+        remarks = soup.select('#main > section.grid > section > article > div > section.col-33 > div > div > p')[0].get_text()
+        DATE = dateform(datemode.findall(soup.select('p > span.nowrap')[0].get_text())[0])
+
+        try:
+            geturl = requests.get(url2, headers=header)
+        except ConnectionError as e:
+            print e
+
+        if geturl.status_code == 200:
+            MarketShare.objects.filter(sourcename='IOS开发者论坛').all().delete()
+            infomation = geturl.text
+            datas = datamode.findall(infomation)
+            for data in datas:
+                MarketShare(date=DATE, source=url1,
+                            sourcename='IOS开发者论坛',
+                            platform='mobile', type='os',
+                            market='ww', value=data[1],
+                            productname=data[0],
+                            remarks=remarks).save()
+    return HttpResponse('ok')
