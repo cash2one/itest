@@ -20,4 +20,6 @@ urlpatterns = [
     url(r'^getsc',apiget.views.getStatCounter),
     url(r'^getnms',apiget.views.initNetMarketShare),
     url(r'^getms',apiget.views.GetMarketShareAPI),
+    url(r'^getandroid', apiget.views.getAndroid),
+    url(r'^getbaidu', apiget.views.getBaidu)
 ]

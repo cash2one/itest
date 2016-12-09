@@ -968,11 +968,6 @@ def GetMarketShareAPI(request):
             dbo = dbo.filter(date__gte = needdate).order_by('date')
 
     ret = {}
-    d = []
-
-    for date in dbo.values_list('date').distinct():
-        d.append(date[0])
-
     for o in dbo:
         if ret.has_key(o.sourcename):
             if ret[o.sourcename]['data'].has_key(o.productname):
@@ -980,7 +975,10 @@ def GetMarketShareAPI(request):
             else:
                 ret[o.sourcename]['data'][o.productname] = {'value':[o.value,]}
         else:
-            ret[o.sourcename] = {'date':d,'data':{o.productname:{'value':[o.value,]}},'src':o.source}
+            d = []
+            for date in dbo.filter(sourcename=o.sourcename).values_list('date').distinct():
+                d.append(date[0])
+            ret[o.sourcename] = {'date':d,'data':{o.productname:{'value':[o.value,]}},'src':o.source, 'remarks': o.remarks}
 
     return JsonResponse(ret)
 
@@ -1028,51 +1026,58 @@ def initNetMarketShare(request):
               "url=%%2freport.aspx%%3fqprid%%3d%s%%26qptimeframe%%3dM%%26qpsp%%3d%s%%26qpnp%%3d%s%%26qpch%%3d350%%26" \
               "qpdisplay%%3d111111111111110%%26qpdt%%3d1%%26qpct%%3d4%%26qpcustomb%%3d%s%%26qpcid%%3d%s%%26qpf%%3d13&exportpageloaded=1" \
               % (qprid, qpsp, qpnp, qpcustomd, qpcid)
+        try:
+            geturl = requests.get(url, headers=header)
+        except ConnectionError as e:
+            return HttpResponse(e)
 
-        infomation = requests.get(url, headers=header, cookies=cookies).text
-        soup = BeautifulSoup(infomation, "xml")
-        if soup.select('dataset') :
-            if qprid == 3:
-                platform, type = 'desktop', 'browser'
-            elif qprid == 1:
-                platform, type = 'mobile', 'browser'
-            elif qprid == 11:
-                if qpcustomd == 0:
-                    platform, type = 'desktop', 'os'
-                else:
-                    platform, type = 'mobile', 'os'
-            else:
-                platform, type = 'desktop', 'browser'
-            MarketShare.objects.filter(sourcename='netmarketshare', platform=platform,
-                                       type=type, market='ww').all().delete()
-            d = soup.select('dataset')[0].children
-            rd = {'data':{},'month' : [] }
-            for item in d:
-                if(item.name):
-                    if(item.name!='row'):
-                        if item.name[-1] != '1':
-                            rd['data'][item.name[-1]] = {'name':item.get_text(),'value':[]}
+        if geturl.status_code == 200:
+            infomation = geturl.text
+            soup = BeautifulSoup(infomation, "xml")
+            if soup.select('dataset') :
+                if qprid == 3:
+                    platform, type = 'desktop', 'browser'
+                elif qprid == 1:
+                    platform, type = 'mobile', 'browser'
+                elif qprid == 11:
+                    if qpcustomd == 0:
+                        platform, type = 'desktop', 'os'
                     else:
-                        for v in item:
-                            if (v.name):
-                                if v.name[-1] == '1':
-                                    rd['month'].append(dateform(v.get_text()))
-                                else:
-                                    rd['data'][v.name[-1]]['value'].append(float(v.get_text()[:-1]))
+                        platform, type = 'mobile', 'os'
+                else:
+                    platform, type = 'desktop', 'browser'
+                MarketShare.objects.filter(sourcename='netmarketshare', platform=platform,
+                                           type=type, market='ww').all().delete()
+                d = soup.select('dataset')[0].children
+                rd = {'data':{},'month' : [] }
+                for item in d:
+                    if(item.name):
+                        if(item.name!='row'):
+                            if item.name[-1] != '1':
+                                rd['data'][item.name[-1]] = {'name':item.get_text(),'value':[]}
+                        else:
+                            for v in item:
+                                if (v.name):
+                                    if v.name[-1] == '1':
+                                        rd['month'].append(dateform(v.get_text()))
+                                    else:
+                                        rd['data'][v.name[-1]]['value'].append(float(v.get_text()[:-1]))
 
-            for k in rd['data'].keys():
-                i = 0
-                while i < len(rd['data'][k]['value']):
+                for k in rd['data'].keys():
+                    i = 0
+                    while i < len(rd['data'][k]['value']):
+                        MarketShare(date=rd['month'][i],
+                                    source='http://netmarketshare.com/', sourcename='netmarketshare',
+                                    platform=platform, type=type,
+                                    market='ww', value=float(rd['data'][k]['value'][i]),
+                                    productname=rd['data'][k]['name']).save()
+                        i += 1
 
-                    MarketShare(date=rd['month'][i],
-                                source='http://netmarketshare.com/', sourcename='netmarketshare',
-                                platform=platform, type=type,
-                                market='ww', value=float(rd['data'][k]['value'][i]),
-                                productname=rd['data'][k]['name']).save()
-                    i += 1
-            return HttpResponse('ok')
+            else:
+                return HttpResponse('Get wrong response\n' + infomation)
         else:
-            return HttpResponse('get '+url+'failed')
+            return HttpResponse('Get ' + url + ' error try later,code:' + geturl.status_code)
+    return HttpResponse('ok')
 
 def getStatCounter(request):
     timeframemode = re.compile(r'from (.*?)$')
@@ -1119,19 +1124,132 @@ def getStatCounter(request):
                          fromMonthYear, toMonthYear)
                 header = {
                     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36"}
+                try:
+                    geturl = requests.get(url, headers=header)
+                except ConnectionError as e:
+                    return HttpResponse(e)
 
-                infomation = requests.get(url, headers=header).text
-                soup = BeautifulSoup(infomation, "xml")
-                datasets = soup.select('dataset')
-                if datasets:
-                    MarketShare.objects.filter(platform=device_hidden, type=statType_hidden, market=region_hidden).all().delete()
-                    for dataset in datasets:
-                        for set in dataset.select('set'):
-                            MarketShare(date=dateform(datemode.findall(set.get('toolText'))[0]),
-                                        source='http://gs.statcounter.com/',sourcename='statcounter',
-                                        platform=device_hidden,type=statType_hidden,
-                                        market=region_hidden,value=float(set.get('value')),
-                                        productname=dataset.get('seriesName')).save()
-                    return HttpResponse('ok')
+                if geturl.status_code == 200:
+                    infomation = geturl.text
+                    soup = BeautifulSoup(infomation, "xml")
+                    datasets = soup.select('dataset')
+                    if datasets:
+                        MarketShare.objects.filter(platform=device_hidden, type=statType_hidden, market=region_hidden,
+                                                   sourcename='statcounter').all().delete()
+                        for dataset in datasets:
+                            for set in dataset.select('set'):
+                                MarketShare(date=dateform(datemode.findall(set.get('toolText'))[0]),
+                                            source='http://gs.statcounter.com/',sourcename='statcounter',
+                                            platform=device_hidden,type=statType_hidden,
+                                            market=region_hidden,value=float(set.get('value')),
+                                            productname=dataset.get('seriesName')).save()
+
+                    else:
+                        return HttpResponse('Get wrong response\n' + infomation)
                 else:
-                    return HttpResponse('get ' + url + 'failed')
+                    return HttpResponse('Get ' + url + ' error try later,code:' + geturl.status_code)
+    return HttpResponse('ok')
+
+def getAndroid(request):
+    datamode = re.compile(r'"api": (\d+?),\n.+?"name": ".+?",\n.+?"perc": "(\d+?\.\d+?)"')
+    datamode2 = re.compile(
+        r'"api":(\d+?),\n.+?"link":\'<a href="https://developer.android.com/about/versions/.+?.html">(.+?)</a>')
+
+    datemode = re.compile(r'ending on (\w+?) \d{1,2}, (\d{4}?).\n')
+
+    url = "https://developer.android.com/about/dashboards/index.html"
+
+    header = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36"}
+
+    def dateform(dategroup):
+        d = {'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06', 'July': '07',
+             'August': '08', 'September': '09', 'October': '10', 'November': '11', 'December': '12',}
+        year = dategroup[1]
+        month = d[dategroup[0]]
+        return year + '-' + month
+    try:
+        geturl = requests.get(url, headers=header)
+    except ConnectionError as e:
+        return HttpResponse(e)
+
+    if geturl.status_code == 200:
+        infomation = geturl.text
+        soup = BeautifulSoup(infomation, "lxml")
+        text = soup.text
+        VERSION_DATA = datamode.findall(text)
+        VERSION_NAMES = datamode2.findall(text)
+        timeframeDescription = soup.select('em')[0].get_text()
+        DATE = dateform(datemode.findall(timeframeDescription)[0])
+        if VERSION_DATA and VERSION_NAMES and DATE:
+            MarketShare.objects.filter(sourcename='谷歌开发者论坛',platform='mobile', type='os',market='ww', date=DATE).all().delete()
+            for data in VERSION_DATA:
+                for name in VERSION_NAMES:
+                    if data[0] == name[0]:
+                        MarketShare(date=DATE,source='https://developer.android.com/about/dashboards/index.html',
+                                    sourcename='谷歌开发者论坛',
+                                    platform='mobile', type='os',
+                                    market='ww', value=data[1],
+                                    productname='Android'+''.join(name[1].split('<br>')),remarks=timeframeDescription).save()
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('Get wrong response\n'+text)
+    else:
+        return HttpResponse('Get '+url+' error try later,code:'+geturl.status_code)
+
+
+def getBaidu(request):
+    stime = "2015-12"
+    etime = "2016-11"
+    st = int(time.mktime(datetime.datetime.strptime(stime, "%Y-%m").timetuple()) * 1000)
+    et = int(time.mktime(datetime.datetime.strptime(etime, "%Y-%m").timetuple()) * 1000)
+    types = ['os', 'browser']
+    payload = "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; " \
+              "name=\"st\"\r\n\r\n%d\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; " \
+              "name=\"et\"\r\n\r\n%d\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; " \
+              "name=\"sm\"\r\n\r\n2014/10\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; " \
+              "name=\"reportId\"\r\n\r\n200\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--" % (st, et)
+
+    headers = {
+        'content-type': "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+        'cache-control': "no-cache",
+        'postman-token': "00da87ee-40fb-e2c7-7747-e75444100e18"
+    }
+
+    for type in types:
+        url = "http://tongji.baidu.com/data/%s/getData" % type
+        source = "http://tongji.baidu.com/data/%s" % type
+        try:
+            response = requests.request("POST", url, data=payload, headers=headers)
+        except ConnectionError as e:
+            return HttpResponse(e)
+
+        if response.status_code == 200:
+            content = json.loads(response.text)
+            if content.has_key('status'):
+                if content['status'] == 0:
+                    MarketShare.objects.filter(type=type, sourcename='百度移动流量研究院', platform='desktop').all().delete()
+                    if type == 'browser':
+                        cv = content['data']['version']
+                    else:
+                        cv = content['data']
+                    i = 0
+                    while i < len(cv['names']):
+                        j = 0
+                        while j < len(cv['dates']):
+                            MarketShare(date=cv['dates'][j].replace('.','-'), source=source,
+                                        sourcename='百度移动流量研究院',
+                                        platform='desktop', type=type,
+                                        market='CN', value=cv['datas'][i]['pvs'][j],
+                                        productname=cv['names'][i],
+                                        remarks='来源于百度统计所覆盖的超过150万的站点，而不是baidu.com的流量数据。').save()
+                            j += 1
+                        i += 1
+                else:
+                    return HttpResponse('Get wrong status\n' + content)
+            else:
+                return HttpResponse('Get wrong response\n' + content)
+        else:
+            return HttpResponse('Get ' + url + ' error try later,code:' + response.status_code)
+    return HttpResponse('ok')
+

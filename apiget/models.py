@@ -74,3 +74,4 @@ class MarketShare(models.Model):
     platform = models.CharField(max_length=10)# desktop / mobile
     type = models.CharField(max_length=10)# browser / os
     market = models.CharField(max_length=10)# ww / CN
+    remarks = models.TextField()

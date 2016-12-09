@@ -35,23 +35,46 @@
                 <div class="panel-body">
                     <form action="" role="form" id="form">
                         <div class="row">
-                            <br>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                <button class="btn btn-info btn-block" id="last-1-month" type="button">
-                                    最近一个月 <i class="fa fa-arrow-circle-right"></i>
-                                </button>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-info btn-block" id="last-3-month" type="button">
-                                    最近三个月 <i class="fa fa-arrow-circle-right"></i>
-                                </button>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-info btn-block" id="last-1-year" type="button">
-                                    最近一年 <i class="fa fa-arrow-circle-right"></i>
-                                </button>
+                            <div class="col-md-12">
+                                <div class="alert alert-block alert-info fade in">
+                                    <h4 class="alert-heading"><i class="fa fa-info-circle"></i> 说明</h4>
+                                    <ul>
+                                        <li>操作：
+                                            <ol>
+                                                <li>
+                                                    先选择筛选信息，再点击按钮出图
+                                                </li>
+                                                <li>
+                                                    点击图例可隐藏不需要的部分，百分比数据将动态更新。
+                                                </li>
+                                                <li>
+                                                    点击右上角 <i class="clip-download"></i> 图标可下载图片
+                                                </li>
+                                                <li>
+                                                    点击标题可跳转到信息源网站
+                                                </li>
+                                            </ol>
+
+                                        </li>
+                                        <li>
+                                            暂时数据来源于四个网站，分别是 <a href="http://netmarketshare.com/">Netmarketshare</a>
+                                            、<a href="http://gs.statcounter.com/">Statcounter</a>、
+                                            <a href="https://developer.android.com/about/dashboards/index.html">安卓开发者论坛</a> 及
+                                            <a href="http://tongji.baidu.com/data/">百度移动流量研究院</a>。
+
+
+                                        </li>
+                                        <li>
+                                            Netmarketshare和安卓开发者论坛只有全球数据，百度移动流量研究院只有中国市场数据。
+                                        </li>
+                                        <li>
+                                            由于百度移动流量研究院PC端和移动端接口不同，暂未同步移动端数据。
+                                        </li>
+                                        <li>
+                                            Apple开发者论坛全球ios市场份额数据尚在解析中。
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <br>
@@ -84,10 +107,22 @@
                                         市场 <span class="symbol"></span>
                                     </label>
                                     <select id="market" class="form-control" name="market">
-                                        <option value="CN">中国</option>
                                         <option value="ww">全球</option>
+                                        <option value="CN">中国</option>
                                     </select>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="last-1-month" type="button">
+                                    最近一个月 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="last-1-year" type="button">
+                                    最近一年 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -157,118 +192,140 @@
                 "months": Months
             }
             , function (ret) {
-                    $("#canvasrow").children().remove();
+                $("#canvasrow").children().remove();
 
-                    if (Months > 1) {
-                        for (var site in ret) {
+                if (Months > 1) {
+                    for (var site in ret) {
 
-                            $("#canvasrow").append('<div class="col-md-12"><div id="' + site + '" style="width: 1000px;height:400px;"></div></div>');
-                            var series = [],namelist = [], myChart = echarts.init(document.getElementById(site));
+                        $("#canvasrow").append('<div class="col-md-12"><div id="' + site + '" style="width: 1000px;height:400px;"></div></div>');
+                        var series = [],namelist = [], myChart = echarts.init(document.getElementById(site));
 
-                            for (var name in ret[site]['data']) {
-                                namelist.push(name);
-                                series.push({name: name, type: 'line', data: ret[site]['data'][name]['value'],
-                                    smooth:true});
-                            }
-                            var option = {
-                                title: {
-                                    text: site.toUpperCase() +' '+ title + ' 数据',
-                                    link: ret[site].src,
-                                    x: 'center',
-                                    align: 'right'
+                        for (var name in ret[site]['data']) {
+                            namelist.push(name);
+                            series.push({name: name, type: 'line', data: ret[site]['data'][name]['value'],
+                                smooth:true});
+                        }
+                        var option = {
+                            title: {
+                                text: site.toUpperCase() +' '+ title + ' 数据',
+                                link: ret[site].src,
+                                x: 'center',
+                                align: 'right'
+                            },
+                            color: [
+                                "#81C2D6",
+                                "#8192D6",
+                                "#D9B3E6",
+                                "#DCF7A1",
+                                "#83FCD8",
+                                "#61FF69",
+                                "#B8F788",
+                                "#58D2E8",
+                                "#F2B6B6",
+                                "#E8ED51"
+                            ],
+                            tooltip : {
+                                trigger: 'axis',
+                                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                                    type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                }
+                            },
+                            toolbox: {
+                                feature: {
+                                    saveAsImage: {},
+                                    dataView: {}
                                 },
-                                color: [
-                                    "#81C2D6",
-                                    "#8192D6",
-                                    "#D9B3E6",
-                                    "#DCF7A1",
-                                    "#83FCD8",
-                                    "#61FF69",
-                                    "#B8F788",
-                                    "#58D2E8",
-                                    "#F2B6B6",
-                                    "#E8ED51"
-                                ],
-                                tooltip : {
-                                    trigger: 'axis',
-                                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                                        type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                optionToContent: function(opt) {
+                                    var axisData = opt.xAxis[0].data;
+                                    var series = opt.series;
+
+                                    var table = '<table style="width:auto;text-align:center" border=2><tbody><tr>'
+                                                 + '<td>时间</td>';
+                                    for (var i = 0, ls = series.length; i<ls;i++){
+                                        table += ('<td>' + series[i].name + '</td>');
                                     }
-                                },
-                                toolbox: {
-                                    feature: {
-                                        saveAsImage: {},
-                                        dataView: {}
-                                    },
-                                    optionToContent: function(opt) {
-                                        var axisData = opt.xAxis[0].data;
-                                        var series = opt.series;
-
-                                        var table = '<table style="width:auto;text-align:center" border=2><tbody><tr>'
-                                                     + '<td>时间</td>';
-                                        for (var i = 0, ls = series.length; i<ls;i++){
-                                            table += ('<td>' + series[i].name + '</td>');
+                                    table += '</tr>';
+                                    for (var i = 0, l = axisData.length; i < l; i++) {
+                                        table += ('<tr>'+ '<td>' + axisData[i] + '</td>');
+                                        for (var j = 0, ls = series.length; j < ls; j++){
+                                            table += ('<td>' + series[j].data[i] + '</td>');
                                         }
                                         table += '</tr>';
-                                        for (var i = 0, l = axisData.length; i < l; i++) {
-                                            table += ('<tr>'+ '<td>' + axisData[i] + '</td>');
-                                            for (var j = 0, ls = series.length; j < ls; j++){
-                                                table += ('<td>' + series[j].data[i] + '</td>');
-                                            }
-                                            table += '</tr>';
-                                        }
-                                        table += '</tbody></table>';
-                                        return table;
-                                    },
-                                    top: '10%',
-                                    right: '5%'
-                                },
-                                legend: {
-                                    data:[],
-                                    x: 'left',
-                                    left:'5%',
-                                    top:'10%',
-                                    right: '10%',
-                                },
-                                grid: {
-                                    left: '3%',
-                                    right: '4%',
-                                    bottom: '3%',
-                                    top: '20%',
-                                    containLabel: true
-                                },
-                                xAxis : [
-                                    {
-                                        type : 'category',
-                                        data : []
                                     }
-                                ],
-                                yAxis : [{type : 'value'}],
-                                series : []
-                            };
-                            option.legend.data = namelist;
-                            option.xAxis[0].data = ret[site].date;
-                            option.series = series;
-                            myChart.setOption(option);
-                        }
+                                    table += '</tbody></table>';
+                                    return table;
+                                },
+                                top: '10%',
+                                right: '5%'
+                            },
+                            legend: {
+                                data:[],
+                                x: 'left',
+                                left:'5%',
+                                top:'10%',
+                                right: '10%',
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                top: '20%',
+                                containLabel: true
+                            },
+                            xAxis : [
+                                {
+                                    type : 'category',
+                                    data : []
+                                }
+                            ],
+                            yAxis : [{type : 'value'}],
+                            series : []
+                        };
+
+                        option.legend.data = namelist;
+                        option.xAxis[0].data = ret[site].date;
+                        option.series = series;
+                        myChart.setOption(option);
                     }
-                    else {
-                        for (var site in ret) {
+                }
+                else {
+                    for (var site in ret) {
                         $("#canvasrow").append('<div class="col-md-6"><div id="' + site + '" style="width: 500px;height:400px;"></div></div>');
                         var dlist = [],
-                                myChart = echarts.init(document.getElementById(site));
+                            namelist = [],
+                        myChart = echarts.init(document.getElementById(site));
                         for (var name in ret[site]['data']) {
-                            dlist.push({'name': name, 'value': ret[site]['data'][name]['value'][0]})
+                            dlist.push({'name': name, 'value': ret[site]['data'][name]['value'][0]});
+
+                        }
+                        dlist = dlist.sort(function (a, b) {
+                                        return b.value - a.value
+                                    });
+                        for (var d in dlist){
+                            namelist.push(dlist[d]['name']);
                         }
                         var option = {
                             title: {
                                 text: ret[site].date + ' ' + site.toUpperCase() + ' 数据',
                                 link: ret[site].src,
-                                left: 'center'
+                                left: 'left'
                             },
                             tooltip: {
                                 trigger: 'item',
                                 formatter: "{a} <br/>{b} : {d}%"
+                            },
+                            legend: {
+                                data: namelist,
+                                orient: 'vertical',
+                                x: 'right',
+                                top:'10%',
+                            },
+                            toolbox: {
+                                feature: {
+                                    saveAsImage: {},
+                                },
+                                right:'5%'
+
                             },
                             visualMap: {
                                 show: false,
@@ -294,8 +351,8 @@
                                 {
                                     name: '最近一个月市场份额',
                                     type: 'pie',
-                                    radius: '55%',
-                                    center: ['50%', '50%'],
+                                    radius: '50%',
+                                    center: ['40%', '55%'],
                                     avoidLabelOverlap: true,
                                     label: {
                                         normal: {
@@ -314,23 +371,22 @@
                                             show: true
                                         }
                                     },
-                                    data: dlist.sort(function (a, b) {
-                                        return a.value - b.value
-                                    }),
+                                    data: dlist,
                                 }
                             ]
                         };
+                        if (ret[site]['remarks']){
+                                option.title.subtext=ret[site]['remarks'];
+                            }
+
                         myChart.setOption(option);
                     }
-                    }
+                }
             });
         }
 
     $("#last-1-month").click(function () {
         getmarketshare(1);
-    });
-    $("#last-3-month").click(function () {
-        getmarketshare(3,'最近三个月');
     });
     $("#last-1-year").click(function () {
         getmarketshare(12, '最近一年');
