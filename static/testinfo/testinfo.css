@@ -17,6 +17,7 @@
     z-index: 1000;
 }
 #detail .modal-dialog{
+    font-size: 130%;
     width: auto;
     height: auto;
 }
@@ -28,11 +29,6 @@ div{
     display:block;
     position:relative;
     margin:auto;
-}
-.detail img{
-    height: auto;
-    width: auto\9;
-    width:100%;
 }
 img {
     max-width: 100%;

@@ -18,9 +18,11 @@ urlpatterns = [
     url(r'^filename', apiget.views.GetFileNameAPI),
     url(r'^fbupload', apiget.views.FBUploadAPI),
     url(r'^getsc',apiget.views.getStatCounter),
-    url(r'^getnms',apiget.views.initNetMarketShare),
+    url(r'^getnms',apiget.views.getNetMarketShare),
     url(r'^getms',apiget.views.GetMarketShareAPI),
     url(r'^getandroid', apiget.views.getAndroid),
+    url(r'^getbaidu2', apiget.views.getBaiduNew),
     url(r'^getbaidu', apiget.views.getBaidu),
     url(r'^getios', apiget.views.getIos),
+
 ]

@@ -225,7 +225,7 @@ function table_time_date(date) {
 
 function tableinit() {
     Main.init();
-
+    TableData.init();
     openmenu($('#holeinfo'));
     var date = new Date();
     var thisyear = date.getFullYear();
