@@ -27,12 +27,15 @@ StatusList = ["空","处理中","状态2","已修复","可接受风险","误报"
 ScanTypeList = ["空","漏洞跟踪","主机扫描","插件扫描"]
 UpdateStatusList = ["没更新","状态2","处理中","已修复","可接受风险","误报"]
 
-GroupLuna = ["有道考研","有道手机版","有道专业翻译","有道网页翻译","有道四六级","有道词典","有道小组","有道口语大师",
-             "有道学堂","有道翻译官","有道精品课"]
-GroupNote = ["有道云笔记","有道云笔记论坛",]
-GroupAD = ["有道搜索推广","有道E读","有道智选",]
-GroupHuihui = ["惠惠网","惠惠购物助手","拼了App",]
-GroupD = {'LUNA':GroupLuna,'笔记':GroupNote, '广告':GroupAD, '惠惠':GroupHuihui}
+GroupLUNA = ["有道考研","有道手机版","有道专业翻译","有道网页翻译","有道四六级","有道词典","有道小组","有道口语大师",
+             "有道翻译官","有道语文达人","有道英印词典","有道词典翻译论坛","有道词典FAQ"]
+GroupYNOTE = ["有道云笔记","有道云笔记论坛",]
+GroupEAD = ["有道搜索推广","有道E读","有道智选",]
+GroupARMANI = ["惠惠网","惠惠购物助手","拼了App",]
+GroupKE = ["有道精品课","有道学堂",]
+
+GroupD = {'LUNA':GroupLUNA,'YNOTE':GroupYNOTE, 'EAD':GroupEAD, 'ARMANI':GroupARMANI, 'KE': GroupKE}
+GroupOrder = ['LUNA', 'YNOTE', 'EAD', 'ARMANI','KE']
 
 #更新信息的服务器 在tb038x上使用 nohop python -m SimpleHTTPServer 23333 & 在后台永久挂起
 _ResetUrl = 'http://tb038x.corp.youdao.com:23333/%s'
@@ -130,16 +133,11 @@ def _HoleSave(hi):
     else:
         targets = ','.join(hi['targets'])
     #分组
-    if hi['productName'].encode('utf-8') in GroupLuna:
-        group = 'LUNA'
-    elif hi['productName'].encode('utf-8') in GroupNote:
-        group = '笔记'
-    elif hi['productName'].encode('utf-8') in GroupAD:
-        group = '广告'
-    elif hi['productName'].encode('utf-8') in GroupHuihui:
-        group = '惠惠'
-    else:
-        group = '其他'
+    group = '其他'
+    for k in GroupD.keys():
+        if hi['productName'].encode('utf-8') in GroupD[k]:
+            group = k
+            break
 
     #方便筛选而构造季度字段
     hid = hi['id']
@@ -238,14 +236,19 @@ def _StatisticsJsonRp(dbos, smode, years, group):
     jsonRes['xAxis'].reverse()
 
     if smode == '1' :
-        namelist = ['LUNA', '广告', '惠惠', '笔记']
+        namelist = GroupOrder
+        allit = []
         for item in namelist:
             productit = []
             for quarter in jsonRes['xAxis']:
                 c = dbos.filter(groupName = item, quarter = quarter).count()
                 productit.append(c)
-
             jsonRes['data'].append({"name": item, "value": productit})
+        for quarter in jsonRes['xAxis']:
+            c = dbos.filter(quarter = quarter).count()
+            allit.append(c)
+        jsonRes['data'].append({"name": '全部', "value": allit})
+
     elif smode == '2':
         namelist = GroupD[group]
         for item in namelist:
@@ -261,20 +264,6 @@ def _StatisticsJsonRp(dbos, smode, years, group):
 
 #获取漏洞信息详情
 def HoleDetailAPI(request):
-    # timefile = open('%s/time.txt' % BASE_DIR,'r')
-    # content = {}
-    # content['uptime'] = timefile.read()
-    # timefile.close()
-    #
-    # dbo = HoleInfo.objects
-    # if 'id' in request.GET:
-    #     id = request.GET['id']
-    #     if id:
-    #         content['detail'] = dbo.get(h_id=id).description
-    #         return render_to_response('detail.html',content,request)
-    #     return  HttpResponse('id is null')
-    # else:
-    #     return HttpResponse('no id')
     dbo = HoleInfo.objects
     if 'id' in request.GET:
         id = request.GET['id']
@@ -284,6 +273,7 @@ def HoleDetailAPI(request):
         return  HttpResponse('id is null')
     else:
         return HttpResponse('no id')
+
 #链式选择器
 def _Selector(request, dbos):
     if 'targetType' in request.GET:
@@ -478,7 +468,9 @@ def QuartersBugsAPI(request):
         quarters = request.GET['quarters']
         if quarters and quarters!='0':
             qd = _QuarterD()
-            dbo = dbo.filter(quarter__lte = qd['last']).order_by('quarter').reverse()[:int(quarters)*4]
+            dbo = dbo.filter(quarter__lte = qd['last']).order_by('-quarter')
+            firstquarter = list(dbo.values_list('quarter', flat=True).distinct().order_by('-quarter'))[int(quarters)-1]
+            dbo = dbo.filter(quarter__gte=firstquarter).order_by('-quarter')
 
     title = 'default title'
     type = 'line'
@@ -495,7 +487,6 @@ def QuartersBugsAPI(request):
                 ret[entry.quarter[2:]] += int(count)
             else:
                 ret[entry.quarter[2:]] = int(count)
-
         if case == '1':
             title = '发现BUG数'
             for entry in dbo:
@@ -607,7 +598,7 @@ def QuartersBugsAPI(request):
             title = '各产品逃逸BUG数'
             for entry in dbo:
                 mode4f(entry.bugs_escape)
-        x = ['LUNA', 'YNOTE', 'EAD', 'ARMANI']
+        x = GroupOrder
         dp = {}
         for qu in x:
             for k in ret[qu].keys():
@@ -615,7 +606,6 @@ def QuartersBugsAPI(request):
                    dp[k].append(ret[qu][k])
                else:
                    dp[k] = [ret[qu][k],]
-
         xAxis = x
         data = dp
         type = 'bar'
@@ -638,6 +628,9 @@ def GetQuartersAPI(request):
     dret['qd'] = qd
     return JsonResponse(dret)
 
+#获取按序号的组名
+def GetOrderGroupsAPI(request):
+    return JsonResponse({'ordergroup':GroupOrder})
 #反馈信息
 def FeedBackAPI(request):
     dbo = FeedBack.objects.all()
@@ -813,7 +806,7 @@ def TIUpdate(request):
         matchcase = dbo.filter(group = group, quarter = quarter)
         #已存在，更新
         if len(matchcase) == 1:
-            matchcase[0].update(bugs_found=request.POST.get('found'), bugs_found_p1=request.POST.get('found_p1'),
+            matchcase.update(bugs_found=request.POST.get('found'), bugs_found_p1=request.POST.get('found_p1'),
                                 bugs_escape=request.POST.get('escape'), bugs_escape_p1=request.POST.get('escape_p1'),
                                 bugs_escape_noduty=request.POST.get('escape_noduty'),
                                 bugs_escape_p1_noduty=request.POST.get('escape_p1_noduty'),
@@ -837,6 +830,8 @@ def TIUpdate(request):
                 t_id += '3'
             elif group == 'ARMANI':
                 t_id += '4'
+            elif group == 'KE':
+                t_id += '5'
             else:
                 t_id += '0'
             TestInfos(group = group, quarter = quarter,
@@ -860,6 +855,8 @@ def GetLastEntryAPI(request):
     dbo = TestInfos.objects
     if 'quarter' in request.GET:
         quarter = request.GET['quarter']
+    else:
+        quarter = ''
     if 'group' in request.GET:
         group = request.GET['group']
     else:
@@ -885,16 +882,12 @@ def _QuarterD():
     elif int(nowtime.month) < 7:
         lastquarter = nowquarter + 'Q1'
         nowquarter += 'Q2'
-        
     elif int(nowtime.month) < 10:
         lastquarter = nowquarter + 'Q2'
         nowquarter += 'Q3'
-        
     else:
         lastquarter = nowquarter + 'Q3'
         nowquarter += 'Q4'
-        
-
     return {'new': nowquarter, 'last': lastquarter}
 
 #获取文件名
@@ -957,12 +950,16 @@ def GetMarketShareAPI(request):
         months = int(request.GET['months'])
     ret = {}
     statlist = list(dbo.values_list('sourcename',flat=True).distinct())
+
     for stat in statlist:
-        statdbo = dbo.filter(sourcename=stat)
-        datelist = list(statdbo.values_list('date', flat=True).distinct().order_by('date'))
-        needdate = datelist[-months]
-        needdbo = statdbo.filter(date__gte = needdate).order_by('date')
-        ret[stat] = {'date':datelist[-months:],'data':{},'src':needdbo.all()[0].source, 'remarks': needdbo.all()[0].remarks}
+        needdbo = dbo.filter(sourcename=stat)
+        datelist = list(needdbo.values_list('date', flat=True).distinct().order_by('date'))
+        ret[stat] = {'data':{},'src': needdbo.all()[0].source, 'remarks': needdbo.all()[0].remarks}
+        if (months <= len(datelist)):
+            needdbo = needdbo.filter(date__gte = datelist[-months]).order_by('date')
+            ret[stat]['date'] = datelist[-months:]
+        else:
+            ret[stat]['date'] = datelist
 
         for o in needdbo:
             if ret[stat]['data'].has_key(o.productname):
@@ -1154,7 +1151,6 @@ def getStatCounter(request):
                     return HttpResponse('Get ' + url + ' error try later,code:' + geturl.status_code)
     return HttpResponse('ok')
 
-
 def getAndroid(request):
     datamode = re.compile(r'"api": (\d+?),\n.+?"name": ".+?",\n.+?"perc": "(\d+?\.\d+?)"')
     datamode2 = re.compile(
@@ -1212,7 +1208,6 @@ def getAndroid(request):
             return HttpResponse('Get wrong response\n'+text)
     else:
         return HttpResponse('Get '+url+' error try later,code:'+geturl.status_code)
-
 
 def getBaidu(request):
     #采用时间戳（毫秒）的API格式，精确到天。

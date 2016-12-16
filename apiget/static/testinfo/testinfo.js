@@ -45,6 +45,13 @@ function chartsinit() {
         $("#charts-year").append('<option value="'+thisyear+'">'+thisyear+'</option>');
         thisyear--;
     }
+    $.getJSON('/api/getordergroup',
+    function (ret){
+        var group = $('#group')
+        for (var i in ret['ordergroup']){
+            group.append('<option value="'+ret['ordergroup'][i]+'">'+ret['ordergroup'][i]+'</option>');
+        }
+    })
     getcharts(2, 1,'最近两年安全部漏洞统计');
     $("#chart1-last-2-year").click(function () {
         getcharts(2, 1, '最近两年安全部漏洞统计');
@@ -145,7 +152,11 @@ function updateinit() {
             for (var ind in ret.quarters){
                 $("#quarter").append('<option value="'+ret.quarters[ind]+'">'+ret.quarters[ind]+'</option>');
             }
-            getpbugs();
+            $.getJSON('/api/getordergroup',function(ret){
+                    for (var i in ret['ordergroup']){
+                        $('#group').append('<option value="'+ret['ordergroup'][i]+'">'+ret['ordergroup'][i]+'</option>');
+                    }
+                });
         });
     $('#go').click(function(){
         update_getentry();
@@ -233,6 +244,14 @@ function tableinit() {
         $("#year").append('<option value="'+thisyear+'">'+thisyear+'</option>');
         thisyear--;
     }
+    $.getJSON('/api/getordergroup',
+    function (ret){
+        var group = $('#group')
+        for (var i in ret['ordergroup']){
+            group.append('<option value="'+ret['ordergroup'][i]+'">'+ret['ordergroup'][i]+'</option>');
+        }
+        group.append('<option value="其他">其他</option>')
+    })
     $("#time_quarter").click(function (){
         table_time_quarter(date);
     });
@@ -454,19 +473,10 @@ function getcharts(years, smode, title){
         , function (ret) {
             var ldate = [];
             var smaplist = [];
-            var allvalue = [];
-            for( var i = 0; i < ret.xAxis.length; i++){
-                allvalue.push(0);
-            }
             $.each(ret.data, function (idx, item) {
                 ldate.push(item.name);
                 smaplist.push({name: item.name, type: 'line', smooth: true, data: item.value, label: { normal: {show: false, position: 'top', textStyle: {fontSize: 16}}}});
-                for (var v in item.value){
-                    allvalue[v] += item.value[v];
-                }
             });
-            ldate.push('全部');
-            smaplist.push({name: '全部', type: 'line', smooth: true, data: allvalue, label: { normal: {show: false, position: 'top', textStyle: {fontSize: 16}}}});
             option.xAxis[0].data = ret.xAxis;
             option.legend.data = ldate;
             option.series = smaplist;

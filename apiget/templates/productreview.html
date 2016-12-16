@@ -50,10 +50,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <select id="name" class="form-control" name="name">
-                                        <option value="LUNA">LUNA</option>
-                                        <option value="YNOTE">YNOTE</option>
-                                        <option value="ARMANI">ARMANI</option>
-                                        <option value="EAD">EAD</option>
+
                                     </select>
                                 </div>
                             </div>
@@ -273,19 +270,27 @@
     });
     $(document).ready(function() {
         Main.init();
-        $.getJSON('/api/getquarters',
-        {
-            need: 'last'
-        },
-        function (ret) {
-           for (var ind in ret.quarters){
-               $("#quarter").append('<option value="'+ret.quarters[ind]+'">'+ret.quarters[ind]+'</option>');
-           }
-            getpbugs();
-        });
+
 
         openmenu($('#testinfo'));
         openmenu($('#productbugs'));
+        $.getJSON('/api/getquarters',
+            {
+                need: 'last'
+            },
+            function (ret) {
+               for (var ind in ret.quarters){
+                   $("#quarter").append('<option value="'+ret.quarters[ind]+'">'+ret.quarters[ind]+'</option>');
+               }
+               $.getJSON('/api/getordergroup',function(ret){
+                    for (var i in ret['ordergroup']){
+                        $('#name').append('<option value="'+ret['ordergroup'][i]+'">'+ret['ordergroup'][i]+'</option>');
+                    }
+                    getpbugs();
+                });
+
+        });
+
 
     });
 </script>
