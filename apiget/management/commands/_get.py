@@ -50,7 +50,8 @@ def getNetMarketShare():
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36"}
 
     cookies['ASP.NET_SessionId'] = init.cookies['ASP.NET_SessionId']
-    count = skipcount = errorcount = 0
+
+    count = skipcount = updatecount = errorcount = 0
     for (qprid, qpcustomd) in qpgroup:
         url = "http://netmarketshare.com/common/pages/reportexport?uimyType=dialog&" \
               "url=%%2freport.aspx%%3fqprid%%3d%s%%26qptimeframe%%3dM%%26qpsp%%3d%s%%26qpnp%%3d%s%%26qpch%%3d350%%26" \
@@ -61,6 +62,7 @@ def getNetMarketShare():
         except ConnectionError as e:
             log('Error:' + str(e) + ' in connet to' + url)
             return
+        print 'cookies:'+str(geturl.cookies)
         if geturl.status_code == 200:
             infomation = geturl.text
             soup = BeautifulSoup(infomation, "xml")
@@ -97,12 +99,13 @@ def getNetMarketShare():
                     while i < len(rd['data'][k]['value']):
                         touch = MarketShare.objects.filter(date=rd['month'][i], sourcename='netmarketshare',
                                                            platform=platform, myType=myType,
-                                                           market='ww', productname=rd['data'][k]['name'])
+                                                           market='ww', itemname=rd['data'][k]['name'])
                         if touch:
-                            if len(touch) == 1 and touch[0].value != float(rd['data'][k]['value'][i]):
+                            if  touch[0].value != float(rd['data'][k]['value'][i]):
                                 touch.update(value=float(rd['data'][k]['value'][i]))
                                 count += 1
-                                print count
+                                updatecount += 1
+                                print 'update'
                             else:
                                 skipcount += 1
                                 print 'skip'
@@ -111,18 +114,18 @@ def getNetMarketShare():
                                         source='http://netmarketshare.com/', sourcename='netmarketshare',
                                         platform=platform, myType=myType,
                                         market='ww', value=float(rd['data'][k]['value'][i]),
-                                        productname=rd['data'][k]['name']).save()
+                                        itemname=rd['data'][k]['name']).save()
                             count += 1
                             print count
                         i += 1
             else:
-                log('MarketShare/netmarketshare Get wrong response\n' + infomation)
+                log('MarketShare/netmarketshare Get wrong response.cookie:'+ str(cookies) + '\n' + infomation[:100] + '...')
                 errorcount += 1
         else:
             log('MarketShare/netmarketshare Get ' + url + ' error try later,code:' + geturl.status_code)
             errorcount += 1
-    log('Get MarketShare/netmarketshare at %s . Finish:%d, Getnone:%d, Error:%d' %
-        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, skipcount, errorcount))
+    log('Get MarketShare/netmarketshare at %s . Finish:%d, Update%d, Skip:%d, Error:%d' %
+        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
 def getStatCounter():
@@ -151,7 +154,7 @@ def getStatCounter():
     devices = ['Desktop', 'Mobile']
     statTypes = ['Browser', 'Operating%20System']
     statType_hiddens = ['browser', 'os']
-    count = skipcount = errorcount = 0
+    count = skipcount = updatecount = errorcount = 0
     for device in devices:
         device_hidden = device.lower()
         for (statType, statType_hidden) in zip(statTypes, statType_hiddens):
@@ -189,12 +192,13 @@ def getStatCounter():
                                     date=dateform(datemode.findall(set.get('toolText'))[0]),
                                     source='http://gs.statcounter.com/', sourcename='statcounter',
                                     platform=device_hidden, myType=statType_hidden,
-                                    market=region_hidden, productname=dataset.get('seriesName'))
+                                    market=region_hidden, itemname=dataset.get('seriesName'))
                                 if touch:
-                                    if len(touch) == 1 and touch[0].value != float(set.get('value')):
+                                    if  touch[0].value != float(set.get('value')):
                                         touch.update(value=float(set.get('value')))
                                         count += 1
-                                        print count
+                                        updatecount += 1
+                                        print 'update'
                                     else:
                                         skipcount += 1
                                         print 'skip'
@@ -203,17 +207,17 @@ def getStatCounter():
                                                 source='http://gs.statcounter.com/', sourcename='statcounter',
                                                 platform=device_hidden, myType=statType_hidden,
                                                 market=region_hidden, value=float(set.get('value')),
-                                                productname=dataset.get('seriesName')).save()
+                                                itemname=dataset.get('seriesName')).save()
                                     count += 1
                                     print count
                     else:
-                        log('Get MarketShare/statcounter wrong response\n' + infomation)
+                        log('Get MarketShare/statcounter wrong response\n' + infomation[:100] + '...')
                         errorcount += 1
                 else:
                     log('Get MarketShare/statcounter' + url + ' error try later,code:' + geturl.status_code)
                     errorcount += 1
-    log('Get MarketShare/statcounter at %s . Finish:%d, Getnone:%d, Error:%d' %
-        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, skipcount, errorcount))
+    log('Get MarketShare/statcounter at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
 def getAndroid():
@@ -243,7 +247,7 @@ def getAndroid():
         log('Error:'+str(e)+' in connect to '+url)
         return
 
-    count = skipcount = errorcount = 0
+    count = skipcount = updatecount = errorcount = 0
     if geturl.status_code == 200:
         infomation = geturl.text
         soup = BeautifulSoup(infomation, "lxml")
@@ -261,13 +265,14 @@ def getAndroid():
                                                            sourcename='谷歌开发者论坛',
                                                            platform='mobile', myType='os',
                                                            market='ww',
-                                                           productname='Android' + ''.join(name[1].split('<br>')),
+                                                           itemname='Android' + ''.join(name[1].split('<br>')),
                                                            remarks=timeframeDescription)
                         if touch:
-                            if len(touch) == 1 and touch[0].value != data[1]:
+                            if  touch[0].value != float(data[1]):
                                 touch.update(value=data[1])
                                 count += 1
-                                print count
+                                updatecount += 1
+                                print 'update'
                             else:
                                 skipcount += 1
                                 print 'skip'
@@ -276,19 +281,19 @@ def getAndroid():
                                         sourcename='谷歌开发者论坛',
                                         platform='mobile', myType='os',
                                         market='ww', value=data[1],
-                                        productname='Android' + ''.join(name[1].split('<br>')),
+                                        itemname='Android' + ''.join(name[1].split('<br>')),
                                         remarks=timeframeDescription).save()
                             count += 1
                             print count
         else:
-            log('Get MarketShare/android wrong response\n' + text)
+            log('Get MarketShare/android wrong response\n' + text[:100] + '...')
             errorcount += 1
     else:
         log('Get MarketShare/android ' + url + ' error try later,code:' + geturl.status_code)
         errorcount += 1
 
-    log('Get MarketShare/android at %s . Finish:%d, Getnone:%d, Error:%d' %
-        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, skipcount, errorcount))
+    log('Get MarketShare/android at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
 def getBaidu():
@@ -312,7 +317,7 @@ def getBaidu():
         'cache-control': "no-cache",
         'postman-token': "00da87ee-40fb-e2c7-7747-e75444100e18"
     }
-    count = skipcount = errorcount = 0
+    count = skipcount = updatecount = errorcount = 0
     for myType in myTypes:
         url = "http://tongji.baidu.com/data/%s/getData" % myType
         source = "http://tongji.baidu.com/data/%s" % myType
@@ -337,12 +342,13 @@ def getBaidu():
                             touch = MarketShare.objects.filter(date=cv['dates'][j].replace('.', '-'), source=source,
                                                                sourcename='百度移动流量研究院', platform='desktop',
                                                                myType=myType,
-                                                               market='CN', productname=cv['names'][i])
+                                                               market='CN', itemname=cv['names'][i])
                             if touch:
-                                if len(touch) == 1 and touch[0].value != cv['datas'][i]['pvs'][j]:
+                                if  touch[0].value != float(cv['datas'][i]['pvs'][j]):
                                     touch.update(value=cv['datas'][i]['pvs'][j])
                                     count += 1
-                                    print count
+                                    updatecount += 1
+                                    print 'update'
                                 else:
                                     skipcount += 1
                                     print 'skip'
@@ -351,24 +357,24 @@ def getBaidu():
                                             sourcename='百度移动流量研究院',
                                             platform='desktop', myType=myType,
                                             market='CN', value=cv['datas'][i]['pvs'][j],
-                                            productname=cv['names'][i],
+                                            itemname=cv['names'][i],
                                             remarks='来源于百度统计所覆盖的超过150万的站点，而不是baidu.com的流量数据。').save()
                                 count += 1
                                 print count
                             j += 1
                         i += 1
                 else:
-                    log('Get MarketShare/Baidu wrong status\n' + content)
+                    log('Get MarketShare/Baidu wrong status\n' + content[:100] + '...')
                     errorcount += 1
             else:
-                log('Get MarketShare/Baidu wrong response\n' + content)
+                log('Get MarketShare/Baidu wrong response\n' + content[:100] + '...')
                 errorcount += 1
         else:
             log('Get MarketShare/Baidu ' + url + ' error try later,code:' + response.status_code)
             errorcount += 1
 
-    log('Get MarketShare/Baidu at %s . Finish:%d, Getnone:%d, Error:%d' %
-        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, skipcount, errorcount))
+    log('Get MarketShare/Baidu at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
 def getBaiduNew():
@@ -388,7 +394,7 @@ def getBaiduNew():
 
     pd = {'iOS': 1, 'Android': 0}
 
-    count = skipcount = errorcount = 0
+    count = skipcount = updatecount = errorcount = 0
     for k in pd:
         platformId = pd[k]
 
@@ -398,56 +404,59 @@ def getBaiduNew():
         except ConnectionError as e:
             log('Error:'+str(e)+' in connect to '+rankurl+str(querystring))
             continue
+        if response.status_code == 200:
+            result = (json.loads(response.text))['result']
+            if len(result['id']) == len(result['name']):
+                for (i, id) in enumerate(result['id']):
+                    trendquerystring = {"dimension": "os", "platformId": platformId, "rankId": id, "stattime": stattime}
+                    try:
+                        trendresponse = requests.request("GET", trendurl, headers=headers, params=trendquerystring)
+                    except ConnectionError as e:
+                        log('Error:' + str(e) + ' in connect to ' + trendurl + str(trendquerystring))
+                        continue
+                    MarketShare.objects.filter(sourcename='百度移动流量研究院-' + k, platform='moblie', myType='os',
+                                               itemname=result['name'][i]).all().delete()
+                    trendresult = (json.loads(trendresponse.text))['result']
+                    if len(trendresult['scale']) == len(trendresult['name']):
 
-        result = (json.loads(response.text))['result']
-        if len(result['id']) == len(result['name']):
-            for (i, id) in enumerate(result['id']):
-                trendquerystring = {"dimension": "os", "platformId": platformId, "rankId": id, "stattime": stattime}
-                try:
-                    trendresponse = requests.request("GET", trendurl, headers=headers, params=trendquerystring)
-                except ConnectionError as e:
-                    log('Error:' + str(e) + ' in connect to ' + trendurl + str(trendquerystring))
-                    continue
-                MarketShare.objects.filter(sourcename='百度移动流量研究院-' + k, platform='moblie', myType='os',
-                                           productname=result['name'][i]).all().delete()
-                trendresult = (json.loads(trendresponse.text))['result']
-                if len(trendresult['scale']) == len(trendresult['name']):
-
-                    for (j, scale) in enumerate(trendresult['scale']):
-                        if scale == '-':
-                            value = 0
-                        else:
-                            value = scale
-                        touch = MarketShare.objects.filter(date=dateform(trendresult['name'][j]),
-                                                           sourcename='百度移动流量研究院-' + k,
-                                                           platform='mobile', myType='os', market='CN', value=value,
-                                                           productname=result['name'][i])
-                        if touch:
-                            if len(touch) == 1 and touch[0].value != value:
-                                touch.update(value=value)
+                        for (j, scale) in enumerate(trendresult['scale']):
+                            if scale == '-':
+                                value = 0
+                            else:
+                                value = scale
+                            touch = MarketShare.objects.filter(date=dateform(trendresult['name'][j]),
+                                                               sourcename='百度移动流量研究院-' + k,
+                                                               platform='mobile', myType='os', market='CN', value=value,
+                                                               itemname=result['name'][i])
+                            if touch:
+                                if  touch[0].value != float(value):
+                                    touch.update(value=value)
+                                    count += 1
+                                    updatecount += 1
+                                    print 'update'
+                                else:
+                                    skipcount += 1
+                                    print 'skip'
+                            else:
+                                MarketShare(date=dateform(trendresult['name'][j]),
+                                            source="https://mtj.baidu.com/data/mobile/device",
+                                            sourcename='百度移动流量研究院-' + k,
+                                            platform='mobile', myType='os',
+                                            market='CN', value=value,
+                                            itemname=result['name'][i],
+                                            remarks='来源于百度统计所覆盖的超过150万的站点，而不是baidu.com的流量数据。').save()
                                 count += 1
                                 print count
-                            else:
-                                skipcount += 1
-                                print 'skip'
-                        else:
-                            MarketShare(date=dateform(trendresult['name'][j]),
-                                        source="https://mtj.baidu.com/data/mobile/device",
-                                        sourcename='百度移动流量研究院-' + k,
-                                        platform='mobile', myType='os',
-                                        market='CN', value=value,
-                                        productname=result['name'][i],
-                                        remarks='来源于百度统计所覆盖的超过150万的站点，而不是baidu.com的流量数据。').save()
-                            count += 1
-                            print count
-                else:
-                    log('Get MarketShare/BaiduNew' + trendurl + ' scale-name error')
-                    errorcount += 1
+                    else:
+                        log('Get MarketShare/BaiduNew' + trendurl + ' scale-name error\n' + trendresponse.text[:100] + '...')
+                        errorcount += 1
+            else:
+                log('Get MarketShare/BaiduNew ' + rankurl + ' id-name error\n' + response.text[:100] + '...')
+                errorcount += 1
         else:
-            log('Get MarketShare/BaiduNew ' + rankurl + ' id-name error')
-            errorcount += 1
-    log('Get MarketShare/BaiduNew at %s . Finish:%d, Getnone:%d, Error:%d' %
-        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, skipcount, errorcount))
+            log('Get MarketShare/Ios ' + rankurl + ' ' + response.status_code)
+    log('Get MarketShare/BaiduNew at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
 def getIos():
@@ -468,13 +477,12 @@ def getIos():
         year = dategroup[1]
         month = d[dategroup[0]]
         return year + '-' + month
-
     try:
         geturl = requests.get(url1, headers=header)
     except ConnectionError as e:
         log(str(e))
         return
-    count = skipcount = errorcount = 0
+    count = skipcount = errorcount = updatecount = 0
 
     if geturl.status_code == 200:
         infomation = geturl.text
@@ -490,18 +498,18 @@ def getIos():
             return
 
         if geturl.status_code == 200:
-            MarketShare.objects.filter(sourcename='IOS开发者论坛').all().delete()
             infomation = geturl.text
             datas = datamode.findall(infomation)
             for data in datas:
                 touch = MarketShare.objects.filter(date=DATE, source=url1, sourcename='IOS开发者论坛',
-                                                   platform='mobile', myType='os', market='ww', productname=data[0],
+                                                   platform='mobile', myType='os', market='ww', itemname=data[0],
                                                    remarks=remarks)
                 if touch:
-                    if len(touch) == 1 and touch[0].value != data[1]:
+                    if touch[0].value != float(data[1]):
                         touch.update(value=data[1])
+                        updatecount += 1
                         count += 1
-                        print count
+                        print updatecount
                     else:
                         skipcount += 1
                 else:
@@ -509,7 +517,7 @@ def getIos():
                                 sourcename='IOS开发者论坛',
                                 platform='mobile', myType='os',
                                 market='ww', value=data[1],
-                                productname=data[0],
+                                itemname=data[0],
                                 remarks=remarks).save()
                     count += 1
                     print count
@@ -519,15 +527,15 @@ def getIos():
     else:
         log('Get MarketShare/Ios ' + url1 + ' ' + geturl.status_code)
         errorcount += 1
-    log('Get MarketShare/Ios at %s . Finish:%d, Getnone:%d, Error:%d' %
-        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, skipcount, errorcount))
+    log('Get MarketShare/Ios at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 def getLi(endDate):
     url = "http://analyzer2.corp.youdao.com/server-run/run-script.html"
     backDaysd = {'D': 1, 'W': 7, 'M': 30}
 
 
-    count = getnonecount = skipcount = errorcount = 0
+    count = getnonecount = updatecount = skipcount = errorcount = 0
 
     for datetype in backDaysd.keys():
         print datetype
@@ -545,45 +553,47 @@ def getLi(endDate):
             log('Warning:' + str(e) + ' in connect to ' + url + str(querystring))
             continue
 
-        try:
-            rptext = json.loads(response.text)
-        except ValueError as e:
-            log('Error:' + str(e)+' in load'+response.text)
-            continue
 
-        if rptext.has_key('result'):
-            for item in rptext['result']:
-                title = (item['title'].split(' - '))
-                if item['kvs'][0].has_key('msg'):
-                    getnonecount += 1
-                else:
-                    myType = title[-1]
-                    platform = title[-2]
-                    productname = title[-3]
-                    for kv in item['kvs']:
-                        touch = ProductsShare.objects.filter(productname=productname, platform=platform,
-                                                            myType=myType, remarks='', datetype=datetype,
-                                                            itemname=kv[myType] or 'other',
-                                                            date=endDate)
-                        if len(touch) == 1 :
-                            if(touch[0].pv != kv['pv'] or touch[0].uv != ['uv']):
-                                touch.update(pv=kv['pv'], uv=kv['uv'])
+
+        if response.status_code == 200:
+            rptext = json.loads(response.text)
+            if rptext.has_key('result'):
+                for item in rptext['result']:
+                    title = (item['title'].split(' - '))
+                    if item['kvs'][0].has_key('msg'):
+                        getnonecount += 1
+                    else:
+                        myType = title[-1]
+                        platform = title[-2]
+                        productname = title[-3]
+                        for kv in item['kvs']:
+                            touch = ProductsShare.objects.filter(productname=productname, platform=platform,
+                                                                myType=myType, remarks='', datetype=datetype,
+                                                                itemname=kv[myType] or 'other',
+                                                                date=endDate)
+                            if len(touch) == 1 :
+                                if(touch[0].pv != int(kv['pv']) or touch[0].uv != int(kv['uv'])):
+                                    touch.update(pv=kv['pv'], uv=kv['uv'])
+                                    count += 1
+                                    updatecount += 1
+                                    print 'update'
+                                else:
+                                    skipcount += 1
+                                    print 'skip'
+                            elif len(touch) > 1:
+                                errorcount += 1
+                            else:
+                                ProductsShare(productname=productname, platform=platform, myType=myType, remarks='',
+                                              pv=kv['pv'], uv=kv['uv'], itemname=kv[myType] or 'other',
+                                              date=endDate, datetype=datetype).save()
                                 count += 1
                                 print count
-                            else:
-                                skipcount += 1
-                                print 'skip'
-                        elif len(touch) > 1:
-                            errorcount += 1
-                        else:
-                            ProductsShare(productname=productname, platform=platform, myType=myType, remarks='',
-                                          pv=kv['pv'], uv=kv['uv'], itemname=kv[myType] or 'other',
-                                          date=endDate, datetype=datetype).save()
-                            count += 1
-                            print count
+            else:
+                log ('Get ProductsShare/Li has no result\n'+ rptext[:100] + '...')
+                errorcount += 1
         else:
-            log ('Get ProductsShare/Li has no result')
+            log('Get MarketShare/Li ' + url + ' ' + response.status_code)
             errorcount += 1
 
-    log('Get ProductsShare/Li at %s . Finish:%d, Getnone:%d, Error:%d' %
-        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, getnonecount, errorcount))
+    log('Get ProductsShare/Li at %s . Finish:%d, Update:%d, Getnone:%d, Skip:%d, Error:%d' %
+        (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, getnonecount, skipcount, errorcount))
