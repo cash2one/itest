@@ -66,12 +66,23 @@ class FeedBack(models.Model):
     escape1 = models.CharField(max_length=2)
 
 class MarketShare(models.Model):
-    productname = models.CharField(max_length=30)
+    itemname = models.CharField(max_length=30)
     value = models.FloatField()
     date = models.CharField(max_length=10)
     source = models.TextField()
     sourcename = models.CharField(max_length=30)
     platform = models.CharField(max_length=10)# desktop / mobile
-    type = models.CharField(max_length=10)# browser / os
+    myType = models.CharField(max_length=10)# browser / os
     market = models.CharField(max_length=10)# ww / CN
+    remarks = models.TextField()
+
+class ProductsShare(models.Model):
+    productname = models.CharField(max_length=30)
+    pv = models.IntegerField()
+    uv = models.IntegerField()
+    date = models.CharField(max_length=10)
+    datetype = models.CharField(max_length=2)
+    itemname = models.CharField(max_length=30)
+    platform = models.CharField(max_length=10)# ios/android/pc/web
+    myType = models.CharField(max_length=10)# browser / os / dpi
     remarks = models.TextField()

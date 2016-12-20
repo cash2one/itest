@@ -73,3 +73,8 @@ def marketshare(request):
     content = _cinit()
 
     return render(request, 'marketshare.html', content)
+
+def productsshare(request):
+    content = _cinit()
+
+    return render(request, 'productsshare.html', content)

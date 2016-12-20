@@ -25,7 +25,7 @@
             <!-- start: FORM VALIDATION 1 PANEL -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-line-chart teal"></i>市场份额数据
+                    <i class="fa fa-line-chart teal"></i>分产品市场份额
                     <div class="panel-tools">
                         <a class="btn btn-xs btn-link panel-close" href="#">
                             <i class="fa fa-times"></i>
@@ -50,52 +50,58 @@
                                                     点击右上角 <i class="clip-download"></i> 图标可下载图片
                                                 </li>
                                                 <li>
-                                                    点击标题可跳转到信息源网站
-                                                </li>
-                                                <li>
                                                     图例已按最新数据从大到小的顺序排好（左→右，上→下）。
                                                 </li>
                                             </ol>
 
                                         </li>
                                         <li>
-                                            数据来源于五个网站，分别是 <a href="http://netmarketshare.com/" target="_blank">Netmarketshare</a>
-                                            、<a href="http://gs.statcounter.com/" target="_blank">Statcounter</a>、
-                                            <a href="https://developer.android.com/about/dashboards/index.html" target="_blank">安卓开发者论坛</a>、
-                                            <a href="https://developer.apple.com/support/app-store/" target="_blank">IOS开发者论坛</a> 及
-                                            <a href="http://tongji.baidu.com/data/" target="_blank">百度移动流量研究院</a>。
+                                            数据来源于李斯宁的analyzer2。
                                         </li>
                                         <li>
-                                            Netmarketshare和安卓开发者论坛只有全球数据，百度移动流量研究院只有中国市场数据。
+                                            翻译官只有ios/android 操作系统的数据。分辨率数据暂缺。
                                         </li>
                                         <li>
-                                            安卓开发者论坛每周更新，暂时只有2016年12月5日的数据。IOS开发者论坛每月更新，暂时只有2016年11月27日的数据。
+                                            词典只有ios/android/pc 操作系统的数据。分辨率数据暂缺。
                                         </li>
                                         <li>
-                                            百度移动流量研究院还有各品牌、机型分辨率等的市场份额信息欢迎猛戳 <i class="fa fa-hand-o-right"></i>
-                                            <button type="button" class="btn btn-link">
-                                            <a href="https://mtj.baidu.com/data/mobile/device" target="_blank">https://mtj.baidu.com/data/mobile/device</a>
-                                        </button>
-
+                                            E读只有android 操作系统/分辨率的数据。
+                                        </li>
+                                        <li>
+                                            笔记只有android 操作系统/分辨率， ios/pc 操作系统， web 操作系统/浏览器的数据。
+                                        </li>
+                                        <li>
+                                            精品课数据暂缺。
                                         </li>
                                     </ul>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="alert alert-block alert-warning fade in">
+                                    <h4 class="alert-heading"><i class="fa fa-exclamation-triangle"></i> 警告!</h4>
+                                    <h5>analyzer上的数据均属公司机密，请对外保密！！</h5>
+                                </div>
+                            </div>
                         </div>
                     <form action="" role="form" id="form">
-
                         <div class="row">
-
                         </div>
                         <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        产品名 <span class="symbol"></span>
+                                    </label>
+                                    <select id="productname" class="form-control" name="productname">
+                                    </select>
+                                </div>
+                            </div>
                              <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">
                                         平台 <span class="symbol"></span>
                                     </label>
                                     <select id="platform" class="form-control" name="platform">
-                                        <option value="mobile">移动端</option>
-                                        <option value="desktop">桌面</option>
                                     </select>
                                 </div>
                             </div>
@@ -105,32 +111,35 @@
                                         类型 <span class="symbol"></span>
                                     </label>
                                     <select id="type" class="form-control" name="type">
-                                        <option value="os">操作系统</option>
-                                        <option value="browser">浏览器</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        市场 <span class="symbol"></span>
+                                        图表类型 <span class="symbol"></span>
                                     </label>
-                                    <select id="market" class="form-control" name="market">
-                                        <option value="CN">中国</option>
-                                        <option value="ww">全球</option>
+                                    <select id="mode" class="form-control" name="mode">
+                                        <option value="1">最新数据-饼图</option>
+                                        <option value="2">变化趋势-折线图</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-2">
-                                <button class="btn btn-info btn-block" id="last-1-month" type="button">
-                                    最近一个月 <i class="fa fa-arrow-circle-right"></i>
+                                <button class="btn btn-info btn-block" id="last-1-day" type="button">
+                                    1天 <i class="fa fa-arrow-circle-right"></i>
                                 </button>
                             </div>
                             <div class="col-md-2">
-                                <button class="btn btn-info btn-block" id="last-1-year" type="button">
-                                    最近一年 <i class="fa fa-arrow-circle-right"></i>
+                                <button class="btn btn-info btn-block" id="last-7-day" type="button">
+                                    7天 <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-info btn-block" id="last-30-day" type="button">
+                                    30天 <i class="fa fa-arrow-circle-right"></i>
                                 </button>
                             </div>
                         </div>
@@ -189,28 +198,121 @@
 <script type="text/javascript" src="/static/assets/js/min/form-elements.min.js"></script>
 <script type="text/javascript" src="/static/testinfo/testinfo.js"></script>
 <script>
-    function getmarketshare(Months, title){
-        var market = $("#market").val(),
+    function getproductsshare(dateType, dateSymbol){
+        var productname = $("#productname").val(),
             type = $("#type").val(),
-            platform = $("#platform").val();
-        $.getJSON("/api/getms",
+            platform = $("#platform").val(),
+            mode = $("#mode").val();
+        $.getJSON("/api/getps",
             {
-                "market": market,
+                "productname": productname,
                 "type": type,
-                "platform": platform ,
-                "months": Months
+                "platform": platform,
+                "datetype": dateType,
+                "mode": mode
             }
-            , function (ret) {
+            , function (ret)
+            {
                 $("#canvasrow").children().remove();
+                result = ret['result'];
+                for (var site in result)
+                {
 
-                if (Months > 1) {
-                    for (var site in ret) {
-
+                    if (mode == '1')
+                    {
+                        $("#canvasrow").append('<div class="col-md-6"><div id="' + site + '" style="width: 500px;height:400px;"></div></div>');
+                        var dlist = [],
+                            namelist = [],
+                            myChart = echarts.init(document.getElementById(site)),
+                            datas = result[site]['data'];
+                        for (var name in datas) {
+                            dlist.push({'name': name, 'value': datas[name]['value']});
+                        }
+                        dlist = dlist.sort(function (a, b) {
+                                        return b.value - a.value
+                                    });
+                        for (var d in dlist){
+                            namelist.push(dlist[d]['name']);
+                        }
+                        var option = {
+                            title: {
+                                text: ret['title'] + ' '  + site.toUpperCase() + ' ' + dateSymbol + ' 数据',
+                                left: 'left'
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} / {d}%"
+                            },
+                            legend: {
+                                data: namelist,
+                                orient: 'vertical',
+                                x: 'right',
+                                top:'10%',
+                            },
+                            toolbox: {
+                                feature: {
+                                    saveAsImage: {},
+                                },
+                                right:'5%'
+                            },
+                            visualMap: {
+                                show: false,
+                                min: 80,
+                                max: 600,
+                                inRange: {
+                                    colorLightness: [0, 1]
+                                }
+                            },
+                            color: [
+                                "#81C2D6",
+                                "#8192D6",
+                                "#D9B3E6",
+                                "#DCF7A1",
+                                "#83FCD8",
+                                "#61FF69",
+                                "#B8F788",
+                                "#58D2E8",
+                                "#F2B6B6",
+                                "#E8ED51"
+                            ],
+                            series: [
+                                {
+                                    name: '市场份额',
+                                    type: 'pie',
+                                    radius: '50%',
+                                    center: ['40%', '55%'],
+                                    avoidLabelOverlap: true,
+                                    label: {
+                                        normal: {
+                                            show: true
+                                        },
+                                        emphasis: {
+                                            show: true,
+                                            textStyle: {
+                                                fontSize: '10',
+                                                fontWeight: 'bold'
+                                            }
+                                        }
+                                    },
+                                    labelLine: {
+                                        normal: {
+                                            show: true
+                                        }
+                                    },
+                                    data: dlist,
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                    }
+                    else{
                         $("#canvasrow").append('<div class="col-md-12"><div id="' + site + '" style="width: 1000px;height:400px;"></div></div>');
-                        var series = [],namelist = [], myChart = echarts.init(document.getElementById(site));
-
-                        for (var name in ret[site]['data']) {
-                            series.push({name: name, type: 'line', data: ret[site]['data'][name]['value'],
+                        var namelist = [],
+                            myChart = echarts.init(document.getElementById(site)),
+                            datas = result[site]['data'];
+                        var series = [];
+                        for (var name in datas) {
+                            series.push({name: name, type: 'line', data: datas[name]['value'],
                                 smooth:true});
                         }
                         series = series.sort(function (a, b) {
@@ -221,8 +323,7 @@
                         }
                         var option = {
                             title: {
-                                text: site.toUpperCase() +' '+ title + ' 数据',
-                                link: ret[site].src,
+                                text: ret['title'] +' '+ site.toUpperCase() + ' 数据/每' + dateSymbol,
                                 x: 'center',
                                 align: 'right'
                             },
@@ -297,113 +398,24 @@
                         };
 
                         option.legend.data = namelist;
-                        option.xAxis[0].data = ret[site].date;
+                        option.xAxis[0].data = ret['date'];
                         option.series = series;
                         myChart.setOption(option);
                     }
+
                 }
-                else {
-                    for (var site in ret) {
-                        $("#canvasrow").append('<div class="col-md-6"><div id="' + site + '" style="width: 500px;height:400px;"></div></div>');
-                        var dlist = [],
-                            namelist = [],
-                        myChart = echarts.init(document.getElementById(site));
-                        for (var name in ret[site]['data']) {
-                            dlist.push({'name': name, 'value': ret[site]['data'][name]['value'][0]});
+            }
+        ).error(function (){ alert('无此数据');});
+    }
 
-                        }
-                        dlist = dlist.sort(function (a, b) {
-                                        return b.value - a.value
-                                    });
-                        for (var d in dlist){
-                            namelist.push(dlist[d]['name']);
-                        }
-                        var option = {
-                            title: {
-                                text: ret[site].date + ' ' + site.toUpperCase() + ' 数据',
-                                link: ret[site].src,
-                                left: 'left'
-                            },
-                            tooltip: {
-                                trigger: 'item',
-                                formatter: "{a} <br/>{b} : {d}%"
-                            },
-                            legend: {
-                                data: namelist,
-                                orient: 'vertical',
-                                x: 'right',
-                                top:'10%',
-                            },
-                            toolbox: {
-                                feature: {
-                                    saveAsImage: {},
-                                },
-                                right:'5%'
-
-                            },
-                            visualMap: {
-                                show: false,
-                                min: 80,
-                                max: 600,
-                                inRange: {
-                                    colorLightness: [0, 1]
-                                }
-                            },
-                            color: [
-                                "#81C2D6",
-                                "#8192D6",
-                                "#D9B3E6",
-                                "#DCF7A1",
-                                "#83FCD8",
-                                "#61FF69",
-                                "#B8F788",
-                                "#58D2E8",
-                                "#F2B6B6",
-                                "#E8ED51"
-                            ],
-                            series: [
-                                {
-                                    name: '最近一个月市场份额',
-                                    type: 'pie',
-                                    radius: '50%',
-                                    center: ['40%', '55%'],
-                                    avoidLabelOverlap: true,
-                                    label: {
-                                        normal: {
-                                            show: true
-                                        },
-                                        emphasis: {
-                                            show: true,
-                                            textStyle: {
-                                                fontSize: '10',
-                                                fontWeight: 'bold'
-                                            }
-                                        }
-                                    },
-                                    labelLine: {
-                                        normal: {
-                                            show: true
-                                        }
-                                    },
-                                    data: dlist,
-                                }
-                            ]
-                        };
-                        if (ret[site]['remarks']){
-                                option.title.subtext=ret[site]['remarks'];
-                            }
-
-                        myChart.setOption(option);
-                    }
-                }
-            });
-        }
-
-    $("#last-1-month").click(function () {
-        getmarketshare(1);
+    $("#last-30-day").click(function () {
+        getproductsshare('M', '30天');
     });
-    $("#last-1-year").click(function () {
-        getmarketshare(12, '最近一年');
+    $("#last-7-day").click(function () {
+        getproductsshare('W', '7天');
+    });
+    $("#last-1-day").click(function () {
+        getproductsshare('D', '1天');
     });
 
     var openmenu = function(menunow){
@@ -415,6 +427,16 @@
     $(document).ready(function() {
         Main.init();
         openmenu($('#toolbox'));
+        $.getJSON('/api/getpsfi',
+            function (ret){
+                for (var k in ret){
+                    var inputitem = $("#"+k);
+                    for (var i in ret[k]){
+                        inputitem.append('<option value="'+ ret[k][i] +'">' + ret[k][i] + '</option>');
+                    }
+                }
+            }
+        )
     });
 </script>
 {% endblock %}

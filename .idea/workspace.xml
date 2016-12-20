@@ -4,19 +4,14 @@
     <list default="true" id="d059be19-4593-4fd2-a487-940b2b01a464" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/static/bower_components/datatables/media/js/jquery.dataTables.min.js" afterPath="$PROJECT_DIR$/apiget/static/bower_components/datatables/media/js/jquery.dataTables.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/static/testinfo/testinfo.js" afterPath="$PROJECT_DIR$/apiget/static/testinfo/testinfo.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/models.py" afterPath="$PROJECT_DIR$/apiget/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/templates/base.html" afterPath="$PROJECT_DIR$/apiget/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/templates/charts.html" afterPath="$PROJECT_DIR$/apiget/templates/charts.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/templates/marketshare.html" afterPath="$PROJECT_DIR$/apiget/templates/marketshare.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/templates/productreview.html" afterPath="$PROJECT_DIR$/apiget/templates/productreview.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/templates/table.html" afterPath="$PROJECT_DIR$/apiget/templates/table.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/templates/update.html" afterPath="$PROJECT_DIR$/apiget/templates/update.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/urls.py" afterPath="$PROJECT_DIR$/apiget/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/views.py" afterPath="$PROJECT_DIR$/apiget/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/itest/urls.py" afterPath="$PROJECT_DIR$/itest/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/itest/views.py" afterPath="$PROJECT_DIR$/itest/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/log" afterPath="$PROJECT_DIR$/log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/bower_components/datatables/media/js/jquery.dataTables.min.js" afterPath="$PROJECT_DIR$/static/bower_components/datatables/media/js/jquery.dataTables.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/testinfo/testinfo.js" afterPath="$PROJECT_DIR$/static/testinfo/testinfo.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/time.txt" afterPath="$PROJECT_DIR$/time.txt" />
     </list>
     <ignored path="itest.iws" />
@@ -37,63 +32,69 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="marketshare.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apiget/templates/marketshare.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apiget/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="499">
-              <caret line="80" column="30" selection-start-line="80" selection-start-column="30" selection-end-line="80" selection-end-column="30" />
+            <state relative-caret-position="343">
+              <caret line="969" column="72" selection-start-line="969" selection-start-column="72" selection-end-line="969" selection-end-column="72" />
               <folding>
-                <element signature="n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#div#0;n#form#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="false" />
-                <marker date="1481874852668" expanded="true" signature="10052:10079" ph="..." />
-                <marker date="1481874852668" expanded="true" signature="12124:12152" ph="..." />
-                <marker date="1481874852668" expanded="true" signature="14639:14665" ph="..." />
+                <element signature="e#23#34#0" expanded="true" />
+                <marker date="1482222805595" expanded="false" signature="8365:8648" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="testinfo.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apiget/static/testinfo/testinfo.js">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apiget/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="412">
-              <caret line="252" column="54" selection-start-line="252" selection-start-column="54" selection-end-line="252" selection-end-column="54" />
+            <state relative-caret-position="330">
+              <caret line="23" column="52" selection-start-line="23" selection-start-column="52" selection-end-line="23" selection-end-column="52" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/apiget/views.py">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apiget/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="959" column="50" selection-start-line="959" selection-start-column="50" selection-end-line="959" selection-end-column="50" />
+            <state relative-caret-position="163">
+              <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_get.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apiget/management/commands/_get.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1213">
+              <caret line="567" column="44" selection-start-line="567" selection-start-column="44" selection-end-line="567" selection-end-column="44" />
               <folding>
-                <element signature="e#8136#8416#0" expanded="false" />
-                <element signature="e#19545#19926#0" expanded="false" />
-                <element signature="e#20057#23824#0" expanded="false" />
-                <element signature="e#23877#25981#0" expanded="false" />
-                <element signature="e#26043#29141#0" expanded="false" />
-                <element signature="e#29185#30172#0" expanded="false" />
-                <element signature="e#30195#30705#0" expanded="false" />
-                <element signature="e#30747#30856#0" expanded="false" />
-                <element signature="e#30898#31536#0" expanded="false" />
-                <element signature="e#34175#39123#0" expanded="false" />
-                <element signature="e#39158#43170#0" expanded="false" />
-                <element signature="e#43201#46125#0" expanded="false" />
-                <element signature="e#46154#49548#0" expanded="false" />
-                <element signature="e#49580#52523#0" expanded="false" />
-                <element signature="e#52550#54907#0" expanded="false" />
+                <element signature="e#15#26#0" expanded="true" />
+                <element signature="e#367#5811#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="charts.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apiget/templates/charts.html">
+      <file leaf-file-name="getandroid.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apiget/management/commands/getandroid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="45" column="46" selection-start-line="38" selection-start-column="40" selection-end-line="45" selection-end-column="46" />
+            <state relative-caret-position="75">
+              <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+              <folding>
+                <element signature="e#0#65#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="productsshare.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apiget/templates/productsshare.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="311">
+              <caret line="314" column="0" selection-start-line="314" selection-start-column="0" selection-end-line="314" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -102,49 +103,46 @@
       <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apiget/templates/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="62" column="34" selection-start-line="62" selection-start-column="34" selection-end-line="62" selection-end-column="34" />
+            <state relative-caret-position="-2">
+              <caret line="228" column="58" selection-start-line="228" selection-start-column="58" selection-end-line="228" selection-end-column="58" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="table.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apiget/templates/table.html">
+      <file leaf-file-name="marketshare.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/apiget/templates/marketshare.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="755">
-              <caret line="129" column="18" selection-start-line="129" selection-start-column="18" selection-end-line="129" selection-end-column="18" />
+            <state relative-caret-position="-1531">
+              <caret line="291" column="45" selection-start-line="291" selection-start-column="45" selection-end-line="291" selection-end-column="45" />
+              <folding>
+                <element signature="n#div#0;n#form#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="false" />
+                <marker date="1482222835628" expanded="true" signature="10235:10262" ph="..." />
+                <marker date="1482222835628" expanded="true" signature="12569:12597" ph="..." />
+                <marker date="1482222835628" expanded="true" signature="15084:15110" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="77" selection-start-line="17" selection-start-column="77" selection-end-line="17" selection-end-column="77" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="quarterreview.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apiget/templates/quarterreview.html">
+      <file leaf-file-name="getli.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apiget/management/commands/getli.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="productreview.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apiget/templates/productreview.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="499">
-              <caret line="284" column="15" selection-start-line="284" selection-start-column="15" selection-end-line="289" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apiget/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="15" column="24" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="24" />
-              <folding />
+            <state relative-caret-position="300">
+              <caret line="20" column="15" selection-start-line="20" selection-start-column="15" selection-end-line="20" selection-end-column="15" />
+              <folding>
+                <element signature="e#1#66#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -155,9 +153,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="Python Script" />
         <option value="CSS File" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -167,21 +165,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/apiget/static/bower_components/bootstrap-daterangepicker/daterangepicker.js" />
-        <option value="$PROJECT_DIR$/apiget/static/bower_components/bootstrap-daterangepicker/daterangepicker.css" />
-        <option value="$PROJECT_DIR$/apiget/static/bower_components/jquery/dist/jquery.min.js" />
-        <option value="$PROJECT_DIR$/apiget/static/bower_components/datatables/media/css/dataTables.bootstrap.min.css" />
-        <option value="$PROJECT_DIR$/apiget/static/bower_components/select2/dist/css/select2.min.css" />
-        <option value="$PROJECT_DIR$/apiget/templates/test.html" />
-        <option value="$PROJECT_DIR$/holeinfo.conf" />
-        <option value="$PROJECT_DIR$/static/bower_components/datatables/media/js/jquery.dataTables.min.js" />
-        <option value="$PROJECT_DIR$/static/assets/js/min/table-data.min.js" />
-        <option value="$PROJECT_DIR$/apiget/static/assets/js/min/table-data.min.js" />
-        <option value="$PROJECT_DIR$/tem_dbcopy.py" />
-        <option value="$PROJECT_DIR$/dbcopy.py" />
-        <option value="$PROJECT_DIR$/dbbackup/backup2016-11-15.json" />
-        <option value="$PROJECT_DIR$/apiget/templates/table2.html" />
-        <option value="$PROJECT_DIR$/apiget/templates/charts2.html" />
         <option value="$PROJECT_DIR$/apiget/templates/navbar.html" />
         <option value="$PROJECT_DIR$/apiget/templates/updata.html" />
         <option value="$PROJECT_DIR$/apiget/templates/download.html" />
@@ -201,23 +184,38 @@
         <option value="$PROJECT_DIR$/apiget/templates/feedback.html" />
         <option value="$PROJECT_DIR$/apiget/templates/filedown.html" />
         <option value="$PROJECT_DIR$/apiget/templates/quarterreview.html" />
-        <option value="$PROJECT_DIR$/log" />
         <option value="$PROJECT_DIR$/test" />
-        <option value="$PROJECT_DIR$/itest/urls.py" />
-        <option value="$PROJECT_DIR$/itest/views.py" />
         <option value="$PROJECT_DIR$/apiget/static/echarts/js/echarts.min.js" />
-        <option value="$PROJECT_DIR$/apiget/models.py" />
         <option value="$PROJECT_DIR$/apiget/static/testinfo/testinfo.css" />
         <option value="$PROJECT_DIR$/apiget/static/bower_components/datatables/media/js/jquery.dataTables.min.js" />
-        <option value="$PROJECT_DIR$/apiget/urls.py" />
         <option value="$PROJECT_DIR$/apiget/templates/productreview.html" />
         <option value="$PROJECT_DIR$/apiget/templates/update.html" />
-        <option value="$PROJECT_DIR$/apiget/templates/marketshare.html" />
         <option value="$PROJECT_DIR$/apiget/static/testinfo/testinfo.js" />
         <option value="$PROJECT_DIR$/apiget/templates/table.html" />
         <option value="$PROJECT_DIR$/apiget/templates/charts.html" />
+        <option value="$PROJECT_DIR$/itest/urls.py" />
+        <option value="$PROJECT_DIR$/apiget/templates/productsshare2.html" />
+        <option value="$PROJECT_DIR$/itest/views.py" />
+        <option value="$PROJECT_DIR$/script/getbaidu.py" />
+        <option value="$PROJECT_DIR$/script/get.py" />
+        <option value="$PROJECT_DIR$/script/log.py" />
+        <option value="$PROJECT_DIR$/script/getli.py" />
+        <option value="$PROJECT_DIR$/scripts/getli.py" />
+        <option value="$PROJECT_DIR$/apiget/management/commands/_log.py" />
+        <option value="$PROJECT_DIR$/apiget/urls.py" />
+        <option value="$PROJECT_DIR$/apiget/management/commands/getnms.py" />
+        <option value="$PROJECT_DIR$/log" />
+        <option value="$PROJECT_DIR$/apiget/management/commands/getios.py" />
+        <option value="$PROJECT_DIR$/apiget/management/commands/getbaidu.py" />
+        <option value="$PROJECT_DIR$/apiget/management/commands/getsc.py" />
+        <option value="$PROJECT_DIR$/apiget/management/commands/getandroid.py" />
+        <option value="$PROJECT_DIR$/apiget/models.py" />
+        <option value="$PROJECT_DIR$/apiget/management/commands/getli.py" />
+        <option value="$PROJECT_DIR$/apiget/management/commands/_get.py" />
         <option value="$PROJECT_DIR$/apiget/templates/base.html" />
+        <option value="$PROJECT_DIR$/apiget/templates/productsshare.html" />
         <option value="$PROJECT_DIR$/apiget/views.py" />
+        <option value="$PROJECT_DIR$/apiget/templates/marketshare.html" />
       </list>
     </option>
   </component>
@@ -273,6 +271,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -285,20 +284,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="itest" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="itest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="itest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="itest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="itest" />
@@ -351,11 +336,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="testinfo" />
+              <option name="myItemId" value="management" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -373,36 +354,17 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="itest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="itest" />
+              <option name="myItemId" value="management" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="apiget" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bower_components" />
+              <option name="myItemId" value="commands" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -416,16 +378,16 @@
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/apiget/static/bower_components/iCheck/skins" />
-      <recent name="$PROJECT_DIR$/apiget/static/bower_components/iCheck/skins/flat" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apiget/management/commands" />
+      <recent name="$PROJECT_DIR$/apiget/management" />
       <recent name="$PROJECT_DIR$/apiget" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/apiget/static/echarts/js" />
-      <recent name="$PROJECT_DIR$/media" />
-      <recent name="$PROJECT_DIR$/apiget/media" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apiget/static/bower_components/iCheck/skins" />
+      <recent name="$PROJECT_DIR$/apiget/static/bower_components/iCheck/skins/flat" />
     </key>
   </component>
   <component name="RunManager">
@@ -739,97 +701,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="11" />
+      <option name="time" value="13" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/apiget/migrations/0004_remove_holeinfo_offset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dbbackup/backup2016-11-15.json" />
-    <entry file="file://$PROJECT_DIR$/dbcopy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="11" column="89" selection-start-line="11" selection-start-column="89" selection-end-line="11" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/templates/table2.html" />
-    <entry file="file://$PROJECT_DIR$/itest.conf">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/templates/navbar.html" />
-    <entry file="file://$PROJECT_DIR$/apiget/tests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/assets/css/main.min.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="0" column="25750" selection-start-line="0" selection-start-column="25746" selection-end-line="0" selection-end-column="25750" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/Django-1.10-py2.7.egg/django/core/servers/basehttp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/Django-1.10-py2.7.egg/django/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/Django-1.10-py2.7.egg/django/conf/global_settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3857">
-          <caret line="269" column="0" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/templates/download.html" />
-    <entry file="file://$PROJECT_DIR$/itest/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="132" column="0" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/static/bower_components/iCheck/icheck.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="266" selection-start-line="10" selection-start-column="266" selection-end-line="10" selection-end-column="266" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/bower_components/iCheck/icheck.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="266" selection-start-line="10" selection-start-column="266" selection-end-line="10" selection-end-column="266" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/static/bower_components/iCheck/skins/flat/aero.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/apiget/static/bower_components/iCheck/skins/futurico/futurico.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -908,13 +784,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/apiget/templates/feedback.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -957,13 +826,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/itest/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1020">
-          <caret line="74" column="39" selection-start-line="74" selection-start-column="39" selection-end-line="74" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/apiget/static/bower_components/datatables/media/js/jquery.dataTables.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="172">
@@ -989,37 +851,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="795">
           <caret line="53" column="109" selection-start-line="53" selection-start-column="109" selection-end-line="53" selection-end-column="109" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1125">
-          <caret line="77" column="0" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/templates/marketshare.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="80" column="30" selection-start-line="80" selection-start-column="30" selection-end-line="80" selection-end-column="30" />
-          <folding>
-            <element signature="n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#0;n#form#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="false" />
-            <marker date="1481874852668" expanded="true" signature="10052:10079" ph="..." />
-            <marker date="1481874852668" expanded="true" signature="12124:12152" ph="..." />
-            <marker date="1481874852668" expanded="true" signature="14639:14665" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/templates/productreview.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="284" column="15" selection-start-line="284" selection-start-column="15" selection-end-line="289" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1027,54 +858,176 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/itest/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="47" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="15" column="24" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/static/testinfo/testinfo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="252" column="54" selection-start-line="252" selection-start-column="54" selection-end-line="252" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apiget/templates/table.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="755">
-          <caret line="129" column="18" selection-start-line="129" selection-start-column="18" selection-end-line="129" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/apiget/templates/charts.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="45" column="46" selection-start-line="38" selection-start-column="40" selection-end-line="45" selection-end-column="46" />
+        <state relative-caret-position="298">
+          <caret line="95" column="54" selection-start-line="95" selection-start-column="54" selection-end-line="95" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/static/testinfo/testinfo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="252" column="54" selection-start-line="252" selection-start-column="54" selection-end-line="252" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/templates/productreview.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="523">
+          <caret line="284" column="15" selection-start-line="284" selection-start-column="15" selection-end-line="289" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/templates/table.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2080">
+          <caret line="129" column="18" selection-start-line="129" selection-start-column="18" selection-end-line="129" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/templates/productsshare2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="162" column="43" selection-start-line="162" selection-start-column="43" selection-end-line="162" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/get.py" />
+    <entry file="file://$PROJECT_DIR$/scripts/getbaidu.py" />
+    <entry file="file://$PROJECT_DIR$/apiget/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/log.py" />
+    <entry file="file://$PROJECT_DIR$/scripts/getli.py" />
+    <entry file="file://$PROJECT_DIR$/itest/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="27" column="48" selection-start-line="27" selection-start-column="48" selection-end-line="27" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/itest/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1095">
+          <caret line="79" column="41" selection-start-line="79" selection-start-column="41" selection-end-line="79" selection-end-column="41" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/management/commands/_log.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="3" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/management/commands/getbaidu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/management/commands/getios.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="16" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/management/commands/getnms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="6" column="19" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
+          <folding>
+            <element signature="e#1#66#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/management/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/management/commands/getsc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="23" column="52" selection-start-line="23" selection-start-column="52" selection-end-line="23" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="77" selection-start-line="17" selection-start-column="77" selection-end-line="17" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/management/commands/getli.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="15" selection-start-line="20" selection-start-column="15" selection-end-line="20" selection-end-column="15" />
+          <folding>
+            <element signature="e#1#66#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/management/commands/_get.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1213">
+          <caret line="567" column="44" selection-start-line="567" selection-start-column="44" selection-end-line="567" selection-end-column="44" />
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+            <element signature="e#367#5811#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/apiget/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="62" column="34" selection-start-line="62" selection-start-column="34" selection-end-line="62" selection-end-column="34" />
+        <state relative-caret-position="-2">
+          <caret line="228" column="58" selection-start-line="228" selection-start-column="58" selection-end-line="228" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/management/commands/getandroid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/templates/productsshare.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="314" column="0" selection-start-line="314" selection-start-column="0" selection-end-line="314" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1082,23 +1035,31 @@
     <entry file="file://$PROJECT_DIR$/apiget/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="343">
-          <caret line="959" column="50" selection-start-line="959" selection-start-column="50" selection-end-line="959" selection-end-column="50" />
+          <caret line="969" column="72" selection-start-line="969" selection-start-column="72" selection-end-line="969" selection-end-column="72" />
           <folding>
-            <element signature="e#8136#8416#0" expanded="false" />
-            <element signature="e#19545#19926#0" expanded="false" />
-            <element signature="e#20057#23824#0" expanded="false" />
-            <element signature="e#23877#25981#0" expanded="false" />
-            <element signature="e#26043#29141#0" expanded="false" />
-            <element signature="e#29185#30172#0" expanded="false" />
-            <element signature="e#30195#30705#0" expanded="false" />
-            <element signature="e#30747#30856#0" expanded="false" />
-            <element signature="e#30898#31536#0" expanded="false" />
-            <element signature="e#34175#39123#0" expanded="false" />
-            <element signature="e#39158#43170#0" expanded="false" />
-            <element signature="e#43201#46125#0" expanded="false" />
-            <element signature="e#46154#49548#0" expanded="false" />
-            <element signature="e#49580#52523#0" expanded="false" />
-            <element signature="e#52550#54907#0" expanded="false" />
+            <element signature="e#23#34#0" expanded="true" />
+            <marker date="1482222805595" expanded="false" signature="8365:8648" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apiget/templates/marketshare.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1531">
+          <caret line="291" column="45" selection-start-line="291" selection-start-column="45" selection-end-line="291" selection-end-column="45" />
+          <folding>
+            <element signature="n#div#0;n#form#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="false" />
+            <marker date="1482222835628" expanded="true" signature="10235:10262" ph="..." />
+            <marker date="1482222835628" expanded="true" signature="12569:12597" ph="..." />
+            <marker date="1482222835628" expanded="true" signature="15084:15110" ph="..." />
           </folding>
         </state>
       </provider>
