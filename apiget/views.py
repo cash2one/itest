@@ -1016,7 +1016,7 @@ def GetProductShareAPI(request):
     ret = {'result':{'pv': {'data':{}}, 'uv': {'data':{}}}, 'title': '', 'date':[]}
 
     if mode == '1':
-        ret['title'] = '%s - %s - %s - %s' % (datelist[-1], productname, platform, myType)
+        ret['title'] = '%s - %s - %s - %s' % (datelist[-1], dbo[0].productname, dbo[0].platform, dbo[0].myType)
         dbo = dbo.filter(date = datelist[-1])
         ret['date'] = datelist[-1]
         for o in dbo:

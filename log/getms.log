@@ -18,3 +18,21 @@ Get ProductsShare/Li http://analyzer2.corp.youdao.com/server-run/run-script.html
 Get ProductsShare/Li at 2016-12-21 16:08:17 . Finish:0, Update:0, Getnone:8, Skip:250, Error:1
 Get ProductsShare/Li http://analyzer2.corp.youdao.com/server-run/run-script.html 500
 Get ProductsShare/Li at 2016-12-21 16:14:45 . Finish:0, Update:0, Getnone:8, Skip:250, Error:1
+Get ProductsShare/Li at 2016-12-21 16:27:23 . Finish:0, Update:0, Getnone:12, Skip:390, Error:0
+Get ProductsShare/Li http://analyzer2.corp.youdao.com/server-run/run-script.html 500
+Get ProductsShare/Li at 2016-12-21 16:31:28 . Finish:0, Update:0, Getnone:8, Skip:250, Error:1
+Get ProductsShare/Li at 2016-12-21 16:35:12 . Finish:120, Update:0, Getnone:12, Skip:250, Error:0
+Get ProductsShare/Li http://analyzer2.corp.youdao.com/server-run/run-script.html 500
+Get ProductsShare/Li at 2016-12-21 16:50:29 . Finish:260, Update:0, Getnone:8, Skip:0, Error:1
+Get ProductsShare/Li http://analyzer2.corp.youdao.com/server-run/run-script.html 500
+Get ProductsShare/Li at 2016-12-21 17:00:19 . Finish:0, Update:0, Getnone:8, Skip:260, Error:1
+Get ProductsShare/Li http://analyzer2.corp.youdao.com/server-run/run-script.html 500
+Get ProductsShare/Li at 2016-12-21 17:05:30 . Finish:0, Update:0, Getnone:8, Skip:260, Error:1
+Get ProductsShare/Li at 2016-12-21 17:39:41 . Finish:360, Update:228, Getnone:12, Skip:0, Error:0
+Get ProductsShare/Li at 2016-12-21 17:39:55 . Finish:20, Update:0, Getnone:12, Skip:340, Error:0
+Get ProductsShare/Li at 2016-12-21 17:41:43 . Finish:360, Update:0, Getnone:12, Skip:0, Error:0
+Get ProductsShare/Li /server-run/run-script.html?scriptId=deviceDist&isAsync=true&backDays=30&endDate=2016-12-09 500
+Get ProductsShare/Li /server-run/run-script.html?scriptId=deviceDist&isAsync=true&backDays=7&endDate=2016-12-09 500
+Get ProductsShare/Li at 2016-12-21 18:08:05 . Finish:130, Update:0, Getnone:4, Skip:0, Error:2
+Get ProductsShare/Li at 2016-12-21 18:15:27 . Finish:240, Update:0, Getnone:12, Skip:110, Error:0
+Get ProductsShare/Li at 2016-12-21 18:39:23 . Finish:70, Update:0, Getnone:12, Skip:280, Error:0

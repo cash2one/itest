@@ -1,4 +1,5 @@
 # coding:utf-8
+import httplib
 import json
 import re
 from bs4 import BeautifulSoup
@@ -542,67 +543,62 @@ def getLi(endDate):
 
     for datetype in backDaysd.keys():
         print datetype
-        querystring = {"scriptId": "deviceDist", "isAsync": "true", "backDays": backDaysd[datetype], "endDate": endDate}
         headers = {
             'cache-control': "no-cache",
-            'postman-token': "2143be33-1e47-f007-1754-72ba0246e4c4"
+            'postman-token': "49a05dc4-4054-1c8b-e595-b92424e95ce3"
         }
+        conn = httplib.HTTPConnection("analyzer2.corp.youdao.com")
+        url = "/server-run/run-script.html?scriptId=deviceDist&isAsync=true&backDays=%d&endDate=%s" % \
+              (backDaysd[datetype], endDate)
         try:
-            requests.request("GET", url,  params=querystring)
-        except ConnectionError as e:
-            print ('Error:'+str(e)+' in first touch to ' + url + str(querystring))
-        except Timeout as e:
-            print ('Warning:' + str(e) + ' in first touch to ' + url + str(querystring))
+            conn.request("GET", url, headers=headers)
 
-        try:
-            response = requests.request("GET", url, params=querystring)
         except ConnectionError as e:
-            _getlog('Error:'+str(e)+' in connect to ' + url + str(querystring))
+            _getlog('Error:'+str(e)+' in connect to ' + url )
             continue
         except Timeout as e:
-            _getlog('Warning:' + str(e) + ' in connect to ' + url + str(querystring))
+            _getlog('Warning:' + str(e) + ' in connect to ' + url )
             continue
 
+        r1 = conn.getresponse()
+        try:
+            rptext = json.loads(r1.read())
+        except ValueError as e:
+            _getlog(str(e) + ': \n ' + r1.read()[:100] + '...')
 
-
-        if response.status_code == 200:
-            rptext = json.loads(response.text)
-            if rptext.has_key('result'):
-                for item in rptext['result']:
-                    title = (item['title'].split(' - '))
-                    if item['kvs'][0].has_key('msg'):
-                        getnonecount += 1
-                    else:
-                        myType = title[-1]
-                        platform = title[-2]
-                        productname = title[-3]
-                        for kv in item['kvs']:
-                            touch = ProductsShare.objects.filter(productname=productname, platform=platform,
-                                                                myType=myType, remarks='', datetype=datetype,
-                                                                itemname=kv[myType] or 'other',
-                                                                date=endDate)
-                            if len(touch) == 1 :
-                                if(touch[0].pv != int(kv['pv']) or touch[0].uv != int(kv['uv'])):
-                                    touch.update(pv=kv['pv'], uv=kv['uv'])
-                                    count += 1
-                                    updatecount += 1
-                                    print 'update'
-                                else:
-                                    skipcount += 1
-                                    print 'skip'
-                            elif len(touch) > 1:
-                                errorcount += 1
-                            else:
-                                ProductsShare(productname=productname, platform=platform, myType=myType, remarks='',
-                                              pv=kv['pv'], uv=kv['uv'], itemname=kv[myType] or 'other',
-                                              date=endDate, datetype=datetype).save()
+        if rptext.has_key('result'):
+            for item in rptext['result']:
+                title = (item['title'].split(' - '))
+                if item['kvs'][0].has_key('msg'):
+                    getnonecount += 1
+                else:
+                    myType = title[-1]
+                    platform = title[-2]
+                    productname = title[-3]
+                    for kv in item['kvs']:
+                        touch = ProductsShare.objects.filter(productname=productname, platform=platform,
+                                                            myType=myType, remarks='', datetype=datetype,
+                                                            itemname=kv[myType] or 'other',
+                                                            date=endDate)
+                        if len(touch) == 1 :
+                            if(touch[0].pv != int(kv['pv']) or touch[0].uv != int(kv['uv'])):
+                                touch.update(pv=kv['pv'], uv=kv['uv'])
                                 count += 1
-                                print count
-            else:
-                _getlog('Get ProductsShare/Li has no result\n'+ rptext[:100] + '...')
-                errorcount += 1
+                                updatecount += 1
+                                print 'update'
+                            else:
+                                skipcount += 1
+                                print 'skip'
+                        elif len(touch) > 1:
+                            errorcount += 1
+                        else:
+                            ProductsShare(productname=productname.lower(), platform=platform, myType=myType, remarks='',
+                                          pv=kv['pv'], uv=kv['uv'], itemname=kv[myType] or 'other',
+                                          date=endDate, datetype=datetype).save()
+                            count += 1
+                            print count
         else:
-            _getlog('Get ProductsShare/Li ' + url + ' ' + str(response.status_code))
+            _getlog('Get ProductsShare/Li has no result\n'+ rptext[:100] + '...')
             errorcount += 1
 
     _getlog('Get ProductsShare/Li at %s . Finish:%d, Update:%d, Getnone:%d, Skip:%d, Error:%d' %
