@@ -22,5 +22,4 @@ urlpatterns = [
 
     url(r'^getms',apiget.views.GetMarketShareAPI),
     url(r'^getps', apiget.views.GetProductShareAPI),
-
 ]

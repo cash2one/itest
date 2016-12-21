@@ -7,11 +7,11 @@ import requests
 import datetime
 from requests import ConnectionError
 from requests.exceptions import Timeout
-
+from itest.settings import BASE_DIR
 from apiget.models import MarketShare,ProductsShare
 
-def log(str):
-    with open('getlog', 'a') as f:
+def _getlog(str):
+    with open('%s/log/getms.log' % BASE_DIR, 'a') as f:
         print str
         f.write(str + '\n')
 
@@ -58,11 +58,11 @@ def getNetMarketShare():
               "qpdisplay%%3d111111111111110%%26qpdt%%3d1%%26qpct%%3d4%%26qpcustomb%%3d%s%%26qpcid%%3d%s%%26qpf%%3d13&exportpageloaded=1" \
               % (qprid, qpsp, qpnp, qpcustomd, qpcid)
         try:
-            geturl = requests.get(url, headers=header)
+            geturl = requests.get(url, headers=header, cookies=cookies)
         except ConnectionError as e:
-            log('Error:' + str(e) + ' in connet to' + url)
-            return
-        print 'cookies:'+str(geturl.cookies)
+            _getlog('Error:' + str(e) + ' in connet to' + url)
+            continue
+
         if geturl.status_code == 200:
             infomation = geturl.text
             soup = BeautifulSoup(infomation, "xml")
@@ -119,12 +119,12 @@ def getNetMarketShare():
                             print count
                         i += 1
             else:
-                log('MarketShare/netmarketshare Get wrong response.cookie:'+ str(cookies) + '\n' + infomation[:100] + '...')
+                _getlog('MarketShare/netmarketshare Get wrong response.cookie:'+ str(cookies) + '\n' + infomation[:100] + '...')
                 errorcount += 1
         else:
-            log('MarketShare/netmarketshare Get ' + url + ' error try later,code:' + geturl.status_code)
+            _getlog('MarketShare/netmarketshare Get ' + url + ' error try later,code:' + str(geturl.status_code))
             errorcount += 1
-    log('Get MarketShare/netmarketshare at %s . Finish:%d, Update%d, Skip:%d, Error:%d' %
+    _getlog('Get MarketShare/netmarketshare at %s . Finish:%d, Update%d, Skip:%d, Error:%d' %
         (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
@@ -178,7 +178,7 @@ def getStatCounter():
                 try:
                     geturl = requests.get(url, headers=header)
                 except ConnectionError as e:
-                    log('Error:'+str(e) +' in connect to '+ url)
+                    _getlog('Error:'+str(e) +' in connect to '+ url)
                     continue
 
                 if geturl.status_code == 200:
@@ -211,12 +211,12 @@ def getStatCounter():
                                     count += 1
                                     print count
                     else:
-                        log('Get MarketShare/statcounter wrong response\n' + infomation[:100] + '...')
+                        _getlog('Get MarketShare/statcounter wrong response\n' + infomation[:100] + '...')
                         errorcount += 1
                 else:
-                    log('Get MarketShare/statcounter' + url + ' error try later,code:' + geturl.status_code)
+                    _getlog('Get MarketShare/statcounter' + url + ' error try later,code:' + str(geturl.status_code))
                     errorcount += 1
-    log('Get MarketShare/statcounter at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+    _getlog('Get MarketShare/statcounter at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
         (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
@@ -244,7 +244,7 @@ def getAndroid():
     try:
         geturl = requests.get(url, headers=header)
     except ConnectionError as e:
-        log('Error:'+str(e)+' in connect to '+url)
+        _getlog('Error:'+str(e)+' in connect to '+url)
         return
 
     count = skipcount = updatecount = errorcount = 0
@@ -262,7 +262,7 @@ def getAndroid():
                     if data[0] == name[0]:
                         touch = MarketShare.objects.filter(date=DATE,
                                                            source='https://developer.android.com/about/dashboards/index.html',
-                                                           sourcename='谷歌开发者论坛',
+                                                           sourcename='安卓开发者论坛',
                                                            platform='mobile', myType='os',
                                                            market='ww',
                                                            itemname='Android' + ''.join(name[1].split('<br>')),
@@ -286,13 +286,13 @@ def getAndroid():
                             count += 1
                             print count
         else:
-            log('Get MarketShare/android wrong response\n' + text[:100] + '...')
+            _getlog('Get MarketShare/android wrong response\n' + text[:100] + '...')
             errorcount += 1
     else:
-        log('Get MarketShare/android ' + url + ' error try later,code:' + geturl.status_code)
+        _getlog('Get MarketShare/android ' + url + ' error try later,code:' + str(geturl.status_code))
         errorcount += 1
 
-    log('Get MarketShare/android at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+    _getlog('Get MarketShare/android at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
         (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
@@ -324,7 +324,7 @@ def getBaidu():
         try:
             response = requests.request("POST", url, data=payload, headers=headers)
         except ConnectionError as e:
-            log('Error:'+str(e)+' in connect to '+url+str(payload))
+            _getlog('Error:'+str(e)+' in connect to '+url+str(payload))
             continue
 
         if response.status_code == 200:
@@ -364,16 +364,16 @@ def getBaidu():
                             j += 1
                         i += 1
                 else:
-                    log('Get MarketShare/Baidu wrong status\n' + content[:100] + '...')
+                    _getlog('Get MarketShare/Baidu wrong status\n' + content[:100] + '...')
                     errorcount += 1
             else:
-                log('Get MarketShare/Baidu wrong response\n' + content[:100] + '...')
+                _getlog('Get MarketShare/Baidu wrong response\n' + content[:100] + '...')
                 errorcount += 1
         else:
-            log('Get MarketShare/Baidu ' + url + ' error try later,code:' + response.status_code)
+            _getlog('Get MarketShare/Baidu ' + url + ' error try later,code:' + str(response.status_code))
             errorcount += 1
 
-    log('Get MarketShare/Baidu at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+    _getlog('Get MarketShare/Baidu at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
         (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
@@ -402,7 +402,7 @@ def getBaiduNew():
         try:
             response = requests.request("GET", rankurl, headers=headers, params=querystring)
         except ConnectionError as e:
-            log('Error:'+str(e)+' in connect to '+rankurl+str(querystring))
+            _getlog('Error:'+str(e)+' in connect to '+rankurl+str(querystring))
             continue
         if response.status_code == 200:
             result = (json.loads(response.text))['result']
@@ -412,7 +412,7 @@ def getBaiduNew():
                     try:
                         trendresponse = requests.request("GET", trendurl, headers=headers, params=trendquerystring)
                     except ConnectionError as e:
-                        log('Error:' + str(e) + ' in connect to ' + trendurl + str(trendquerystring))
+                        _getlog('Error:' + str(e) + ' in connect to ' + trendurl + str(trendquerystring))
                         continue
                     MarketShare.objects.filter(sourcename='百度移动流量研究院-' + k, platform='moblie', myType='os',
                                                itemname=result['name'][i]).all().delete()
@@ -448,14 +448,14 @@ def getBaiduNew():
                                 count += 1
                                 print count
                     else:
-                        log('Get MarketShare/BaiduNew' + trendurl + ' scale-name error\n' + trendresponse.text[:100] + '...')
+                        _getlog('Get MarketShare/BaiduNew' + trendurl + ' scale-name error\n' + trendresponse.text[:100] + '...')
                         errorcount += 1
             else:
-                log('Get MarketShare/BaiduNew ' + rankurl + ' id-name error\n' + response.text[:100] + '...')
+                _getlog('Get MarketShare/BaiduNew ' + rankurl + ' id-name error\n' + response.text[:100] + '...')
                 errorcount += 1
         else:
-            log('Get MarketShare/Ios ' + rankurl + ' ' + response.status_code)
-    log('Get MarketShare/BaiduNew at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+            _getlog('Get MarketShare/Ios ' + rankurl + ' ' + str(response.status_code))
+    _getlog('Get MarketShare/BaiduNew at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
         (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
 
@@ -480,7 +480,7 @@ def getIos():
     try:
         geturl = requests.get(url1, headers=header)
     except ConnectionError as e:
-        log(str(e))
+        _getlog(str(e))
         return
     count = skipcount = errorcount = updatecount = 0
 
@@ -494,7 +494,7 @@ def getIos():
         try:
             geturl = requests.get(url2, headers=header)
         except ConnectionError as e:
-            log(str(e))
+            _getlog(str(e))
             return
 
         if geturl.status_code == 200:
@@ -509,9 +509,10 @@ def getIos():
                         touch.update(value=data[1])
                         updatecount += 1
                         count += 1
-                        print updatecount
+                        print 'update'
                     else:
                         skipcount += 1
+                        print 'skip'
                 else:
                     MarketShare(date=DATE, source=url1,
                                 sourcename='IOS开发者论坛',
@@ -522,13 +523,15 @@ def getIos():
                     count += 1
                     print count
         else:
-            log('Get MarketShare/Ios '+ url2 +' '+ geturl.status_code)
+            _getlog('Get MarketShare/Ios '+ url2 +' '+ str(geturl.status_code))
             errorcount += 1
     else:
-        log('Get MarketShare/Ios ' + url1 + ' ' + geturl.status_code)
+        _getlog('Get MarketShare/Ios ' + url1 + ' ' + str(geturl.status_code))
         errorcount += 1
-    log('Get MarketShare/Ios at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
+    _getlog('Get MarketShare/Ios at %s . Finish:%d, Update:%d, Skip:%d, Error:%d' %
         (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
+
+
 
 def getLi(endDate):
     url = "http://analyzer2.corp.youdao.com/server-run/run-script.html"
@@ -545,12 +548,19 @@ def getLi(endDate):
             'postman-token': "2143be33-1e47-f007-1754-72ba0246e4c4"
         }
         try:
-            response = requests.request("GET", url, headers=headers, params=querystring, timeout=1000)
+            requests.request("GET", url,  params=querystring)
         except ConnectionError as e:
-            log('Error:'+str(e)+' in connect to ' + url + str(querystring))
+            print ('Error:'+str(e)+' in first touch to ' + url + str(querystring))
+        except Timeout as e:
+            print ('Warning:' + str(e) + ' in first touch to ' + url + str(querystring))
+
+        try:
+            response = requests.request("GET", url, params=querystring)
+        except ConnectionError as e:
+            _getlog('Error:'+str(e)+' in connect to ' + url + str(querystring))
             continue
         except Timeout as e:
-            log('Warning:' + str(e) + ' in connect to ' + url + str(querystring))
+            _getlog('Warning:' + str(e) + ' in connect to ' + url + str(querystring))
             continue
 
 
@@ -589,11 +599,11 @@ def getLi(endDate):
                                 count += 1
                                 print count
             else:
-                log ('Get ProductsShare/Li has no result\n'+ rptext[:100] + '...')
+                _getlog('Get ProductsShare/Li has no result\n'+ rptext[:100] + '...')
                 errorcount += 1
         else:
-            log('Get MarketShare/Li ' + url + ' ' + response.status_code)
+            _getlog('Get ProductsShare/Li ' + url + ' ' + str(response.status_code))
             errorcount += 1
 
-    log('Get ProductsShare/Li at %s . Finish:%d, Update:%d, Getnone:%d, Skip:%d, Error:%d' %
+    _getlog('Get ProductsShare/Li at %s . Finish:%d, Update:%d, Getnone:%d, Skip:%d, Error:%d' %
         (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, getnonecount, skipcount, errorcount))

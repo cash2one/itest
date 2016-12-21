@@ -41,7 +41,9 @@ GroupOrder = ['LUNA', 'YNOTE', 'EAD', 'ARMANI','KE']
 _ResetUrl = 'http://tb038x.corp.youdao.com:23333/%s'
 
 
-
+def _dblog(str):
+    with open(BASE_DIR + '/log/changedb.log', 'a') as f:
+        f.write(str + '\n')
 
 #------------------------------------------------------holeinfo---------------------------------------------------------
 #                                              安全部反馈的漏洞信息所用接口
@@ -175,9 +177,7 @@ def HolesResetAPI(request):
 
     for hi in jtest['holeInfos']:
         _HoleSave(hi)
-    logfile = open(BASE_DIR + '/log', 'a')
-    logfile.write('Reset holeinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
-    logfile.close()
+    _dblog('Reset holeinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     return HttpResponse('ok')
 
 #更新数据库 时间短
@@ -196,9 +196,7 @@ def HolesUpdateAPI(request):
             continue
         _HoleSave(hi)
         count += 1
-    logfile = open(BASE_DIR + '/log', 'a')
-    logfile.write('Update holeinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
-    logfile.close()
+    _dblog('Update holeinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     return HttpResponse(count)
 
@@ -797,9 +795,7 @@ def FBUploadAPI(request):
                  suggest = suggest, good = good, process = process, chat = chat, escape1 = escape1,
                  feedback = feedback, feedback_done = 'Y').save()
 
-        logfile = open(BASE_DIR + '/log', 'a')
-        logfile.write('Edit feedback at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
-        logfile.close()
+        _dblog('Edit feedback at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     return HttpResponseRedirect('/fbupload')
             
 #上传季度数据
@@ -822,9 +818,7 @@ def TIUpdate(request):
                                 bugs_other=request.POST.get('other'), bugs_other_p1=request.POST.get('other_p1'),
                                 allow_tests=request.POST.get('allow_tests'),
                                 allow_tests_pass=request.POST.get('allow_tests_pass'))
-            logfile = open(BASE_DIR + '/log', 'a')
-            logfile.write('Update testinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
-            logfile.close()
+            _dblog('Update testinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         #不存在，创建
         elif len(matchcase) == 0:
             t_id = quarter[:4] + quarter[-1]
@@ -851,9 +845,8 @@ def TIUpdate(request):
                                 bugs_other=request.POST.get('other'), bugs_other_p1=request.POST.get('other_p1'),
                                 allow_tests=request.POST.get('allow_tests'),
                                 allow_tests_pass=request.POST.get('allow_tests_pass'),t_id = t_id).save()
-            logfile = open(BASE_DIR + '/log', 'a')
-            logfile.write('New testinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
-            logfile.close()
+            _dblog('New testinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
     return HttpResponseRedirect('/update')
 
 #获取季度信息
@@ -983,6 +976,7 @@ def GetMarketShareAPI(request):
                         ret[stat]['data'][itemname] = {'value':[0,]}
 
     return JsonResponse(ret)
+
 
 # ------------------------------------------------------productsshare-------------------------------------------------------
 #                                             来自李斯宁的公司各产品的用户数据信息
