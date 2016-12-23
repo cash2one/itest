@@ -9,10 +9,10 @@
     opacity:0.4;
 }
 #detail{
-    margin: 60px 100px;
+    margin: 5% 10%;
     position: fixed;
     width: auto;
-    height: 500px;
+    height: auto;
     overflow: auto;
     z-index: 1000;
 }
@@ -32,6 +32,7 @@ div{
 }
 img {
     max-width: 100%;
+    max-height: 700px;
 }
 .unfinished{
     text-decoration: line-through;

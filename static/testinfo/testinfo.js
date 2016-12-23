@@ -185,13 +185,14 @@ function table_select() {
     var status = $("#status").val();
     var quarter = $("#quarter").val();
     var year = $("#year").val();
+    var vulType = $("#vulType").val();
     var st = $('form').serialize();
     if ($("#tablerow")){
         $("#tablerow").remove();
     }
     $(".main-container .main-content .container").append('<div class="row" id="tablerow"><div class="col-md-12"><div class="panel panel-default"></div></div></div>');
     $("#tablerow div div").append('<div class="panel-heading"><i class="fa clip-grid-6"></i>漏洞信息数据表<div class="panel-tools"><a class="btn btn-xs btn-link panel-close" href="#"> <i class="fa fa-times"></i> </a></div></div>').append('<div class="panel-body"><table class="table table-striped table-bordered table-hover table-full-width" id="sample_1"></table></div>');
-    $("table").append('<thead><tr><th>id</th><th class="hidden-xs">产品名</th><th>漏洞状态</th><th class="hidden-xs">目标类型</th><th class="hidden-xs">漏洞等级</th><th>目标</th><th class="hidden-xs">创建时间</th><th class="hidden-xs">描述</th></tr></thead>');
+    $("table").append('<thead><tr><th>id</th><th class="hidden-xs">产品名</th><th>漏洞状态</th><th class="hidden-xs">漏洞等级</th><th class="hidden-xs">漏洞类型</th><th>目标</th><th class="hidden-xs">目标类型</th><th class="hidden-xs">创建时间</th><th class="hidden-xs">描述</th></tr></thead>');
     $("table").append('<tbody></tbody>');
     $.getJSON("/api/search",
         {
@@ -203,13 +204,14 @@ function table_select() {
             "level":level,
             "status":status,
             "quarter":quarter,
-            "year":year
+            "year":year,
+            "vulType":vulType
         }
         , function (ret) {
             $.each(ret, function (idx, item) {
                 $("table tbody").append('<tr><td>' + item.id + "</td><td>" + item.productName + "</td><td>" + item.status +
-                    "</td><td>" + item.targetType + "</td><td>" + item.level +
-                    "</td><td>" + item.targets + "</td><td>" + item.createTime + '</td><td><button class="opendetail btn btn-info btn-block" id='+item.id+'>详情</button></td></tr>');
+                     "</td><td>" + item.level + "</td><td>" + item.vulType +
+                    "</td><td>" + item.targets + "</td><td>" + item.targetType + "</td><td>" + item.createTime + '</td><td><button class="opendetail btn btn-info btn-block" id='+item.id+'>详情</button></td></tr>');
             });
             $('.opendetail').click(function(){
                 table_opendetail($(this));
@@ -251,6 +253,13 @@ function tableinit() {
             group.append('<option value="'+ret['ordergroup'][i]+'">'+ret['ordergroup'][i]+'</option>');
         }
         group.append('<option value="其他">其他</option>')
+    })
+    $.getJSON('/api/getvt',
+    function (ret){
+        var vulType = $('#vulType')
+        for (var i in ret['vulType']){
+            vulType.append('<option value="'+ret['vulType'][i]+'">'+ret['vulType'][i]+'</option>');
+        }
     })
     $("#time_quarter").click(function (){
         table_time_quarter(date);
@@ -487,5 +496,215 @@ function getcharts(years, smode, title){
                 option.title.text = group+title;
             }
             myChart.setOption(option);
+        });
+}
+
+function getmarketshare(Months, title){
+    var market = $("#market").val(),
+        type = $("#type").val(),
+        platform = $("#platform").val();
+    $.getJSON("/api/getms",
+        {
+            "market": market,
+            "type": type,
+            "platform": platform ,
+            "months": Months
+        }
+        , function (ret) {
+            $("#canvasrow").children().remove();
+
+            if (Months > 1) {
+                for (var site in ret) {
+
+                    $("#canvasrow").append('<div class="col-md-12"><div id="' + site + '" style="width: 1000px;height:400px;"></div></div>');
+                    var series = [],namelist = [], myChart = echarts.init(document.getElementById(site));
+
+                    for (var name in ret[site]['data']) {
+                        series.push({name: name, type: 'line', data: ret[site]['data'][name]['value'],
+                            smooth:true});
+                    }
+                    series = series.sort(function (a, b) {
+                        return b.data[b.data.length-1] - a.data[a.data.length-1]
+                    });
+                    for (var d in series){
+                        namelist.push(series[d]['name']);
+                    }
+                    var option = {
+                        title: {
+                            text: site.toUpperCase() +' '+ title + ' 数据',
+                            link: ret[site].src,
+                            x: 'center',
+                            align: 'right'
+                        },
+                        color: [
+                            "#81C2D6",
+                            "#8192D6",
+                            "#D9B3E6",
+                            "#DCF7A1",
+                            "#83FCD8",
+                            "#61FF69",
+                            "#B8F788",
+                            "#58D2E8",
+                            "#F2B6B6",
+                            "#E8ED51"
+                        ],
+                        tooltip : {
+                            trigger: 'axis',
+                            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                                type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                            }
+                        },
+                        toolbox: {
+                            feature: {
+                                saveAsImage: {},
+                                dataView: {}
+                            },
+                            optionToContent: function(opt) {
+                                var axisData = opt.xAxis[0].data;
+                                var series = opt.series;
+
+                                var table = '<table style="width:auto;text-align:center" border=2><tbody><tr>'
+                                    + '<td>时间</td>';
+                                for (var i = 0, ls = series.length; i<ls;i++){
+                                    table += ('<td>' + series[i].name + '</td>');
+                                }
+                                table += '</tr>';
+                                for (var i = 0, l = axisData.length; i < l; i++) {
+                                    table += ('<tr>'+ '<td>' + axisData[i] + '</td>');
+                                    for (var j = 0, ls = series.length; j < ls; j++){
+                                        table += ('<td>' + series[j].data[i] + '</td>');
+                                    }
+                                    table += '</tr>';
+                                }
+                                table += '</tbody></table>';
+                                return table;
+                            },
+                            top: '10%',
+                            right: '5%'
+                        },
+                        legend: {
+                            data:[],
+                            x: 'left',
+                            left:'5%',
+                            top:'10%',
+                            right: '10%',
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            top: '20%',
+                            containLabel: true
+                        },
+                        xAxis : [
+                            {
+                                type : 'category',
+                                data : []
+                            }
+                        ],
+                        yAxis : [{type : 'value'}],
+                        series : []
+                    };
+
+                    option.legend.data = namelist;
+                    option.xAxis[0].data = ret[site].date;
+                    option.series = series;
+                    myChart.setOption(option);
+                }
+            }
+            else {
+                for (var site in ret) {
+                    $("#canvasrow").append('<div class="col-md-6"><div id="' + site + '" style="width: 500px;height:400px;"></div></div>');
+                    var dlist = [],
+                        namelist = [],
+                        myChart = echarts.init(document.getElementById(site));
+                    for (var name in ret[site]['data']) {
+                        dlist.push({'name': name, 'value': ret[site]['data'][name]['value'][0]});
+
+                    }
+                    dlist = dlist.sort(function (a, b) {
+                        return b.value - a.value
+                    });
+                    for (var d in dlist){
+                        namelist.push(dlist[d]['name']);
+                    }
+                    var option = {
+                        title: {
+                            text: ret[site].date + ' ' + site.toUpperCase() + ' 数据',
+                            link: ret[site].src,
+                            left: 'left'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {d}%"
+                        },
+                        legend: {
+                            data: namelist,
+                            orient: 'vertical',
+                            x: 'right',
+                            top:'10%',
+                        },
+                        toolbox: {
+                            feature: {
+                                saveAsImage: {},
+                            },
+                            right:'5%'
+
+                        },
+                        visualMap: {
+                            show: false,
+                            min: 80,
+                            max: 600,
+                            inRange: {
+                                colorLightness: [0, 1]
+                            }
+                        },
+                        color: [
+                            "#81C2D6",
+                            "#8192D6",
+                            "#D9B3E6",
+                            "#DCF7A1",
+                            "#83FCD8",
+                            "#61FF69",
+                            "#B8F788",
+                            "#58D2E8",
+                            "#F2B6B6",
+                            "#E8ED51"
+                        ],
+                        series: [
+                            {
+                                name: '最近一个月市场份额',
+                                type: 'pie',
+                                radius: '50%',
+                                center: ['40%', '55%'],
+                                avoidLabelOverlap: true,
+                                label: {
+                                    normal: {
+                                        show: true
+                                    },
+                                    emphasis: {
+                                        show: true,
+                                        textStyle: {
+                                            fontSize: '10',
+                                            fontWeight: 'bold'
+                                        }
+                                    }
+                                },
+                                labelLine: {
+                                    normal: {
+                                        show: true
+                                    }
+                                },
+                                data: dlist,
+                            }
+                        ]
+                    };
+                    if (ret[site]['remarks']){
+                        option.title.subtext=ret[site]['remarks'];
+                    }
+
+                    myChart.setOption(option);
+                }
+            }
         });
 }

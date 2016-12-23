@@ -20,10 +20,12 @@ class HoleInfo(models.Model):
     checkResult = models.BooleanField()
     updateStatus = models.CharField(max_length=2)
     productName = models.CharField(max_length=50)
+    vulType = models.CharField(max_length=50)
     groupName = models.CharField(max_length=10)
     h_id = models.CharField(max_length=20)
     targets = models.TextField()
     quarter = models.CharField(max_length=10)
+
 
 class TestInfos(models.Model):
     quarter = models.CharField(max_length=8)

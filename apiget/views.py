@@ -81,6 +81,12 @@ def ProductNameAPI(request):
         dret['name'].sort(reverse=True)
         return JsonResponse(dret)
 
+def GetVulTypeAPI(request):
+    dbo = HoleInfo.objects
+    ret = {}
+    ret['vulType'] = list(dbo.values_list('vulType', flat=True).distinct())
+    return JsonResponse(ret)
+
 #获取表格数据
 def HoleTableAPI(request):
     dbo = HoleInfo.objects
@@ -164,6 +170,7 @@ def _HoleSave(hi):
              checkResult=hi['checkResult'],
              updateStatus=str(hi['updateStatus']),
              productName=hi['productName'],
+             vulType = hi['vulType'],
              groupName=group,
              h_id=hi['id'],
              targets=targets,
@@ -216,6 +223,7 @@ def _TableJsonRp(dbos):
         jhi['targetType'] = hi.targetType
         jhi['level'] = LevelList[int(hi.level)]
         jhi['targets'] = hi.targets
+        jhi['vulType'] = hi.vulType
         timeStamp = hi.createTime / 1000 + 8*60*60 #时区补正
         dateArray = datetime.datetime.utcfromtimestamp(timeStamp)
         otherStyleTime = dateArray.strftime("%Y-%m-%d %H:%M:%S")
@@ -309,7 +317,10 @@ def _Selector(request, dbos):
         status = str(request.GET['status'])
         if status:
             dbos = dbos.filter(status=status)
-
+    if 'vulType' in request.GET:
+        vulType = request.GET['vulType']
+        if vulType:
+            dbos = dbos.filter(vulType=vulType)
     #东八区的时间组出的时间戳实际多了八个小时 需要补正
     if 'bgdate' in request.GET:
         bgdate = request.GET['bgdate']
@@ -930,7 +941,7 @@ def FileDownloadAPI(request):
 #                                            #    #  #    #  #    #  #  #    #
 #                                             ####   #    #  #    #  #    #  ######
 
-
+#获取市场份额信息数据
 def GetMarketShareAPI(request):
     dbo = MarketShare.objects
     if 'platform' in request.GET:
@@ -948,32 +959,32 @@ def GetMarketShareAPI(request):
     if 'months' in request.GET:
         months = int(request.GET['months'])
     ret = {}
-    statlist = list(dbo.values_list('sourcename',flat=True).distinct())
+    sitelist = list(dbo.values_list('sourcename',flat=True).distinct())
 
-    for stat in statlist:
-        needdbo = dbo.filter(sourcename=stat)
+    for site in sitelist:
+        needdbo = dbo.filter(sourcename=site)
         datelist = list(needdbo.values_list('date', flat=True).distinct().order_by('date'))
-        ret[stat] = {'data':{},'src': needdbo.all()[0].source, 'remarks': needdbo.all()[0].remarks}
+        ret[site] = {'data':{},'src': needdbo.all()[0].source, 'remarks': needdbo.all()[0].remarks}
         if (months <= len(datelist)):
             needdbo = needdbo.filter(date__gte = datelist[-months]).order_by('date')
-            ret[stat]['date'] = datelist[-months:]
+            ret[site]['date'] = datelist[-months:]
         else:
-            ret[stat]['date'] = datelist
+            ret[site]['date'] = datelist
 
         namelist = list(set(needdbo.values_list('itemname', flat=True)))
-        for date in ret[stat]['date']:
+        for date in ret[site]['date']:
             for itemname in namelist:
                 touch = needdbo.filter(itemname = itemname, date=date)
                 if touch.count() != 0:
-                    if ret[stat]['data'].has_key(itemname):
-                        ret[stat]['data'][itemname]['value'].append(touch[0].value)
+                    if ret[site]['data'].has_key(itemname):
+                        ret[site]['data'][itemname]['value'].append(touch[0].value)
                     else:
-                        ret[stat]['data'][itemname] = {'value':[touch[0].value,]}
+                        ret[site]['data'][itemname] = {'value':[touch[0].value,]}
                 else:
-                    if ret[stat]['data'].has_key(itemname):
-                        ret[stat]['data'][itemname]['value'].append(0)
+                    if ret[site]['data'].has_key(itemname):
+                        ret[site]['data'][itemname]['value'].append(0)
                     else:
-                        ret[stat]['data'][itemname] = {'value':[0,]}
+                        ret[site]['data'][itemname] = {'value':[0,]}
 
     return JsonResponse(ret)
 

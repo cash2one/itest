@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^getquarters', apiget.views.GetQuartersAPI),
     url(r'^getlastentry', apiget.views.GetLastEntryAPI),
     url(r'^getordergroup', apiget.views.GetOrderGroupsAPI),
+    url(r'^getvt', apiget.views.GetVulTypeAPI),
     url(r'^update', apiget.views.TIUpdate),
     url(r'^download', apiget.views.FileDownloadAPI),
     url(r'^filename', apiget.views.GetFileNameAPI),
