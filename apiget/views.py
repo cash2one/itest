@@ -37,6 +37,9 @@ GroupKE = ["有道精品课","有道学堂",]
 GroupD = {'LUNA':GroupLUNA,'YNOTE':GroupYNOTE, 'EAD':GroupEAD, 'ARMANI':GroupARMANI, 'KE': GroupKE}
 GroupOrder = ['LUNA', 'YNOTE', 'EAD', 'ARMANI','KE']
 
+HOLEFILE = 'holeInfo'
+TIMEFILE = 'uptime.txt'
+
 #更新信息的服务器 在tb038x上使用 nohop python -m SimpleHTTPServer 23333 & 在后台永久挂起
 _ResetUrl = 'http://tb038x.corp.youdao.com:23333/%s'
 
@@ -120,8 +123,8 @@ def StatisticsAPI(request):
 def _HoleGet():
     #holeInfo 为远程数据文件 uptime.txt time.txt存储远程数据更新时间
     try:
-        reqinfo = requests.get(_ResetUrl % 'holeInfo')
-        reqtime = requests.get(_ResetUrl % 'uptime.txt')
+        reqinfo = requests.get(_ResetUrl % HOLEFILE)
+        reqtime = requests.get(_ResetUrl % TIMEFILE)
     except ConnectionError as e:
         return HttpResponse(e)
 
@@ -141,11 +144,15 @@ def _HoleSave(hi):
     if not hi['targets']:
         targets = 'Null'
     else:
-        targets = ','.join(hi['targets'])
+        targets = hi['targets']
     #分组
     group = '其他'
+    productName = hi['productName'].encode('utf-8')
+    if productName == '-':
+        productName = targets
+
     for k in GroupD.keys():
-        if hi['productName'].encode('utf-8') in GroupD[k]:
+        if productName in GroupD[k]:
             group = k
             break
 
@@ -169,11 +176,12 @@ def _HoleSave(hi):
              createTime=hi['createTime'],
              checkResult=hi['checkResult'],
              updateStatus=str(hi['updateStatus']),
-             productName=hi['productName'],
+             productName=productName,
              vulType = hi['vulType'],
              groupName=group,
              h_id=hi['id'],
              targets=targets,
+             title =hi['title'],
              quarter=quarter).save()
 
 #重置整个数据库 时间长 约半分钟

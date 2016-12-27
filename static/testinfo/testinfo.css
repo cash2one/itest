@@ -18,6 +18,8 @@
 }
 #detail .modal-dialog{
     font-size: 130%;
+    margin: 0px;
+    padding: 0px;
     width: auto;
     height: auto;
 }

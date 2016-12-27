@@ -25,6 +25,7 @@ class HoleInfo(models.Model):
     h_id = models.CharField(max_length=20)
     targets = models.TextField()
     quarter = models.CharField(max_length=10)
+    title = models.TextField()
 
 
 class TestInfos(models.Model):
