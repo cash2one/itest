@@ -17,7 +17,7 @@ class HoleInfo(models.Model):
     description = models.TextField()
     level = models.CharField(max_length=2)
     createTime = models.BigIntegerField()
-    checkResult = models.BooleanField()
+    checkResult = models.CharField(max_length=2)
     updateStatus = models.CharField(max_length=2)
     productName = models.CharField(max_length=50)
     vulType = models.CharField(max_length=50)

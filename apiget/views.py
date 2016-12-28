@@ -201,17 +201,19 @@ def HolesUpdateAPI(request):
     jtest = _HoleGet()
 
     dbo = HoleInfo.objects
-
-    lastid = dbo.order_by('createTime').last().h_id
-
     count = 0
 
     for hi in jtest['holeInfos']:
-        if hi['id'] <= lastid:
-            continue
-        _HoleSave(hi)
+        touch = dbo.filter(h_id = hi['id'])
+        if touch:
+            if touch[0].createTime != hi['createTime']:
+                _HoleSave(hi)
+            else:
+                continue
+        else:
+            _HoleSave(hi)
         count += 1
-    _dblog('Update holeinfo at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    _dblog('Update holeinfo at %s. Update %d entries.' % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count))
 
     return HttpResponse(count)
 
@@ -288,8 +290,10 @@ def HoleDetailAPI(request):
     if 'id' in request.GET:
         id = request.GET['id']
         if id:
-            content = dbo.get(h_id=id).description
-            return HttpResponse(content)
+            need = dbo.get(h_id=id)
+            content = need.description
+            title = need.title
+            return JsonResponse({'content':content,'title':title})
         return  HttpResponse('id is null')
     else:
         return HttpResponse('no id')

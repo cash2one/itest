@@ -169,7 +169,8 @@ function table_opendetail(thisone) {
             id: id
         },
         function (ret) {
-            $("#detail .modal-dialog .modal-content .modal-body").html(ret);
+            $("#detail .modal-dialog .modal-content .modal-body").html(ret['content']);
+            $("#detail .modal-dialog .modal-content .modal-header .modal-title").text(ret['title']);
             displayblock($("#detail"));
         }
     )
