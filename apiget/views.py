@@ -674,12 +674,12 @@ def FeedBackAPI(request):
             title = '测试组质量与效率评分'
             ret = {'gradec':{},}
             for entry in dbo:
-                if ret['gradec'].has_key(entry.date[2:6]):
-                    ret['gradec'][entry.date[2:6]]['count'] += 1
-                    ret['gradec'][entry.date[2:6]]['grade1'] += entry.grade1
-                    ret['gradec'][entry.date[2:6]]['grade2'] += entry.grade2
+                if ret['gradec'].has_key(entry.date[2:]):
+                    ret['gradec'][entry.date[2:]]['count'] += 1
+                    ret['gradec'][entry.date[2:]]['grade1'] += entry.grade1
+                    ret['gradec'][entry.date[2:]]['grade2'] += entry.grade2
                 else:
-                    ret['gradec'][entry.date[2:6]] = {'count':1, 'grade1':entry.grade1, 'grade2': entry.grade2}
+                    ret['gradec'][entry.date[2:]] = {'count':1, 'grade1':entry.grade1, 'grade2': entry.grade2}
 
             q = ret['gradec'].keys()
             q.sort()
