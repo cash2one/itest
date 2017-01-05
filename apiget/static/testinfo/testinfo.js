@@ -423,6 +423,7 @@ function getfb(Mode){
 
 function getcharts(years, smode, title){
     var myChart = echarts.init(document.getElementById('main'));
+    var needtype = $("#needtype").val();
     var option = {
         title : {
             text : '',
@@ -472,8 +473,10 @@ function getcharts(years, smode, title){
     };
     var formelement = {
         "years": years,
-        "smode": smode
+        "smode": smode,
+        "needtype": needtype
     };
+
     if (smode == '2'){
         var group =  $('#group').val();
         formelement['groupname'] = group;
@@ -487,9 +490,11 @@ function getcharts(years, smode, title){
                 ldate.push(item.name);
                 smaplist.push({name: item.name, type: 'line', smooth: true, data: item.value, label: { normal: {show: false, position: 'top', textStyle: {fontSize: 16}}}});
             });
+
             option.xAxis[0].data = ret.xAxis;
             option.legend.data = ldate;
             option.series = smaplist;
+
             if (smode == '1'){
                 option.title.text = title;
             }

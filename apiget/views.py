@@ -84,6 +84,7 @@ def ProductNameAPI(request):
         dret['name'].sort(reverse=True)
         return JsonResponse(dret)
 
+#获取漏洞类型下拉菜单
 def GetVulTypeAPI(request):
     dbo = HoleInfo.objects
     ret = {}
@@ -112,10 +113,15 @@ def StatisticsAPI(request):
         years = 'all'
     if 'groupname' in request.GET:
         group = request.GET['groupname'].encode('utf-8')
-
-
     else:
         group = 'LUNA'
+
+    if 'needtype' in request.GET:
+        needtype = request.GET['needtype']
+    else:
+        needtype = 'new'
+    qd = _QuarterD()
+    dbo = dbo.filter(quarter__lte = qd[needtype])
     ret = _StatisticsJsonRp(dbo, smode, years, group)
     return JsonResponse(ret)
 
@@ -157,13 +163,14 @@ def _HoleSave(hi):
             break
 
     #方便筛选而构造季度字段
-    hid = hi['id']
-    quarter = hid[4:8]
-    if int(hid[8:10]) < 4:
+    timeStamp = hi['createTime'] / 1000
+    dateArray = datetime.datetime.fromtimestamp(timeStamp)
+    quarter, month = str(dateArray.year), dateArray.month
+    if int(month) < 4:
         quarter += 'Q1'
-    elif int(hid[8:10]) < 7:
+    elif int(month) < 7:
         quarter += 'Q2'
-    elif int(hid[8:10]) < 10:
+    elif int(month) < 10:
         quarter += 'Q3'
     else:
         quarter += 'Q4'
@@ -234,8 +241,8 @@ def _TableJsonRp(dbos):
         jhi['level'] = LevelList[int(hi.level)]
         jhi['targets'] = hi.targets
         jhi['vulType'] = hi.vulType
-        timeStamp = hi.createTime / 1000 + 8*60*60 #时区补正
-        dateArray = datetime.datetime.utcfromtimestamp(timeStamp)
+        timeStamp = hi.createTime / 1000
+        dateArray = datetime.datetime.fromtimestamp(timeStamp)
         otherStyleTime = dateArray.strftime("%Y-%m-%d %H:%M:%S")
         jhi['createTime'] = otherStyleTime
         jsonRes[hi.h_id] = jhi
@@ -243,6 +250,9 @@ def _TableJsonRp(dbos):
 
 #组装返回给统计图的数据
 def _StatisticsJsonRp(dbos, smode, years, group):
+
+
+
     jsonRes = {'data':[] , 'xAxis': []}
     quartlist = dbos.values_list('quarter').distinct()
 
@@ -820,7 +830,7 @@ def FBUploadAPI(request):
 
         _dblog('Edit feedback at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     return HttpResponseRedirect('/fbupload')
-            
+
 #上传季度数据
 @csrf_exempt
 def TIUpdate(request):
@@ -1092,5 +1102,3 @@ def GetPSFormItem(request):
     myType = list(dbo.values_list('myType', flat=True).distinct())
     platform = list(dbo.values_list('platform', flat=True).distinct())
     return JsonResponse({'productname': productname, 'type': myType, 'platform': platform})
-
-

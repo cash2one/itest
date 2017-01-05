@@ -19,8 +19,8 @@ def _getlog(str):
 def getNetMarketShare():
     monthmode = re.compile(r'^(\d{4})-(\d{2})')
     now = datetime.datetime.now()
-    bg = str(now.year - 1) + '-' + str(now.month)
-    ed = str(now.year) + '-' + str(now.month)
+    bg = str(now.year - 1) + '-' + ('0'+str(now.month))[-2:]
+    ed = str(now.year) + '-' + ('0'+str(now.month))[-2: ]
 
     def dateform(str):
         d = {'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06', 'July': '07',
@@ -30,6 +30,7 @@ def getNetMarketShare():
         return year + '-' + month
 
     def monthcount(str):
+        print str
         year, month = monthmode.match(str).groups()
         return (int(year) - 1999) * 12 + int(month) - 1
 
