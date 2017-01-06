@@ -417,7 +417,7 @@ def ProductBugsAPI(request):
                 ret = {'发现BUG数':entry.bugs_found,'发现P1BUG数':entry.bugs_found_p1,'逃逸BUG数':entry.bugs_escape,
                        "逃逸P1BUG数":entry.bugs_escape_p1, "测试无责数": entry.bugs_escape_noduty}
             title_mode = '测试数据一览'.decode('utf-8')
-            title = quarter+name+title_mode
+            title = name+quarter+title_mode
             xAxis = ret.keys()
             xAxis.sort()
             d = []
@@ -432,7 +432,9 @@ def ProductBugsAPI(request):
             case = request.GET['case']
         else:
             case = '0'
-
+        #精品课显示效果优化
+        if name == "KE":
+            dbo = dbo.filter(quarter__gte="2016Q4")
         def pmode2f(count):
             if count!='':
                 ret[entry.quarter[2:]] = int(count)
@@ -446,7 +448,7 @@ def ProductBugsAPI(request):
             tm2.append(t.decode('utf-8'))
         title_mode2 = tm2
 
-        title = title_mode2[int(case)-1]+title_mode1
+        title = name+title_mode2[int(case)-1]+title_mode1
 
         if case == '1':
             for entry in dbo:
@@ -987,6 +989,7 @@ def GetMarketShareAPI(request):
         needdbo = dbo.filter(sourcename=site)
         datelist = list(needdbo.values_list('date', flat=True).distinct().order_by('date'))
         ret[site] = {'data':{},'src': needdbo.all()[0].source, 'remarks': needdbo.all()[0].remarks}
+        
         if (months <= len(datelist)):
             needdbo = needdbo.filter(date__gte = datelist[-months]).order_by('date')
             ret[site]['date'] = datelist[-months:]

@@ -280,7 +280,7 @@
             function (ret) {
                for (var ind in ret.quarters){
                    $("#quarter").append('<option value="'+ret.quarters[ind]+'">'+ret.quarters[ind]+'</option>');
-               }
+               }``
                $.getJSON('/api/getordergroup',function(ret){
                     for (var i in ret['ordergroup']){
                         $('#name').append('<option value="'+ret['ordergroup'][i]+'">'+ret['ordergroup'][i]+'</option>');
