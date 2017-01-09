@@ -606,9 +606,10 @@ def QuartersBugsAPI(request):
         er = []
         dr = []
         for qu in q:
-            er.append("%.2f" % (float(100*ret[qu]['escapes'])/ret[qu]['count']))
-            dr.append("%.2f" % (float(100*(ret[qu]['escapes']-ret[qu]['noduty']))/ret[qu]['count']))
-        xAxis = q
+            if(ret[qu]['count']!=0):
+                er.append("%.2f" % (float(100*ret[qu]['escapes'])/ret[qu]['count']))
+                dr.append("%.2f" % (float(100*(ret[qu]['escapes']-ret[qu]['noduty']))/ret[qu]['count']))
+                xAxis.append(qu)
         data = {'线上所有故障': er, '测试主要责任': dr}
 
     #各产品发现bug数
@@ -989,7 +990,7 @@ def GetMarketShareAPI(request):
         needdbo = dbo.filter(sourcename=site)
         datelist = list(needdbo.values_list('date', flat=True).distinct().order_by('date'))
         ret[site] = {'data':{},'src': needdbo.all()[0].source, 'remarks': needdbo.all()[0].remarks}
-        
+
         if (months <= len(datelist)):
             needdbo = needdbo.filter(date__gte = datelist[-months]).order_by('date')
             ret[site]['date'] = datelist[-months:]
