@@ -150,7 +150,10 @@ def _HoleSave(hi):
     if not hi['targets']:
         targets = 'Null'
     else:
-        targets = hi['targets']
+        targets = []
+        for tar in hi['targets']:
+            targets.append(tar)
+        targets = ','.join(targets)
     #分组
     group = '其他'
     productName = hi['productName'].encode('utf-8')
