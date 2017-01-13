@@ -292,7 +292,7 @@ def getAndroid():
                                 print 'skip'
                         else:
                             MarketShare(date=DATE, source='https://developer.android.com/about/dashboards/index.html',
-                                        sourcename='谷歌开发者论坛',
+                                        sourcename='安卓开发者论坛',
                                         platform='mobile', myType='os',
                                         market='ww', value=data[1],
                                         itemname='Android' + ''.join(name[1].split('<br>')),
