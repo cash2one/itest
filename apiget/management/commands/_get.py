@@ -10,18 +10,19 @@ from requests import ConnectionError
 from requests.exceptions import Timeout
 from itest.settings import BASE_DIR
 from apiget.models import MarketShare,ProductsShare
-
+#获取市场份额数据时的日志
 def _getlog(str):
     with open('%s/log/getms.log' % BASE_DIR, 'a') as f:
         print str
         f.write(str + '\n')
 
+#获取www.netmarketshare.com的数据，存入数据库
 def getNetMarketShare():
+    #提取时间信息的正则，用于计算月份数
     monthmode = re.compile(r'^(\d{4})-(\d{2})')
-    now = datetime.datetime.now()
-    bg = str(now.year - 1) + '-' + ('0'+str(now.month))[-2:]
-    ed = str(now.year) + '-' + ('0'+str(now.month))[-2: ]
 
+
+    #统一化存储时的月份结构
     def dateform(str):
         d = {'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06', 'July': '07',
              'August': '08', 'September': '09', 'October': '10', 'November': '11', 'December': '12',}
@@ -29,19 +30,20 @@ def getNetMarketShare():
         month = d[str[:-6]]
         return year + '-' + month
 
+    #计算月份数，以1999年1月为第0月。
     def monthcount(str):
         print str
         year, month = monthmode.match(str).groups()
         return (int(year) - 1999) * 12 + int(month) - 1
 
-    bgmc = monthcount(bg)
-    edmc = monthcount(ed)
-    qpsp = bgmc
-    qpnp = edmc - bgmc
+    #每次抓取最近一年的每月数据。qpsp 起始月份的月份数，qpnp 月份数量。
+    now = datetime.datetime.now()
+    bg = str(now.year - 1) + '-' + ('0'+str(now.month))[-2:]
+    qpsp = monthcount(bg)
+    qpnp = 12
 
+    #第一次访问主页用于获取sessionid
     init = requests.get('http://netmarketshare.com/')
-    qpcid = ''
-    qpgroup = ((3, 0), (1, 1), (11, 0), (11, 1))  # 浏览器桌面 浏览器手机 操作系统按版本桌面 操作系统手机
     cookies = {"ASP.NET_SessionId": "kx0f1rjn4a1h4askp4qogr0r",
                "ppu_main_124111d1af66eb0c050ddea0602fe67f": "1",
                "ppu_sub_124111d1af66eb0c050ddea0602fe67f": "2", "__support_check": "1",
@@ -50,9 +52,13 @@ def getNetMarketShare():
 
     header = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36"}
-
     cookies['ASP.NET_SessionId'] = init.cookies['ASP.NET_SessionId']
 
+    #暂时不影响，一个自动id
+    qpcid = ''
+
+    #浏览器桌面 浏览器手机 操作系统按版本桌面 操作系统手机
+    qpgroup = ((3, 0), (1, 1), (11, 0), (11, 1))
     count = skipcount = updatecount = errorcount = 0
     for (qprid, qpcustomd) in qpgroup:
         url = "http://netmarketshare.com/common/pages/reportexport?uimyType=dialog&" \
@@ -67,6 +73,7 @@ def getNetMarketShare():
 
         if geturl.status_code == 200:
             infomation = geturl.text
+            #该接口数据类型为xml
             soup = BeautifulSoup(infomation, "xml")
             if soup.select('dataset'):
                 if qprid == 3:
@@ -86,6 +93,8 @@ def getNetMarketShare():
                 rd = {'data': {}, 'month': []}
                 for item in d:
                     if (item.name):
+                        #因为这个xml格式的问题，只能这样处理数据
+                        #其中为row的标签存储的是名称，其他的是各月份数据
                         if (item.name != 'row'):
                             if item.name[-1] != '1':
                                 rd['data'][item.name[-1]] = {'name': item.get_text(), 'value': []}
@@ -99,6 +108,7 @@ def getNetMarketShare():
                 for k in rd['data'].keys():
                     i = 0
                     while i < len(rd['data'][k]['value']):
+                        #判断是否新数据，是否需要更新或者跳过
                         touch = MarketShare.objects.filter(date=rd['month'][i], sourcename='netmarketshare',
                                                            platform=platform, myType=myType,
                                                            market='ww', itemname=rd['data'][k]['name'])
@@ -129,7 +139,7 @@ def getNetMarketShare():
     _getlog('Get MarketShare/netmarketshare at %s . Finish:%d, Update%d, Skip:%d, Error:%d' %
         (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), count, updatecount, skipcount, errorcount))
 
-
+#获取gs.statcounter.com上的信息
 def getStatCounter():
     datemode = re.compile(r'% - (.+?)$')
 
@@ -160,6 +170,7 @@ def getStatCounter():
     for device in devices:
         device_hidden = device.lower()
         for (statType, statType_hidden) in zip(statTypes, statType_hiddens):
+            #该网站的一个合并chrome和firefox各版本的选择
             if device == 'Desktop' and statType == 'Browser':
                 nstatType, nstatType_hidden = 'Combine%%20Chrome%%20(all%%20versions)%%20%%26%%20Firefox%%20(5%%2B)', \
                                               'browser_version_partially_combined'
@@ -185,6 +196,7 @@ def getStatCounter():
 
                 if geturl.status_code == 200:
                     infomation = geturl.text
+                    #xml接口
                     soup = BeautifulSoup(infomation, "xml")
                     datasets = soup.select('dataset')
                     if datasets:

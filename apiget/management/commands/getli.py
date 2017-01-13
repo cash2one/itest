@@ -1,9 +1,10 @@
-
+#coding:utf-8
 from django.core.management.base import BaseCommand, CommandError
 from _get import getLi
 import datetime, time
 
 class Command(BaseCommand):
+    #该命令的一个选项 --data 日期 可以爬取某日的数据（YYYY-MM-DD） 不加选项默认今天
     def add_arguments(self, parser):
         parser.add_argument(
             "--date",

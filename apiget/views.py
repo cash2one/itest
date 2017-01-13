@@ -22,11 +22,13 @@ from requests import ConnectionError
 
 from apiget.models import HoleInfo,TestInfos,FeedBack,MarketShare,ProductsShare
 from itest.settings import BASE_DIR
+#安全部漏洞信息各字段数字对应的说明文字
 LevelList = ["空","低","中","高","严重"]
 StatusList = ["空","处理中","状态2","已修复","可接受风险","误报"]
 ScanTypeList = ["空","漏洞跟踪","主机扫描","插件扫描"]
 UpdateStatusList = ["没更新","状态2","处理中","已修复","可接受风险","误报"]
 
+#各组产品名列表
 GroupLUNA = ["有道考研","有道手机版","有道专业翻译","有道网页翻译","有道四六级","有道词典","有道小组","有道口语大师",
              "有道翻译官","有道语文达人","有道英印词典","有道词典翻译论坛","有道词典FAQ"]
 GroupYNOTE = ["有道云笔记","有道云笔记论坛",]
@@ -34,16 +36,20 @@ GroupEAD = ["有道搜索推广","有道E读","有道智选",]
 GroupARMANI = ["惠惠网","惠惠购物助手","拼了App",]
 GroupKE = ["有道精品课","有道学堂",]
 
+#组名-产品名列表字典
 GroupD = {'LUNA':GroupLUNA,'YNOTE':GroupYNOTE, 'EAD':GroupEAD, 'ARMANI':GroupARMANI, 'KE': GroupKE}
+
+#组名列表，会影响图表上的顺序
 GroupOrder = ['LUNA', 'YNOTE', 'EAD', 'ARMANI','KE']
 
+#tb038x上存储漏洞信息和抓取时间的文件
 HOLEFILE = 'holeInfo'
 TIMEFILE = 'uptime.txt'
 
 #更新信息的服务器 在tb038x上使用 nohop python -m SimpleHTTPServer 23333 & 在后台永久挂起
 _ResetUrl = 'http://tb038x.corp.youdao.com:23333/%s'
 
-
+#数据库写入日志（市场份额系统日志单独存储）
 def _dblog(str):
     with open(BASE_DIR + '/log/changedb.log', 'a') as f:
         f.write(str + '\n')
@@ -75,7 +81,7 @@ def ProductNameAPI(request):
                 dret['name'].append(item)
         else:
             if group=='其他':
-                #排除其他组 不直接选择‘其他’组 防止错误
+                #排除其他组 不直接选择‘其他’组 防止写入时漏掉分组的情况
                 for groupname in GroupD.keys():
                     dbo = dbo.exclude(groupName=groupname)
             namelist = dbo.values_list('productName').distinct()
@@ -125,6 +131,51 @@ def StatisticsAPI(request):
     ret = _StatisticsJsonRp(dbo, smode, years, group)
     return JsonResponse(ret)
 
+
+#组装返回给统计图的数据
+def _StatisticsJsonRp(dbos, smode, years, group):
+    jsonRes = {'data':[] , 'xAxis': []}
+    quartlist = dbos.values_list('quarter').distinct()
+
+    if years != 'all':
+        quartlist = quartlist[:int(years)*4]
+
+    for quart in quartlist:
+        jsonRes['xAxis'].append(quart[0])
+    jsonRes['xAxis'].reverse()
+    #统计各产品组
+    if smode == '1' :
+        namelist = GroupOrder
+        for item in namelist:
+            productit = []
+            for quarter in jsonRes['xAxis']:
+                c = dbos.filter(groupName = item, quarter = quarter).count()
+                productit.append(c)
+            jsonRes['data'].append({"name": item, "value": productit})
+        allit = []
+        for quarter in jsonRes['xAxis']:
+            c = dbos.filter(quarter=quarter).count()
+            allit.append(c)
+        jsonRes['data'].append({"name": '全部', "value": allit})
+
+    #统计某组各产品
+    elif smode == '2':
+        namelist = GroupD[group]
+        for item in namelist:
+            productit = []
+            for quarter in jsonRes['xAxis']:
+                c = dbos.filter(productName = item, quarter = quarter).count()
+                productit.append(c)
+            jsonRes['data'].append({"name": item, "value": productit})
+        allit = []
+        for quarter in jsonRes['xAxis']:
+            c = dbos.filter(quarter=quarter, groupName=group).count()
+            allit.append(c)
+        jsonRes['data'].append({"name": '全部', "value": allit})
+
+    return jsonRes
+
+
 #获取服务器数据 并且将json转为dict
 def _HoleGet():
     #holeInfo 为远程数据文件 uptime.txt time.txt存储远程数据更新时间
@@ -146,7 +197,7 @@ def _HoleGet():
 
 #将一条漏洞信息写入数据库
 def _HoleSave(hi):
-    #可能存在targets不唯一的情况，暂且如此处理
+    #targets为一数组
     if not hi['targets']:
         targets = 'Null'
     else:
@@ -156,7 +207,11 @@ def _HoleSave(hi):
         targets = ','.join(targets)
     #分组
     group = '其他'
-    productName = hi['productName'].encode('utf-8')
+    if hi['productName']:
+        productName = hi['productName'].encode('utf-8')
+    else:
+        productName = 'NULL'
+
     if productName == '-':
         productName = targets
 
@@ -178,23 +233,23 @@ def _HoleSave(hi):
     else:
         quarter += 'Q4'
 
-    HoleInfo(status=str(hi['status']),
-             targetType=str(hi['targetType']),
-             scanType=str(hi['scanType']),
-             description=hi['description'],
-             level=str(hi['level']),
-             createTime=hi['createTime'],
-             checkResult=hi['checkResult'],
-             updateStatus=str(hi['updateStatus']),
+    HoleInfo(status=str(hi['status']) or 'NULL',
+             targetType=str(hi['targetType']) or 'NULL',
+             scanType=str(hi['scanType']) or 'NULL',
+             description=hi['description'] or 'NULL',
+             level=str(hi['level']) or 'NULL',
+             createTime=hi['createTime'] or 'NULL',
+             checkResult=hi['checkResult'] or 'NULL',
+             updateStatus=str(hi['updateStatus']) or 'NULL',
              productName=productName,
-             vulType = hi['vulType'],
+             vulType = hi['vulType'] or 'NULL',
              groupName=group,
-             h_id=hi['id'],
+             h_id=hi['id'] or 'NULL',
              targets=targets,
-             title =hi['title'],
+             title =hi['title'] or 'NULL',
              quarter=quarter).save()
 
-#重置整个数据库 时间长 约半分钟
+#重新刷新数据库 每条数据写入约要1s钟。 已弃用接口形式刷新数据库 改为django命令 hirewrite 祥见 management/commands/hirewrite.py
 def HolesResetAPI(request):
     _HoleDelete()
 
@@ -251,51 +306,6 @@ def _TableJsonRp(dbos):
         jsonRes[hi.h_id] = jhi
     return jsonRes
 
-#组装返回给统计图的数据
-def _StatisticsJsonRp(dbos, smode, years, group):
-
-
-
-    jsonRes = {'data':[] , 'xAxis': []}
-    quartlist = dbos.values_list('quarter').distinct()
-
-    if years != 'all':
-        quartlist = quartlist[:int(years)*4]
-
-    for quart in quartlist:
-        jsonRes['xAxis'].append(quart[0])
-    jsonRes['xAxis'].reverse()
-
-    if smode == '1' :
-        namelist = GroupOrder
-        for item in namelist:
-            productit = []
-            for quarter in jsonRes['xAxis']:
-                c = dbos.filter(groupName = item, quarter = quarter).count()
-                productit.append(c)
-            jsonRes['data'].append({"name": item, "value": productit})
-        allit = []
-        for quarter in jsonRes['xAxis']:
-            c = dbos.filter(quarter=quarter).count()
-            allit.append(c)
-        jsonRes['data'].append({"name": '全部', "value": allit})
-
-
-    elif smode == '2':
-        namelist = GroupD[group]
-        for item in namelist:
-            productit = []
-            for quarter in jsonRes['xAxis']:
-                c = dbos.filter(productName = item, quarter = quarter).count()
-                productit.append(c)
-            jsonRes['data'].append({"name": item, "value": productit})
-        allit = []
-        for quarter in jsonRes['xAxis']:
-            c = dbos.filter(quarter=quarter, groupName=group).count()
-            allit.append(c)
-        jsonRes['data'].append({"name": '全部', "value": allit})
-
-    return jsonRes
 
 #获取漏洞信息详情
 def HoleDetailAPI(request):
@@ -1019,39 +1029,48 @@ def GetMarketShareAPI(request):
 
 
 # ------------------------------------------------------productsshare-------------------------------------------------------
-#                                             来自李斯宁的公司各产品的用户数据信息
+#                                             来自李斯宁Analyzer2的公司各产品的用户数据信息
+#
+#                                                                                      #####
+#                          ##    #    #    ##    #      #   #  ######  ######  #####  #     #
+#                         #  #   ##   #   #  #   #       # #       #   #       #    #       #
+#                        #    #  # #  #  #    #  #        #       #    #####   #    #  #####
+#                        ######  #  # #  ######  #        #      #     #       #####  #
+#                        #    #  #   ##  #    #  #        #     #      #       #   #  #
+#                        #    #  #    #  #    #  ######   #    ######  ######  #    # #######
 #
 #
-#
-#                                             ####   #    #    ##    #####   ######
-#                                            #       #    #   #  #   #    #  #
-#                                             ####   ######  #    #  #    #  #####
-#                                                 #  #    #  ######  #####   #
-#                                            #    #  #    #  #    #  #  #    #
-#                                             ####   #    #  #    #  #    #  ######
+
+#读取数据库中analyzer2数据的接口
 def GetProductShareAPI(request):
     dbo = ProductsShare.objects
     platform = myType = productname = datetype = ''
+    #平台字段
     if 'platform' in request.GET:
         platform = request.GET['platform']
         if platform:
             dbo = dbo.filter(platform = platform)
+    #数据类型
     if 'type' in request.GET:
         myType = request.GET['type']
         if myType:
             dbo = dbo.filter(myType = myType)
+    #产品名
     if 'productname' in request.GET:
         productname = request.GET['productname']
         if productname:
             dbo = dbo.filter(productname = productname)
+    #需要的时间类型，D为1天，M为30天，W为7天
     if 'datetype' in request.GET:
         datetype = request.GET['datetype']
         if datetype in ['D', 'M', 'W']:
             dbo = dbo.filter(datetype = datetype)
+    #模式1为饼图所需的一组数据，模式2为折线图的多组数据
     if 'mode' in request.GET:
         mode = request.GET['mode']
     else:
         mode = '1'
+    #排序后的季度列表 从旧到新
     datelist = list(dbo.values_list('date', flat=True).distinct().order_by('date'))
     ret = {'result':{'pv': {'data':{}}, 'uv': {'data':{}}}, 'title': '', 'date':[]}
 
@@ -1064,6 +1083,7 @@ def GetProductShareAPI(request):
             ret['result']['uv']['data'][o.itemname] = {'value': o.uv}
     elif mode == '2':
         dates = []
+        #数据截短
         if datetype == 'D':
             if len(datelist) > 30:
                 dates = datelist[-30:]
@@ -1103,6 +1123,7 @@ def GetProductShareAPI(request):
                         ret['result']['uv']['data'][itemname] = {'value': [0, ]}
     return JsonResponse(ret)
 
+#获取各字段有的值，用于前段生成下拉菜单
 def GetPSFormItem(request):
     dbo = ProductsShare.objects
     productname = list(dbo.values_list('productname', flat=True).distinct())
