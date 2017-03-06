@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d059be19-4593-4fd2-a487-940b2b01a464" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/management/commands/_get.py" afterPath="$PROJECT_DIR$/apiget/management/commands/_get.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/management/commands/moverp.py" afterPath="$PROJECT_DIR$/apiget/management/commands/moverp.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apiget/views.py" afterPath="$PROJECT_DIR$/apiget/views.py" />
     </list>
     <ignored path="itest.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -99,8 +97,8 @@
       <file leaf-file-name="_get.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/apiget/management/commands/_get.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="286" column="42" selection-start-line="286" selection-start-column="42" selection-end-line="286" selection-end-column="42" />
+            <state relative-caret-position="4170">
+              <caret line="288" column="46" selection-start-line="288" selection-start-column="46" selection-end-line="288" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -231,6 +229,7 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -305,11 +304,10 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/homework/test" />
     <property name="settings.editor.selected.configurable" value="File.Encoding" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
@@ -996,8 +994,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/apiget/management/commands/_get.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="286" column="42" selection-start-line="286" selection-start-column="42" selection-end-line="286" selection-end-column="42" />
+        <state relative-caret-position="4170">
+          <caret line="288" column="46" selection-start-line="288" selection-start-column="46" selection-end-line="288" selection-end-column="46" />
           <folding />
         </state>
       </provider>

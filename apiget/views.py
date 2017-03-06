@@ -46,7 +46,7 @@ GroupOrder = ['LUNA', 'YNOTE', 'EAD', 'ARMANI','KE']
 HOLEFILE = 'holeInfo'
 TIMEFILE = 'uptime.txt'
 
-#更新信息的服务器 在tb038x上使用 nohop python -m SimpleHTTPServer 23333 & 在后台永久挂起
+#更新信息的服务器 在tb038x上使用 nohup python -m SimpleHTTPServer 23333 & 在后台永久挂起
 _ResetUrl = 'http://tb038x.corp.youdao.com:23333/%s'
 
 #数据库写入日志（市场份额系统日志单独存储）
